@@ -12,7 +12,7 @@ import java.net.URL;
  */
 public class Constants {
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     public static final Agent MINECRAFT = new Agent("Minecraft", 1);
 
@@ -22,11 +22,13 @@ public class Constants {
     public static final String MC_DOWNLOAD_URL = "https://s3.amazonaws.com/Minecraft.Download/";
     public static final String MC_LIBRARY_URL = "https://libraries.minecraft.net/";
     public static final String MC_ASSET_URL = "http://resources.download.minecraft.net/";
-    public static final String GS_DOWNLOAD_URL = "http://launcher.gawdscape.com/files/";
-    public static final String GS_LIBRARY_URL = "http://launcher.gawdscape.com/files/libraries/";
-    public static final URI HELP_LINK = constantURI("http://launcher.gawdscape.com/help.php");
+    public static final String GS_DOWNLOAD_URL = "https://github.com/GawdScape/GawdScape/releases/download/";
+    public static final String GS_LIBRARY_URL = "https://raw.githubusercontent.com/GawdScape/GawdScape/master/lib/";
+    public static final String GS_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScape/master/gawdscape.json";
+    public static final String LAUNCHER_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScapeLauncher/master/latest.version";
+    public static final URI HELP_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/wiki");
     public static final URI REGISTER_LINK = constantURI("https://account.mojang.com/register");
-    public static final URI UPDATE_LINK = constantURI("http://launcher.gawdscape.com/update.php");
+    public static final URI UPDATE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/releases/latest");
 
     public static URI constantURI(String input) {
 	try {

@@ -95,7 +95,7 @@ public class DownloadManager {
 		Directories.getBinPath() + "minecraft.jar"
 	);
 	addToQueue(
-		Constants.GS_DOWNLOAD_URL + "gawdscape/" + gsVer + "/" + gsVer + ".jar",
+		Constants.GS_DOWNLOAD_URL + gsVer + "/" + gsVer + ".jar",
 		Directories.getBinPath() + "gawdscape.jar"
 	);
     }

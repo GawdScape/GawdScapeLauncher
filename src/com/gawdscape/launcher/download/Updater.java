@@ -42,7 +42,6 @@ public class Updater extends Thread {
 	    // Download latest gawdscape.json
 	    downloadGawdScapeData();
 
-	    //Log.fine(minecraft.toString());
 	    if (localGawdScape.getId().equals(gawdscape.getId())) {
 		// Up to date, launch game
 		launch();
@@ -61,12 +60,11 @@ public class Updater extends Thread {
 	// GawdScape
 	String gawdscapeJson = "";
 	try {
-	    gawdscapeJson = JsonUtils.readJsonFromUrl(Constants.GS_DOWNLOAD_URL + "gawdscape/latest/latest.json");
+	    gawdscapeJson = JsonUtils.readJsonFromUrl(Constants.GS_VERSION_URL);
 	} catch (IOException ex) {
 	    Log.error("Error loading gawdscape.json", ex);
 	}
 	gawdscape = JsonUtils.getGson().fromJson(gawdscapeJson, GawdScape.class);
-	//Log.config(gawdscape.toString());
     }
 
     public static void saveGawdScapeData() {
@@ -100,7 +98,6 @@ public class Updater extends Thread {
 	    Log.error("Error loading minecraft.json", ex);
 	}
 	minecraft = JsonUtils.getGson().fromJson(minecraftJson, Minecraft.class);
-	//Log.config(minecraft.toString());
 	try {
 	    JsonUtils.writeJsonToFile(minecraftJson, new File(Directories.getBinPath(), "minecraft.json"));
 	} catch (IOException ex) {

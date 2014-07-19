@@ -94,7 +94,7 @@ public class GawdScapeLauncher {
 	Log.info("Checking for update...");
 	int version = 0;
 	try {
-	    version = new Integer(JsonUtils.readJsonFromUrl(Constants.GS_DOWNLOAD_URL + "launcher/latest/latest.version"));
+	    version = new Integer(JsonUtils.readJsonFromUrl(Constants.LAUNCHER_VERSION_URL));
 	} catch (IOException ex) {
 	    Log.error("Error checking for launcher update.", ex);
 	}

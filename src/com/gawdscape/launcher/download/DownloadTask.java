@@ -64,7 +64,7 @@ public class DownloadTask implements Callable, RBCWrapperDelegate {
 	    FileOutputStream fos;
 	    ReadableByteChannel rbc;
 	    try {
-		rbc = new RBCWrapper(Channels.newChannel(url.openStream()), connection.getContentLength(), this);
+		rbc = new RBCWrapper(Channels.newChannel(connection.getInputStream()), connection.getContentLength(), this);
 		fos = new FileOutputStream(file);
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		fos.close();
@@ -87,7 +87,15 @@ public class DownloadTask implements Callable, RBCWrapperDelegate {
 	    HttpURLConnection.setFollowRedirects(false);
 
 	    connection = (HttpURLConnection) url.openConnection();
-	    connection.setRequestMethod("HEAD");
+
+	    int status = connection.getResponseCode();
+	    if (status != HttpURLConnection.HTTP_OK) {
+		if (status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_SEE_OTHER) {
+		    String location = connection.getHeaderField("Location");
+		    Log.fine("Being redirected to: " + location);
+		    connection = (HttpURLConnection) new URL(location).openConnection();
+		}
+	    }
 	} catch (IOException e) {
 	}
 
