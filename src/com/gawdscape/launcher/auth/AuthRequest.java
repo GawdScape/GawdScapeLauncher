@@ -10,6 +10,7 @@ public class AuthRequest {
     private String username;
     private String password;
     private String clientToken;
+    private boolean requestUser = true;
 
     public AuthRequest(Agent agent, String username, String password, String clientToken) {
 	this.agent = agent;

@@ -1,5 +1,14 @@
 package com.gawdscape.launcher.launch;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import javax.swing.SwingUtilities;
+
 import com.gawdscape.launcher.GawdScapeLauncher;
 import com.gawdscape.launcher.download.Updater;
 import com.gawdscape.launcher.game.AssetIndex;
@@ -10,14 +19,6 @@ import com.gawdscape.launcher.util.FileUtils;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -112,11 +113,20 @@ public class MinecraftLauncher implements MinecraftExit {
 	    Log.severe("Can't run version, missing minecraftArguments");
 	    return null;
 	}
-	Map<String, String> map = new HashMap();
-	String[] split = version.getMinecraftArguments().split(" ");
 
+	// There's probably a better way to do this... But fuck it.
+	String userProperties = GawdScapeLauncher.response.getUser().getProperties().toString();
+
+	// Get Twitch Access Token
+	String twitchToken = "";
+	if (userProperties.contains("twitch_access_token")) {
+	    int start = userProperties.indexOf("twitch_access_token") + 30;
+	    twitchToken = String.format("\"twitch_access_token\":[\"%s\"]", userProperties.substring(start, start + 31));
+	}
+
+	Map<String, String> map = new HashMap();
 	map.put("auth_access_token", GawdScapeLauncher.response.getAccessToken());
-	map.put("user_properties", "{}");
+	map.put("user_properties", String.format("{%s}", twitchToken));
 	if (GawdScapeLauncher.response.getSessionId() != null) {
 	    map.put("auth_session", GawdScapeLauncher.response.getSessionId());
 	} else {
@@ -140,6 +150,7 @@ public class MinecraftLauncher implements MinecraftExit {
 	map.put("assets_root", new File(Directories.getAssetPath()).getAbsolutePath());
 	map.put("assets_index_name", version.getAssets());
 
+	String[] split = version.getMinecraftArguments().split(" ");
 	// Loop through the default arguments
 	for (int i = 0; i < split.length; i++) {
 	    // Key = current command

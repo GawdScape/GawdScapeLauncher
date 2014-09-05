@@ -8,6 +8,7 @@ public class RefreshRequest {
 
     private String accessToken;
     private String clientToken;
+    private boolean requestUser = true;
 
     public RefreshRequest(String access, String client) {
 	this.accessToken = access;

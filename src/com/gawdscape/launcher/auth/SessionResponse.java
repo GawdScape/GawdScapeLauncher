@@ -10,6 +10,7 @@ public class SessionResponse extends ErrorResponse {
     private String clientToken;
     private Profile[] availableProfiles;
     private Profile selectedProfile;
+    private User user;
 
     // User UUID
     public String getAccessToken() {
@@ -27,6 +28,10 @@ public class SessionResponse extends ErrorResponse {
 
     public Profile getSelectedProfile() {
 	return this.selectedProfile;
+    }
+
+    public User getUser() {
+	return user;
     }
 
     // Session Token
