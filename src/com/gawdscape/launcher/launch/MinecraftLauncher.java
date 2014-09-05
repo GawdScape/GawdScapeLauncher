@@ -115,7 +115,10 @@ public class MinecraftLauncher implements MinecraftExit {
 	}
 
 	// There's probably a better way to do this... But fuck it.
-	String userProperties = GawdScapeLauncher.response.getUser().getProperties().toString();
+	String userProperties = "";
+	if (GawdScapeLauncher.response.getUser().getProperties() != null) {
+	    userProperties = GawdScapeLauncher.response.getUser().getProperties().toString();
+	}
 
 	// Get Twitch Access Token
 	String twitchToken = "";

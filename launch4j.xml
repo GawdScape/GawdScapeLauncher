@@ -22,12 +22,12 @@
 	<runtimeBits>64/32</runtimeBits>
     </jre>
     <versionInfo>
-	<fileVersion>0.0.0.3</fileVersion>
-	<txtFileVersion>0.0.0.3</txtFileVersion>
+	<fileVersion>0.0.0.4</fileVersion>
+	<txtFileVersion>0.0.0.4</txtFileVersion>
 	<fileDescription>GawdScape Launcher</fileDescription>
 	<copyright>(c) 2014 GawdScape</copyright>
-	<productVersion>0.0.0.3</productVersion>
-	<txtProductVersion>0.0.0.3</txtProductVersion>
+	<productVersion>0.0.0.4</productVersion>
+	<txtProductVersion>0.0.0.4</txtProductVersion>
 	<productName>GawdScape Launcher</productName>
 	<companyName>GawdScape</companyName>
 	<internalName>GawdScape</internalName>
