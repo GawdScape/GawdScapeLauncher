@@ -1,5 +1,6 @@
 GawdScapeLauncher
 =================
+![GawdScape Launcher and Log](http://i61.tinypic.com/2dm8f8g.png)
 
 Custom launcher for launching GawdScape (Minecraft)
 
