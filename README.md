@@ -28,3 +28,5 @@ GawdScape Launcher is copyright by GawdScape.
 Minecraft is copyright by Mojang.
 GSON is copyright Google.
 Everything else is copyright their respected owners.
+
+*Important Note: GawdScape is in no way affiliated with Minecraft or Mojang. This is all 3rd party material. If you have an issue, post on the issue tracker provided with this repo, do not contact Mojang about problems dealing with GawdScape.
