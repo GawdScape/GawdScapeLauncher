@@ -1,5 +1,6 @@
 package com.gawdscape.launcher;
 
+import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
@@ -40,7 +41,7 @@ public class Config {
 	joinServer = false;
 	windowSize = false;
 	fullscreen = false;
-	serverIP = "server.gawdscape.com";
+	serverIP = Constants.GS_SERVER_IP;
 	windowWidth = "854";
 	windowHeight = "480";
     }

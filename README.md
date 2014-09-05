@@ -13,10 +13,14 @@ There is also more, easier to use settings.
 
 Refer to the Wiki for help.
 
+Updates in Version 3:
+Allows for Twitch streaming.
+
+
 To contribute, you will need:
-Java JDK 7 or newer. I recommend JDK 8.
-Netbeans IDE.
-Launch4J (For making exe files).
+- Java JDK 7 or newer. I recommend JDK 8.
+- Netbeans IDE.
+- Launch4J (For making exe files).
 Make sure to format the code before committing.
 
 GawdScape Launcher is copyright by GawdScape.
