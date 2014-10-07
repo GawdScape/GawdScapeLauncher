@@ -22,7 +22,7 @@ If you are having an issue please post it on the [Issue Tracker](https://github.
 
 Minimum Requirements:
 - [Java 7](http://www.java.com)
-- [Minecraft](http://www.minecraft.net)
+- [A valid Minecraft account](http://www.minecraft.net)
 
 GawdScape Launcher is copyright by GawdScape. | Minecraft is copyright by Mojang. | GSON is copyright Google.
 
