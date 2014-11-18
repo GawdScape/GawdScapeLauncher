@@ -70,7 +70,7 @@
     nbproject/build-impl.xml file. 
 
     -->
-    <target name="package-for-store" depends="jar">
+    <target name="package-jar" depends="clean,compile,jar">
 	<property name="store.jar.name" value="GawdScape"/>
 
 	<property name="store.dir" value="deploy"/>
@@ -99,7 +99,7 @@
 
     </target>
 
-    <target name="package-for-launch4j" depends="clean,compile,jar,package-for-store">
+    <target name="package-exe" depends="clean,compile,jar,package-jar">
 	<property name="launch4j.dir" location="C:\Program Files (x86)\Launch4j" />
 
 	<taskdef name="launch4j"

@@ -62,6 +62,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         transparentLabel1 = new com.gawdscape.launcher.ui.TransparentLabel();
         skipLauncherCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
         fullscreenCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
+        styleLogCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
 
         fileChooser.setCurrentDirectory(GawdScapeLauncher.config.getGameDirectory());
         fileChooser.setDialogTitle("Choose Game Directory");
@@ -186,6 +187,9 @@ public class OptionsDialog extends javax.swing.JDialog {
         fullscreenCheckBox.setSelected(config.getFullscreen());
         fullscreenCheckBox.setText("Launch in Fullscreen");
 
+        styleLogCheckBox.setSelected(config.getStyleLog());
+        styleLogCheckBox.setText("Parse Colors and Links in Log");
+
         javax.swing.GroupLayout optionsPanelLayout = new javax.swing.GroupLayout(optionsPanel);
         optionsPanel.setLayout(optionsPanelLayout);
         optionsPanelLayout.setHorizontalGroup(
@@ -233,7 +237,8 @@ public class OptionsDialog extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addComponent(windowHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(closeLogCheckBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(skipLauncherCheckBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(skipLauncherCheckBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(styleLogCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         optionsPanelLayout.setVerticalGroup(
@@ -277,7 +282,9 @@ public class OptionsDialog extends javax.swing.JDialog {
                     .addComponent(windowWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(transparentLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(fullscreenCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fullscreenCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(styleLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -314,6 +321,7 @@ public class OptionsDialog extends javax.swing.JDialog {
 		joinServerCheckBox.isSelected(),
 		windowSizeCheckBox.isSelected(),
 		fullscreenCheckBox.isSelected(),
+                styleLogCheckBox.isSelected(),
 		serverIP.getText(),
 		windowWidth.getText(),
 		windowHeight.getText()
@@ -332,9 +340,11 @@ public class OptionsDialog extends javax.swing.JDialog {
 
     private void logButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logButtonActionPerformed
 	if (GawdScapeLauncher.logFrame == null) {
-	    new Log().start();
+	    GawdScapeLauncher.logFrame = new LogFrame(styleLogCheckBox.isSelected());
+            Log.showLog = true;
 	}
 	GawdScapeLauncher.logFrame.setVisible(true);
+        GawdScapeLauncher.logFrame.requestFocus();
     }//GEN-LAST:event_logButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
@@ -415,6 +425,7 @@ public class OptionsDialog extends javax.swing.JDialog {
     private com.gawdscape.launcher.ui.TransparentButton saveButton;
     private javax.swing.JTextField serverIP;
     private com.gawdscape.launcher.ui.TransparentCheckBox skipLauncherCheckBox;
+    private com.gawdscape.launcher.ui.TransparentCheckBox styleLogCheckBox;
     private com.gawdscape.launcher.ui.TransparentLabel titleLabel;
     private com.gawdscape.launcher.ui.TransparentLabel transparentLabel1;
     private com.gawdscape.launcher.ui.TransparentButton updateButton;

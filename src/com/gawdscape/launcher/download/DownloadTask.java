@@ -77,8 +77,8 @@ public class DownloadTask implements Callable, RBCWrapperDelegate {
     @Override
     public void rbcProgressCallback(RBCWrapper rbc, double progress) {
 	this.progress = progress;
-	DownloadManager.setFile(file.getName(), url.getHost(), file.getParentFile().getPath());
-	DownloadManager.setProgress((int) progress, (int) rbc.getReadSoFar(), (int) rbc.getExpectedSize());
+	DownloadManager.downloadDialog.setFile(file.getName(), url.getHost(), file.getParentFile().getPath());
+	DownloadManager.downloadDialog.setProgress((int) progress, (int) rbc.getReadSoFar(), (int) rbc.getExpectedSize());
     }
 
     private HttpURLConnection createConnection(URL url) {
@@ -107,7 +107,7 @@ public class DownloadTask implements Callable, RBCWrapperDelegate {
 	Log.finer("Strating download of: " + url.toString());
 	DownloadManager.thisFile++;
 	downloadFile(url, file);
-	DownloadManager.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);
+	DownloadManager.downloadDialog.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);
 	return true;
     }
 }

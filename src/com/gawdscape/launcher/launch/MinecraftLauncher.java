@@ -101,6 +101,10 @@ public class MinecraftLauncher implements MinecraftExit {
 	try {
 	    MinecraftProcess process = processLauncher.start();
 	    Log.info(process.toString());
+            Log.println(
+"#==============================================================================#\n" + 
+"#--------------------------------- Minecraft ----------------------------------#\n" + 
+"#==============================================================================#");
 	    process.safeSetExitRunnable(this);
 	} catch (IOException e) {
 	    Log.error("Couldn't launch game", e);
@@ -276,5 +280,15 @@ public class MinecraftLauncher implements MinecraftExit {
 	    });
 	}
 	// You close log, you don't know
+    }
+
+    public void cleanupSkinCache() {
+	Log.info("Clearing cached skins...");
+	File skinDir = new File(Directories.getAssetPath(), "skins");
+	try {
+	    FileUtils.delete(skinDir);
+	} catch (IOException ex) {
+	    Log.error("Error deleting skin cache.", ex);
+	}
     }
 }

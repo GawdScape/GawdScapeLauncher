@@ -1,7 +1,23 @@
 package com.gawdscape.launcher;
 
+import com.gawdscape.launcher.util.ColorCodes;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.ImageUtils;
+import com.gawdscape.launcher.util.Log;
+import com.gawdscape.launcher.util.OperatingSystem;
+import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URI;
+import java.net.URISyntaxException;
+import javax.swing.AbstractAction;
+import javax.swing.event.MouseInputAdapter;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 /**
@@ -10,14 +26,32 @@ import javax.swing.text.StyledDocument;
  */
 public class LogFrame extends javax.swing.JFrame {
 
-    public static StyledDocument log;
+    public static final String selectionSymbol = "\u00A7";
+    private final static String LINK_ATTRIBUTE = "linkact";
+
+    public StyledDocument log;
+    Style style;
+    Style hyperlink;
 
     /**
      * Creates new form Console
+     * @param doStyle
      */
-    public LogFrame() {
+    public LogFrame(boolean doStyle) {
 	initComponents();
-	setLocation(20, 20);
+
+        if(doStyle) {
+            style = log.addStyle("ColoredText", null);
+
+            hyperlink = log.addStyle("HyperLink", null);
+            StyleConstants.setForeground(hyperlink, ColorCodes.Blue);
+            StyleConstants.setUnderline(hyperlink, true);
+
+            setLocation(20, 20);
+
+            logPane.addMouseListener(new TextClickListener());
+            logPane.addMouseMotionListener(new TextMotionListener());
+        }
     }
 
     /**
@@ -36,18 +70,23 @@ public class LogFrame extends javax.swing.JFrame {
         setTitle("GawdScape Log");
         setIconImage(ImageUtils.getFavIcon());
         setName("frame"); // NOI18N
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         scrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         logPane.setEditable(false);
         logPane.setBackground(new java.awt.Color(0, 0, 0));
-        logPane.setFont(new java.awt.Font("Lucida Console", 1, 11)); // NOI18N
+        logPane.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         logPane.setForeground(new java.awt.Color(205, 205, 205));
         logPane.setText("GawdScape Launcher [Version " + Constants.VERSION + "]\n(c) 2014 GawdScape Networks.\n\n");
         logPane.setAutoscrolls(false);
         logPane.setCaretColor(new java.awt.Color(205, 205, 205));
         logPane.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        logPane.setPreferredSize(new java.awt.Dimension(661, 304));
+        logPane.setPreferredSize(new java.awt.Dimension(840, 420));
         logPane.setSelectedTextColor(new java.awt.Color(63, 63, 63));
         logPane.setSelectionColor(new java.awt.Color(255, 255, 255));
         log = logPane.getStyledDocument();
@@ -57,15 +96,122 @@ public class LogFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE)
+            .addComponent(scrollPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+            .addComponent(scrollPane)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        Log.showLog = false;
+        GawdScapeLauncher.logFrame = null;
+    }//GEN-LAST:event_formWindowClosed
+
+    public void print(String text, Style style) {
+        try {
+            log.insertString(log.getLength(), text, style);
+        } catch (BadLocationException ex) {
+            System.out.println("Error determining log position.");
+        }
+        if (logPane.getSelectedText() == null) {
+            logPane.setCaretPosition(log.getLength());
+        }
+    }
+
+    public void parseLinks(String text, Style style) {
+        if (text.contains("http://") || text.contains("https://") || text.contains("www.")) {
+            int start = text.indexOf("http://");
+            if (start <= 0)
+                start = text.indexOf("https://");
+            if (start <= 0)
+                start = text.indexOf("www.");
+            int end = text.indexOf(" ", start);
+            if (end <= start)
+                end = text.length(); // end of line
+            String prefix = text.substring(0, start);
+            String url = text.substring(start, end);
+            String suffix = text.substring(end);
+            hyperlink.addAttribute(LINK_ATTRIBUTE, new URLLinkAction(url));
+
+            print(prefix, style);
+            print(url, hyperlink);
+            print(suffix, style);
+        } else {
+            print(text, style);
+        }
+    }
+
+    public void formatAndPrint(String text) {
+        // Properly color usernames and chat.
+        if ((text.contains("<") && text.contains(">")) && (text.indexOf("<") == 40)) {
+            int start = 41;
+            int end = text.indexOf(">", start);
+            String firstText = text.substring(0, start);
+            String lastText = text.substring(end);
+            String username = text.substring(start, end);
+            if (!username.startsWith(selectionSymbol))
+                username = selectionSymbol + "e" + username;
+            text = firstText + username + selectionSymbol + "r" + lastText;
+        }
+        // Properly color private messages.
+        else if (text.contains(" whispers to you: ")) {
+            int start = text.indexOf(" whispers to you: ");
+            String firstText = text.substring(0, start);
+            String lastText = text.substring(start);
+            text = firstText + selectionSymbol + "r" + lastText;
+        }
+
+        String[] selection = text.split(selectionSymbol);
+        for (int i = 0; i < selection.length; i++) {
+            if (i == 0) {
+                parseLinks(selection[i], null);
+                continue;
+            }
+
+            String thisColor = selection[i].substring(0, 1);
+            String thisText = selection[i].substring(1);
+
+            switch (thisColor) {
+                case "k":
+                    StyleConstants.setBackground(style, ColorCodes.White);
+                    break;
+                case "l":
+                    StyleConstants.setBold(style, true);
+                    break;
+                case "m":
+                    StyleConstants.setStrikeThrough(style, true);
+                    break;
+                case "n":
+                    StyleConstants.setUnderline(style, true);
+                    break;
+                case "o":
+                    StyleConstants.setItalic(style, true);
+                    break;
+                case "r":
+                    StyleConstants.setForeground(style, ColorCodes.Default);
+                    resetFormat();
+                    break;
+                default:
+                    StyleConstants.setForeground(style, ColorCodes.getColorFromCode(thisColor));
+                    resetFormat();
+                    break;
+            }
+            parseLinks(thisText, style);
+        }
+        parseLinks("\n", null);
+    }
+
+    public void resetFormat() {
+        StyleConstants.setBold(style, false);
+        StyleConstants.setStrikeThrough(style, false);
+        StyleConstants.setUnderline(style, false);
+        StyleConstants.setItalic(style, false);
+        StyleConstants.setBackground(style, ColorCodes.Black);
+    }
 
     /**
      * @param args the command line arguments
@@ -83,9 +229,66 @@ public class LogFrame extends javax.swing.JFrame {
 	/* Create and display the form */
 	java.awt.EventQueue.invokeLater(new Runnable() {
 	    public void run() {
-		new LogFrame().setVisible(true);
+		new LogFrame(true).setVisible(true);
 	    }
 	});
+    }
+
+    private class TextClickListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            try {
+                Element elem = log.getCharacterElement(logPane.viewToModel(e.getPoint()));
+                AttributeSet as = elem.getAttributes();
+                URLLinkAction link = (URLLinkAction)as.getAttribute(LINK_ATTRIBUTE);
+                if(link != null) {
+                    link.execute();
+                }
+            } catch(Exception ex) {
+            }
+        }
+    }
+
+
+    private class TextMotionListener extends MouseInputAdapter {
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            try {
+                Element elem = log.getCharacterElement(logPane.viewToModel(e.getPoint()));
+                AttributeSet as = elem.getAttributes();
+                URLLinkAction link = (URLLinkAction)as.getAttribute(LINK_ATTRIBUTE);
+                if(link != null) {
+                    logPane.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    logPane.setToolTipText(link.uri.toString());
+                } else {
+                    logPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    logPane.setToolTipText("");
+                }
+            } catch(Exception ex) {
+            }
+        }
+    }
+
+    private class URLLinkAction extends AbstractAction {
+        private URI uri = null;
+
+        URLLinkAction(String url) {
+            try {
+                uri = new URI(url);
+            } catch (URISyntaxException ex) {
+                Log.error("Invalid URI", ex);
+            }
+        }
+
+        protected void execute() {
+            if (uri != null)
+                OperatingSystem.openLink(uri);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e){
+            execute();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

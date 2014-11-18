@@ -27,6 +27,7 @@ public class Config {
     private boolean joinServer;
     private boolean windowSize;
     private boolean fullscreen;
+    private boolean styleLog;
     private String serverIP;
     private String windowWidth;
     private String windowHeight;
@@ -41,6 +42,7 @@ public class Config {
 	joinServer = false;
 	windowSize = false;
 	fullscreen = false;
+        styleLog = true;
 	serverIP = Constants.GS_SERVER_IP;
 	windowWidth = "854";
 	windowHeight = "480";
@@ -56,6 +58,7 @@ public class Config {
 	    boolean joinServer,
 	    boolean windowSize,
 	    boolean fullscreen,
+            boolean styleLog,
 	    String serverIP,
 	    String windowWidth,
 	    String windowHeight
@@ -69,6 +72,7 @@ public class Config {
 	this.joinServer = joinServer;
 	this.windowSize = windowSize;
 	this.fullscreen = fullscreen;
+        this.styleLog = styleLog;
 	this.serverIP = serverIP;
 	this.windowWidth = windowWidth;
 	this.windowHeight = windowHeight;
@@ -84,6 +88,7 @@ public class Config {
 	    boolean joinServer,
 	    boolean windowSize,
 	    boolean fullscreen,
+            boolean styleLog,
 	    String serverIP,
 	    String windowWidth,
 	    String windowHeight
@@ -97,6 +102,7 @@ public class Config {
 	this.joinServer = joinServer;
 	this.windowSize = windowSize;
 	this.fullscreen = fullscreen;
+        this.styleLog = styleLog;
 	this.serverIP = serverIP;
 	this.windowWidth = windowWidth;
 	this.windowHeight = windowHeight;
@@ -142,6 +148,10 @@ public class Config {
 	return fullscreen;
     }
 
+    public boolean getStyleLog() {
+	return styleLog;
+    }
+
     public String getServerIP() {
 	return serverIP;
     }
@@ -159,7 +169,7 @@ public class Config {
 	try {
 	    configJson = JsonUtils.readJsonFromFile(configFile);
 	} catch (IOException ex) {
-	    Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+	    Log.error("Error loading launcher configuration.", ex);
 	}
 	return JsonUtils.getGson().fromJson(configJson, Config.class);
     }
@@ -169,7 +179,7 @@ public class Config {
 	try {
 	    JsonUtils.writeJsonToFile(configJson, configFile);
 	} catch (IOException ex) {
-	    Log.error("Error saving config", ex);
+	    Log.error("Error saving launcher configuration.", ex);
 	}
     }
 }

@@ -7,6 +7,7 @@ import com.gawdscape.launcher.util.OperatingSystem;
 import com.gawdscape.launcher.auth.SessionManager;
 import com.gawdscape.launcher.util.Constants;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import javax.swing.event.HyperlinkEvent;
 
 /**
@@ -186,19 +187,19 @@ public class LauncherFrame extends javax.swing.JFrame {
 
     private void newsPaneHyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_newsPaneHyperlinkUpdate
 	if (evt.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-	    try {
-		OperatingSystem.openLink(evt.getURL().toURI());
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
+            try {
+                OperatingSystem.openLink(evt.getURL().toURI());
+            } catch (URISyntaxException ex) {
+                Log.error("Invalid URI", ex);
+            }
 	}
     }//GEN-LAST:event_newsPaneHyperlinkUpdate
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
 	playButton.setEnabled(false);
 	Config.saveConfig(GawdScapeLauncher.config);
-	Updater updater = new Updater();
-	updater.start();
+	GawdScapeLauncher.updater = new Updater();
+	GawdScapeLauncher.updater.start();
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void optionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsButtonActionPerformed

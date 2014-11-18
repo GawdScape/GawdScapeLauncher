@@ -23,9 +23,12 @@ public class Updater extends Thread {
     public static GawdScape gawdscape;
     public static Minecraft minecraft;
     public static AssetIndex assetIndex;
+    public boolean disableMods;
+    private boolean updating;
 
-    public static void checkForUpdate() {
-	Log.info("Checking for updates...");
+    public void checkForUpdate() {
+        long startTime = System.currentTimeMillis();
+	Log.info("Checking for game updates...");
 
 	// Checking for gawdscape.json
 	File gawdscapeJsonFile = new File(Directories.getBinPath(), "gawdscape.json");
@@ -44,19 +47,27 @@ public class Updater extends Thread {
 
 	    if (localGawdScape.getId().equals(gawdscape.getId())) {
 		// Up to date, launch game
+                long endTime = System.currentTimeMillis();
+                Log.finest("Update check took " + (endTime-startTime) + "ms");
 		launch();
 	    } else {
+                if(!localGawdScape.getMinecraftVersion().equals(gawdscape.getMinecraftVersion())) {
+                    disableMods = true;
+                }
 		// Already downloaded, needs updating
+                long endTime = System.currentTimeMillis();
+                Log.finest("Update check took " + (endTime-startTime) + "ms");
 		promptUpdate();
 	    }
 	} else {
+            long endTime = System.currentTimeMillis();
+            Log.finest("Update check took " + (endTime-startTime) + "ms");
 	    // No game, download now
 	    update();
 	}
-
     }
 
-    public static void downloadGawdScapeData() {
+    public void downloadGawdScapeData() {
 	// GawdScape
 	String gawdscapeJson = "";
 	try {
@@ -67,7 +78,7 @@ public class Updater extends Thread {
 	gawdscape = JsonUtils.getGson().fromJson(gawdscapeJson, GawdScape.class);
     }
 
-    public static void saveGawdScapeData() {
+    public void saveGawdScapeData() {
 	String gawdscapeJson = "";
 	gawdscapeJson = JsonUtils.getGson().toJson(gawdscape);
 	try {
@@ -77,7 +88,7 @@ public class Updater extends Thread {
 	}
     }
 
-    public static void loadLocalMinecraftData() {
+    public void loadLocalMinecraftData() {
 	File minecraftJsonFile = new File(Directories.getBinPath(), "minecraft.json");
 	// Load current minecraft.json
 	String localJson = "";
@@ -89,7 +100,7 @@ public class Updater extends Thread {
 	minecraft = JsonUtils.getGson().fromJson(localJson, Minecraft.class);
     }
 
-    public static void downloadMinecraftData() {
+    public void downloadMinecraftData() {
 	// Minecraft
 	String minecraftJson = "";
 	try {
@@ -119,7 +130,7 @@ public class Updater extends Thread {
 	}
     }
 
-    public static void promptUpdate() {
+    public void promptUpdate() {
 	int n = JOptionPane.showConfirmDialog(
 		GawdScapeLauncher.launcherFrame,
 		"GawdScape version " + gawdscape.getId() + " has been released."
@@ -133,59 +144,85 @@ public class Updater extends Thread {
 	}
     }
 
-    public static void update() {
-	downloadGawdScapeData();
-	downloadMinecraftData();
+    public void update() {
+        long startTime = System.currentTimeMillis();
 
-	downloadGame();
+        DownloadManager.createDialog();
 
-	DownloadManager.completeQueue();
+        downloadGawdScapeData();
+        downloadMinecraftData();
 
-	// Extract Natives
-	DownloadManager.extractNatives(minecraft.getRelevantLibraries());
+        downloadGame();
 
-	// Remove META-INF so Minecraft can be modded
-	DownloadManager.removeMinecraftMetaInf();
+        // Extract Natives
+        DownloadManager.extractNatives(minecraft.getRelevantLibraries());
 
-	DownloadManager.downloadDialog.setLaunching();
+        // Remove META-INF so Minecraft can be modded
+        DownloadManager.removeMinecraftMetaInf();
 
-	// Save gawdscape.json to indicate we're up to date
-	saveGawdScapeData();
+        // Save gawdscape.json to indicate we're up to date
+        saveGawdScapeData();
 
-	// Try to launch now
-	launch();
+        // Disable mods on MC version change
+        if (disableMods) {
+            DownloadManager.downloadDialog.setDisableMods();
+            disableMods();
+        }
 
-	// Remove the dialog
-	DownloadManager.downloadDialog.dispose();
+        DownloadManager.downloadDialog.setLaunching();
+        // Try to launch now
+        launch();
+
+        // Close the download dialog
+        DownloadManager.downloadDialog.dispose();
+        DownloadManager.downloadDialog = null;
+
+        long endTime = System.currentTimeMillis();
+        Log.finest("Updated Minecraft in " + (endTime-startTime) + "ms");
     }
 
-    public static void downloadGame() {
-	DownloadManager.createDialog();
-
+    public void downloadGame() {
 	// Queue all nessary game files
 	DownloadManager.queueLibraries(minecraft.getRelevantLibraries(), gawdscape.getRelevantLibraries());
 	DownloadManager.queueMinecraft(minecraft.getId(), gawdscape.getId());
 	DownloadManager.queueAssets(assetIndex);
+        DownloadManager.completeQueue();
     }
 
-    public static void launch() {
+    public void disableMods() {
+        Log.info("Disabling mods in bin/mods folder...");
+        File modDir = new File(Directories.getModPath());
+        for (File modFile : modDir.listFiles()) {
+            if (modFile.isFile()) {
+                String modName = modFile.getName();
+                modFile.renameTo(new File(modName + ".disabled"));
+                Log.info("Disabled mod: " + modName);
+            }
+        }
+    }
+
+    public void launch() {
+        long startTime = System.currentTimeMillis();
 	loadLocalMinecraftData();
 	try {
 	    MinecraftLauncher launcher = new MinecraftLauncher();
 	    launcher.launchGame(minecraft, gawdscape);
 	    GawdScapeLauncher.launcherFrame.dispose();
+            GawdScapeLauncher.launcherFrame = null;
 	} catch (IOException ex) {
 	    Log.error("Error loading Minecraft", ex);
 	}
+        long endTime = System.currentTimeMillis();
+        Log.finest("Launched Minecraft in " + (endTime-startTime) + "ms");
     }
 
     @Override
     public void run() {
-	if (Config.forceUpdate) {
-	    Log.info("Forcing update...");
-	    update();
-	} else {
-	    checkForUpdate();
-	}
+        if (Config.forceUpdate) {
+            Log.info("Forcing update...");
+            update();
+        } else {
+            checkForUpdate();
+        }
     }
 }

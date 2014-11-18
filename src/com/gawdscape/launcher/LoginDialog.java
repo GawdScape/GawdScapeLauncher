@@ -57,7 +57,7 @@ public class LoginDialog extends javax.swing.JDialog {
         infoLabel.setText("<html>Please login using your Minecraft acccount.");
 
         usernameLabel.setLabelFor(usernameField);
-        usernameLabel.setText("Username:");
+        usernameLabel.setText("Username or Email:");
 
         passwordLabel.setText("Password:");
 
@@ -155,6 +155,7 @@ public class LoginDialog extends javax.swing.JDialog {
 		dispose();
 		GawdScapeLauncher.launcherFrame.setUsername(response.getSelectedProfile().getName());
 		GawdScapeLauncher.launcherFrame.setVisible(true);
+                GawdScapeLauncher.loginDialog = null;
 	    } else {
 		setError(response.getErrorMessage());
 	    }

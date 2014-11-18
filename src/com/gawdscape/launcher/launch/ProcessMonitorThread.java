@@ -22,21 +22,19 @@ public class ProcessMonitorThread
 	InputStreamReader reader = new InputStreamReader(process.getRawProcess().getInputStream());
 	BufferedReader buf = new BufferedReader(reader);
 	String line = null;
-	while (process.isRunning()) {
-	    try {
-		while ((line = buf.readLine()) != null) {
-		    Log.print(line);
-		}
-	    } catch (IOException ex) {
-		Log.error("Error reading from Minecraft process", ex);
-	    } finally {
-		try {
-		    reader.close();
-		} catch (IOException ex) {
-		    Log.error("", ex);
-		}
-	    }
-	}
+        try {
+            while ((line = buf.readLine()) != null) {
+                Log.println(line);
+            }
+        } catch (IOException ex) {
+            Log.error("Error reading from Minecraft process", ex);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                Log.error("", ex);
+            }
+        }
 	MinecraftExit onExit = process.getExitRunnable();
 	if (onExit != null) {
 	    onExit.onMinecraftExit(process);

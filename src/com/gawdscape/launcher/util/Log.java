@@ -1,49 +1,39 @@
 package com.gawdscape.launcher.util;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
-import com.gawdscape.launcher.LogFrame;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 
 /**
  *
  * @author Vinnie
  */
-public class Log extends Thread {
+public class Log {
 
-    public void run() {
-	GawdScapeLauncher.logFrame = new LogFrame();
-	GawdScapeLauncher.logFrame.setVisible(true);
-    }
+    public static boolean showLog;
+    public static boolean formatLog;
 
-    public static void print(String text) {
-	System.out.println(text);
-	printToLogFrame(text);
-    }
-
-    public static void printToLogFrame(final String text) {
-	java.awt.EventQueue.invokeLater(new Runnable() {
-	    public void run() {
-		if (GawdScapeLauncher.logFrame != null) {
-		    try {
-			LogFrame.log.insertString(LogFrame.log.getLength(), text + "\n", null);
-			GawdScapeLauncher.logFrame.logPane.setCaretPosition(LogFrame.log.getLength());
-		    } catch (Exception ex) {
-			ex.printStackTrace();
-		    }
-		}
-	    }
-	});
+    public static void println(String line) {
+        System.out.println(line);
+        if (showLog) {
+            if (formatLog) {
+                GawdScapeLauncher.logFrame.formatAndPrint(line);
+            } else {
+                GawdScapeLauncher.logFrame.print(line + "\n", null);
+            }
+        }
     }
 
     public static void log(Level level, String text) {
-	System.out.println(level + ": " + text);
-	printToLogFrame(level + ": " + text);
+        DateFormat df = new SimpleDateFormat("[HH:mm:ss]");
+        Date date = new Date();
+	println(df.format(date) + " [Launcher/" + level + "]: " + text);
     }
 
     public static void log(Level level, String text, Throwable t) {
-	System.out.println(level + ": " + text);
-	t.printStackTrace();
-	printToLogFrame(level + ": " + text + "\n" + t.getMessage());
+	log(level, text + "\n\t" + t.getMessage());
     }
 
     public static void info(String text) {

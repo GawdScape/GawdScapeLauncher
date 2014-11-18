@@ -45,22 +45,10 @@ public class DownloadManager {
 	java.awt.EventQueue.invokeLater(new Runnable() {
 	    public void run() {
 		downloadDialog = new DownloadDialog(GawdScapeLauncher.launcherFrame, true);
-		downloadDialog.setTitle("Downloading GawdScape...");
+		downloadDialog.changeTitle("Downloading GawdScape...");
 		downloadDialog.setVisible(true);
 	    }
 	});
-    }
-
-    public static void setFile(String fileName, String host, String localPath) {
-	downloadDialog.setFile(fileName, host, localPath);
-    }
-
-    public static void setProgress(int percent, int downloaded, int total) {
-	downloadDialog.setProgress(percent, downloaded, total);
-    }
-
-    public static void setTotalProgress(int current, int total) {
-	downloadDialog.setTotalProgress(current, total);
     }
 
     public static void addToQueue(String url, String toPath) {
@@ -215,7 +203,7 @@ public class DownloadManager {
 
     public static void removeMinecraftMetaInf() {
 	Log.info("Removing META-INF from minecraft.jar...");
-	downloadDialog.setTitle("Removing META-INF...");
+	downloadDialog.changeTitle("Removing META-INF...");
 	File inputFile = new File(Directories.getBinPath(), "minecraft.jar");
 	File outputTmpFile = new File(Directories.getBinPath(), "minecraft.jar.tmp");
 

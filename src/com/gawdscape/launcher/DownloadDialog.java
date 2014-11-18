@@ -1,7 +1,10 @@
 package com.gawdscape.launcher;
 
 import com.gawdscape.launcher.download.DownloadManager;
+import com.gawdscape.launcher.download.Updater;
+import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.ImageUtils;
+import com.gawdscape.launcher.util.Log;
 
 /**
  *
@@ -11,6 +14,8 @@ public class DownloadDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form DownloadDialog
+     * @param parent
+     * @param modal
      */
     public DownloadDialog(java.awt.Frame parent, boolean modal) {
 	super(parent, modal);
@@ -18,7 +23,7 @@ public class DownloadDialog extends javax.swing.JDialog {
 	setLocationRelativeTo(parent);
     }
 
-    public void setTitle(String s) {
+    public void changeTitle(String s) {
 	title.setText(s);
     }
 
@@ -61,6 +66,17 @@ public class DownloadDialog extends javax.swing.JDialog {
 	totalProgress.setString("File " + current + " of " + total + " - " + percent + "% complete");
     }
 
+    public void setDisableMods() {
+	title.setText("Disabling mods...");
+	source.setText("");
+	progressBar.setIndeterminate(true);
+	progressLabel.setText("");
+	progress.setText("This may take a moment...");
+	destinationLabel.setText("Mod Folder:");
+	destination.setText(Directories.getModPath());
+	totalProgress.setString("");
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,10 +102,10 @@ public class DownloadDialog extends javax.swing.JDialog {
         setIconImage(ImageUtils.getFavIcon());
 
         title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        title.setText("Downloading files...");
+        title.setText("GawdScape Download");
         title.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
-        source.setText("fileName.txt from download.example.com");
+        source.setText("Preparing for download...");
 
         progressLabel.setText("Progress:");
         progressLabel.setToolTipText("");
@@ -99,7 +115,7 @@ public class DownloadDialog extends javax.swing.JDialog {
         progress.setText("0 KB of 0 KB copied");
         progress.setToolTipText("");
 
-        destination.setText("C:\\GawdScape");
+        destination.setText(Directories.getWorkingDirectory().toString());
 
         progressBar.setForeground(new java.awt.Color(104, 223, 106));
 
@@ -177,8 +193,13 @@ public class DownloadDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-	DownloadManager.pool.shutdownNow();
 	cancel.setEnabled(false);
+        DownloadManager.pool.shutdownNow();
+        try {
+            Updater.sleep(Long.MAX_VALUE);
+        } catch (InterruptedException ex) {
+            Log.error("Error stopping update thread.", ex);
+        }
     }//GEN-LAST:event_cancelActionPerformed
 
     /**
