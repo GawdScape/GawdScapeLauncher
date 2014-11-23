@@ -71,7 +71,7 @@ public class AuthManager {
 	    return response.toString();
 
 	} catch (IOException e) {
-	    e.printStackTrace();
+	    Log.error("Authentication Error: ", e);
 	}
 	return null;
     }

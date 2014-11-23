@@ -115,33 +115,10 @@ public class LogFrame extends javax.swing.JFrame {
         try {
             log.insertString(log.getLength(), text, style);
         } catch (BadLocationException ex) {
-            System.out.println("Error determining log position.");
+            Log.error("Error determining log position.", ex);
         }
         if (logPane.getSelectedText() == null) {
             logPane.setCaretPosition(log.getLength());
-        }
-    }
-
-    public void parseLinks(String text, Style style) {
-        if (text.contains("http://") || text.contains("https://") || text.contains("www.")) {
-            int start = text.indexOf("http://");
-            if (start <= 0)
-                start = text.indexOf("https://");
-            if (start <= 0)
-                start = text.indexOf("www.");
-            int end = text.indexOf(" ", start);
-            if (end <= start)
-                end = text.length(); // end of line
-            String prefix = text.substring(0, start);
-            String url = text.substring(start, end);
-            String suffix = text.substring(end);
-            hyperlink.addAttribute(LINK_ATTRIBUTE, new URLLinkAction(url));
-
-            print(prefix, style);
-            print(url, hyperlink);
-            print(suffix, style);
-        } else {
-            print(text, style);
         }
     }
 
@@ -168,7 +145,7 @@ public class LogFrame extends javax.swing.JFrame {
         String[] selection = text.split(selectionSymbol);
         for (int i = 0; i < selection.length; i++) {
             if (i == 0) {
-                parseLinks(selection[i], null);
+                parseLinksAndPrint(selection[i], null);
                 continue;
             }
 
@@ -200,9 +177,49 @@ public class LogFrame extends javax.swing.JFrame {
                     resetFormat();
                     break;
             }
-            parseLinks(thisText, style);
+            parseLinksAndPrint(thisText, style);
         }
-        parseLinks("\n", null);
+        print("\n", null);
+    }
+
+    public void parseLinksAndPrint(String text, Style style) {
+        if (text.contains("http://") || text.contains("https://") || text.contains("www.")) {
+            int start = text.indexOf("http://");
+            if (start < 0)
+                start = text.indexOf("https://");
+            if (start < 0)
+                start = text.indexOf("www.");
+            int end = text.indexOf(" ", start);
+            if (end <= start)
+                end = text.length(); // end of line
+            String url = null;
+            if (start > 0) {
+                url = text.substring(start, end);
+            } else {
+                url = text;
+            }
+
+            try {
+                url = new URI(url).toString();
+            } catch (URISyntaxException ex) {
+                print(text, style);
+                return;
+            }
+
+            hyperlink.addAttribute(LINK_ATTRIBUTE, new URLLinkAction(url));
+
+            if (url.length() == text.length()) {
+                print(url, hyperlink);
+            } else {
+                String prefix = text.substring(0, start);
+                String suffix = text.substring(end);
+                print(prefix, style);
+                print(url, hyperlink);
+                print(suffix, style);
+            }
+        } else {
+            print(text, style);
+        }
     }
 
     public void resetFormat() {

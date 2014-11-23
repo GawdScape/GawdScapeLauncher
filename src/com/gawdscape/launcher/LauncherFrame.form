@@ -109,15 +109,18 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="greetingLabel" pref="133" max="32767" attributes="0"/>
-                          <Component id="usernameLabel" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="greetingLabel" alignment="0" pref="133" max="32767" attributes="0"/>
+                          <Component id="usernameLabel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="logoutLabel" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="logoutLabel" max="32767" attributes="0"/>
-                          <Component id="optionsButton" alignment="0" max="32767" attributes="0"/>
-                          <Component id="playButton" alignment="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="optionsButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="playButton" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="aboutLabel" alignment="1" min="-2" pref="69" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -136,9 +139,12 @@
                           <Component id="optionsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="usernameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="7" max="32767" attributes="0"/>
-                      <Component id="logoutLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="logoutLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="aboutLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="12" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -162,7 +168,7 @@
             </Component>
             <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="logoutLabel">
               <Properties>
-                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="horizontalAlignment" type="int" value="11"/>
                 <Property name="text" type="java.lang.String" value="Logout"/>
               </Properties>
               <Events>
@@ -194,6 +200,15 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Guest"/>
               </Properties>
+            </Component>
+            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="aboutLabel">
+              <Properties>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="text" type="java.lang.String" value="About"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="aboutLabelMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

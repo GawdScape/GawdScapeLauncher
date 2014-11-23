@@ -67,4 +67,11 @@ public class Directories {
     public static String getNativesPath() {
 	return getBinPath() + "natives" + separator;
     }
+
+    public static void createGameDirs(File gameDir) {
+	gameDir.mkdirs();
+	new File(gameDir, "resourcepacks").mkdir();
+	new File(gameDir, "saves").mkdir();
+	new File(gameDir, "screenshots").mkdir();
+    }
 }

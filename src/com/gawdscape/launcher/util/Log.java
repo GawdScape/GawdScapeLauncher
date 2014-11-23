@@ -33,7 +33,12 @@ public class Log {
     }
 
     public static void log(Level level, String text, Throwable t) {
-	log(level, text + "\n\t" + t.getMessage());
+	log(level, text + " " + t.getMessage());
+        // Print our stack trace
+        println(t.toString());
+        StackTraceElement[] trace = t.getStackTrace();
+        for (StackTraceElement traceElement : trace)
+            println("\tat " + traceElement);
     }
 
     public static void info(String text) {

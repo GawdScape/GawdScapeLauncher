@@ -12,7 +12,7 @@ import java.net.URL;
  */
 public class Constants {
 
-    public static final int VERSION = 5;
+    public static final int VERSION = 6;
 
     public static final Agent MINECRAFT = new Agent("Minecraft", 1);
 
@@ -29,6 +29,10 @@ public class Constants {
     public static final URI HELP_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/wiki");
     public static final URI REGISTER_LINK = constantURI("https://account.mojang.com/register");
     public static final URI UPDATE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/releases/latest");
+    public static final URI GS_WEBSITE_LINK = constantURI("http://www.gawdscape.com/");
+    public static final URI GS_GITHUB_LINK = constantURI("https://github.com/GawdScape");
+    public static final URI GPL_WARRANTY_LINK = constantURI("http://www.gnu.org/licenses/gpl.html#section15");
+    public static final URI GPL_REDISTRIBUTION_LINK = constantURI("http://www.gnu.org/licenses/gpl.html#preamble");
 
     public static String GS_SERVER_IP = "server.gawdscape.com";
 

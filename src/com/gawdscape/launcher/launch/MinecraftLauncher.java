@@ -279,7 +279,7 @@ public class MinecraftLauncher implements MinecraftExit {
 		}
 	    });
 	}
-	// You close log, you don't know
+	// You close log, what you know??
     }
 
     public void cleanupSkinCache() {

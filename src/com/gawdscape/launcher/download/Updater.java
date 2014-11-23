@@ -24,7 +24,6 @@ public class Updater extends Thread {
     public static Minecraft minecraft;
     public static AssetIndex assetIndex;
     public boolean disableMods;
-    private boolean updating;
 
     public void checkForUpdate() {
         long startTime = System.currentTimeMillis();
@@ -95,7 +94,7 @@ public class Updater extends Thread {
 	try {
 	    localJson = JsonUtils.readJsonFromFile(minecraftJsonFile);
 	} catch (Exception ex) {
-	    Log.error("Error loading loacal minecraft.json", ex);
+	    Log.error("Error loading local minecraft.json", ex);
 	}
 	minecraft = JsonUtils.getGson().fromJson(localJson, Minecraft.class);
     }
@@ -170,6 +169,7 @@ public class Updater extends Thread {
         }
 
         DownloadManager.downloadDialog.setLaunching();
+	Directories.createGameDirs(GawdScapeLauncher.config.getGameDirectory());
         // Try to launch now
         launch();
 
@@ -195,8 +195,10 @@ public class Updater extends Thread {
         for (File modFile : modDir.listFiles()) {
             if (modFile.isFile()) {
                 String modName = modFile.getName();
-                modFile.renameTo(new File(modName + ".disabled"));
-                Log.info("Disabled mod: " + modName);
+		if (modName.toLowerCase().endsWith(".jar") || modName.toLowerCase().endsWith(".zip")) {
+		    modFile.renameTo(new File(modName + ".disabled"));
+		    Log.info("Disabled mod: " + modName);
+		}
             }
         }
     }
