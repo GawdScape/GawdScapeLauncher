@@ -27,33 +27,21 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="dirtPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
+          <Component id="aboutPanel" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="dirtPanel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="aboutPanel" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="com.gawdscape.launcher.ui.DirtPanel" name="dirtPanel1">
+    <Container class="com.gawdscape.launcher.ui.DirtPanel" name="aboutPanel">
 
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="websiteButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="githubButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="closeButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-              </Group>
               <Group type="102" attributes="0">
                   <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -100,6 +88,22 @@
                   </Group>
                   <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
               </Group>
+              <Group type="102" attributes="0">
+                  <EmptySpace pref="335" max="32767" attributes="0"/>
+                  <Component id="closeButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="forumsLink" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="githubLink" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="wikiLink" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="issuesLink" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -144,14 +148,17 @@
                       <Component id="javaVersionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="javaVersion" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="copyright" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="25" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="closeButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="websiteButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="githubButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="forumsLink" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="githubLink" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="wikiLink" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="issuesLink" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="closeButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -196,22 +203,6 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="closeButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="websiteButton">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Website"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="websiteButtonActionPerformed"/>
-          </Events>
-        </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="githubButton">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="GitHub"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="githubButtonActionPerformed"/>
-          </Events>
-        </Component>
         <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="copyright">
           <Properties>
             <Property name="text" type="java.lang.String" value="GawdScapeLauncher  Copyright (C) 2014  GawdScape"/>
@@ -234,10 +225,10 @@
             <Property name="text" type="java.lang.String" value="Launcher Directory:"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="directory">
+        <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="directory">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="&quot;&lt;html&gt;&lt;u&gt;&quot; + Directories.getWorkingDirectory().toString() + &quot;&lt;u&gt;&lt;/html&gt;&quot;" type="code"/>
+              <Connection code="Directories.getWorkingDirectory().toString()" type="code"/>
             </Property>
           </Properties>
           <Events>
@@ -269,10 +260,10 @@
             <Property name="text" type="java.lang.String" value="Game Directory:"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gameDir">
+        <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="gameDir">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="&quot;&lt;html&gt;&lt;u&gt;&quot; + GawdScapeLauncher.config.getGameDir() + &quot;&lt;u&gt;&lt;/html&gt;&quot;" type="code"/>
+              <Connection code="GawdScapeLauncher.config.getGameDir()" type="code"/>
             </Property>
           </Properties>
           <Events>
@@ -290,6 +281,38 @@
               <Connection code="System.getProperty(&quot;java.version&quot;)" type="code"/>
             </Property>
           </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="forumsLink">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Forums"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="forumsLinkMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="githubLink">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="GitHub"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="githubLinkMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="wikiLink">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Wiki"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="wikiLinkMouseClicked"/>
+          </Events>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="issuesLink">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Issues"/>
+          </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="issuesLinkMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

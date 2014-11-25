@@ -21,6 +21,7 @@ public class GawdScapeLauncher {
     public static LogFrame logFrame;
     public static LauncherFrame launcherFrame;
     public static LoginDialog loginDialog;
+    public static SessionManager sessionManager;
     public static SessionResponse response;
     public static Updater updater;
 
@@ -55,13 +56,18 @@ public class GawdScapeLauncher {
             GawdScapeLauncher.logFrame.setVisible(true);
         }
 
+	sessionManager = SessionManager.loadSessions();
+	if (sessionManager == null) {
+            sessionManager = new SessionManager();
+        }
+
         // Load and refresh last saved session
         Log.info("Checking for saved session...");
-        SessionResponse lastSession = SessionManager.loadSession();
-        if (lastSession != null && lastSession.getAccessToken() != null) {
-            Log.info("Session found. Refreshing session for " + lastSession.getSelectedProfile().getName());
-            response = AuthManager.refresh(lastSession.getAccessToken(), lastSession.getClientToken());
-            SessionManager.saveSession(response);
+        if (sessionManager.getAutoLoginUser() != null && sessionManager.isAutoLoginUserSaved()) {
+            Log.info("Session found. Refreshing session for " + sessionManager.getAutoLoginUser());
+            response = AuthManager.refresh(sessionManager.getAutoLoginToken());
+            sessionManager.addSession(response);
+	    SessionManager.saveSessions(sessionManager);
         }
 
         // Should we skip the launcher and just launch Minecraft?

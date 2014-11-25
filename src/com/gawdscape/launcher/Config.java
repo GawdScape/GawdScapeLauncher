@@ -31,7 +31,7 @@ public class Config {
     private String windowHeight;
 
     public Config() {
-	gameDir = "" + Directories.getWorkingDirectory();
+	gameDir = Directories.getWorkingDirectory().toString();
 	memory = 1024;
 	showLog = true;
 	showNews = true;

@@ -7,6 +7,7 @@ import com.gawdscape.launcher.util.OperatingSystem;
 import com.gawdscape.launcher.auth.SessionManager;
 import com.gawdscape.launcher.util.Constants;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import javax.swing.event.HyperlinkEvent;
 
@@ -16,11 +17,13 @@ import javax.swing.event.HyperlinkEvent;
  */
 public class LauncherFrame extends javax.swing.JFrame {
 
+    public static String username = "Guest";
+
     /**
      * Creates new form LauncherFrame
      */
     public LauncherFrame() {
-	Log.debug("Initalizing launcher frame.");
+	Log.debug("Initializing launcher frame.");
 	initComponents();
 	setLocationRelativeTo(null);
 	loadNews();
@@ -54,10 +57,11 @@ public class LauncherFrame extends javax.swing.JFrame {
         profilePanel = new com.gawdscape.launcher.ui.TransparentPanel();
         playButton = new com.gawdscape.launcher.ui.TransparentButton();
         optionsButton = new com.gawdscape.launcher.ui.TransparentButton();
-        logoutLabel = new com.gawdscape.launcher.ui.TransparentLabel();
-        greetingLabel = new javax.swing.JLabel();
-        usernameLabel = new javax.swing.JLabel();
-        aboutLabel = new com.gawdscape.launcher.ui.TransparentLabel();
+        greetingLabel = new com.gawdscape.launcher.ui.TransparentLabel();
+        usernameLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
+        switchUsersLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
+        logoutLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
+        aboutLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
         logoLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -93,21 +97,30 @@ public class LauncherFrame extends javax.swing.JFrame {
             }
         });
 
-        logoutLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        greetingLabel.setText("Welcome back");
+        greetingLabel.setFont(greetingLabel.getFont().deriveFont(greetingLabel.getFont().getStyle() | java.awt.Font.BOLD));
+
+        usernameLabel.setText("Guest");
+        usernameLabel.setFont(usernameLabel.getFont().deriveFont(usernameLabel.getFont().getStyle() | java.awt.Font.BOLD));
+        usernameLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                usernameLabelMouseClicked(evt);
+            }
+        });
+
+        switchUsersLabel.setText("Switch Users");
+        switchUsersLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                switchUsersLabelMouseClicked(evt);
+            }
+        });
+
         logoutLabel.setText("Logout");
         logoutLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 logoutLabelMouseClicked(evt);
             }
         });
-
-        greetingLabel.setFont(greetingLabel.getFont().deriveFont(greetingLabel.getFont().getStyle() | java.awt.Font.BOLD));
-        greetingLabel.setForeground(new java.awt.Color(255, 255, 255));
-        greetingLabel.setText("Welcome back");
-
-        usernameLabel.setFont(usernameLabel.getFont().deriveFont(usernameLabel.getFont().getStyle() | java.awt.Font.BOLD));
-        usernameLabel.setForeground(new java.awt.Color(255, 255, 255));
-        usernameLabel.setText("Guest");
 
         aboutLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         aboutLabel.setText("About");
@@ -124,9 +137,12 @@ public class LauncherFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, profilePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(greetingLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                    .addComponent(greetingLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
                     .addComponent(usernameLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(logoutLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(profilePanelLayout.createSequentialGroup()
+                        .addComponent(switchUsersLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(logoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -141,15 +157,16 @@ public class LauncherFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(playButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(greetingLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(greetingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(optionsButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(usernameLabel))
+                    .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(aboutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(aboutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(switchUsersLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -165,7 +182,7 @@ public class LauncherFrame extends javax.swing.JFrame {
             .addGroup(bottomPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 330, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 346, Short.MAX_VALUE)
                 .addComponent(profilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -190,7 +207,7 @@ public class LauncherFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
                 .addGap(0, 0, 0)
                 .addComponent(bottomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -221,7 +238,8 @@ public class LauncherFrame extends javax.swing.JFrame {
 
     private void logoutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutLabelMouseClicked
 	GawdScapeLauncher.response = null;
-	SessionManager.clearSavedSession();
+	GawdScapeLauncher.sessionManager.removeSession(username);
+	SessionManager.saveSessions(GawdScapeLauncher.sessionManager);
 	dispose();
 	GawdScapeLauncher.loginDialog = new LoginDialog(new javax.swing.JFrame(), true);
 	GawdScapeLauncher.loginDialog.setVisible(true);
@@ -232,7 +250,24 @@ public class LauncherFrame extends javax.swing.JFrame {
         about.setVisible(true);
     }//GEN-LAST:event_aboutLabelMouseClicked
 
-    public void setUsername(String username) {
+    private void usernameLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usernameLabelMouseClicked
+	try {
+	    URI uri = new URI("http://www.gawdscape.com/go/player/" + username);
+	    OperatingSystem.openLink(uri);
+	} catch (URISyntaxException ex) {
+	    Log.error("Invalid URI", ex);
+	}
+    }//GEN-LAST:event_usernameLabelMouseClicked
+
+    private void switchUsersLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_switchUsersLabelMouseClicked
+	GawdScapeLauncher.response = null;
+	dispose();
+	GawdScapeLauncher.loginDialog = new LoginDialog(new javax.swing.JFrame(), true);
+	GawdScapeLauncher.loginDialog.setVisible(true);
+    }//GEN-LAST:event_switchUsersLabelMouseClicked
+
+    public void setUsername(String name) {
+	username = name;
 	greetingLabel.setText("Welcome back");
 	usernameLabel.setText(username);
     }
@@ -271,16 +306,17 @@ public class LauncherFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.gawdscape.launcher.ui.TransparentLabel aboutLabel;
+    private com.gawdscape.launcher.ui.WhiteLinkLabel aboutLabel;
     private com.gawdscape.launcher.ui.CobblestonePanel bottomPanel;
-    private javax.swing.JLabel greetingLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel greetingLabel;
     private javax.swing.JLabel logoLabel;
-    private com.gawdscape.launcher.ui.TransparentLabel logoutLabel;
+    private com.gawdscape.launcher.ui.WhiteLinkLabel logoutLabel;
     private static javax.swing.JTextPane newsPane;
     private com.gawdscape.launcher.ui.TransparentButton optionsButton;
     private com.gawdscape.launcher.ui.TransparentButton playButton;
     private com.gawdscape.launcher.ui.TransparentPanel profilePanel;
     private javax.swing.JScrollPane scrollPane;
-    private javax.swing.JLabel usernameLabel;
+    private com.gawdscape.launcher.ui.WhiteLinkLabel switchUsersLabel;
+    private com.gawdscape.launcher.ui.WhiteLinkLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }

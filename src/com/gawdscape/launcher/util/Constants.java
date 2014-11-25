@@ -12,7 +12,7 @@ import java.net.URL;
  */
 public class Constants {
 
-    public static final int VERSION = 6;
+    public static final int VERSION = 7;
 
     public static final Agent MINECRAFT = new Agent("Minecraft", 1);
 
@@ -26,13 +26,12 @@ public class Constants {
     public static final String GS_LIBRARY_URL = "https://raw.githubusercontent.com/GawdScape/GawdScape/master/lib/";
     public static final String GS_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScape/master/gawdscape.json";
     public static final String LAUNCHER_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScapeLauncher/master/latest.version";
-    public static final URI HELP_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/wiki");
-    public static final URI REGISTER_LINK = constantURI("https://account.mojang.com/register");
     public static final URI UPDATE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/releases/latest");
-    public static final URI GS_WEBSITE_LINK = constantURI("http://www.gawdscape.com/");
+    public static final URI GS_FORUM_LINK = constantURI("http://www.gawdscape.com/");
     public static final URI GS_GITHUB_LINK = constantURI("https://github.com/GawdScape");
-    public static final URI GPL_WARRANTY_LINK = constantURI("http://www.gnu.org/licenses/gpl.html#section15");
-    public static final URI GPL_REDISTRIBUTION_LINK = constantURI("http://www.gnu.org/licenses/gpl.html#preamble");
+    public static final URI LAUNCHER_WIKI_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/wiki");
+    public static final URI LAUNCHER_ISSUE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/issues");
+    public static final URI MC_BUY_LINK = constantURI("https://minecraft.net/store/minecraft");
 
     public static String GS_SERVER_IP = "server.gawdscape.com";
 

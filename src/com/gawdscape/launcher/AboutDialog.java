@@ -63,27 +63,29 @@ public final class AboutDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        dirtPanel1 = new com.gawdscape.launcher.ui.DirtPanel();
+        aboutPanel = new com.gawdscape.launcher.ui.DirtPanel();
         gawdscapeImg = new javax.swing.JLabel();
         launcherImg = new javax.swing.JLabel();
         description1 = new com.gawdscape.launcher.ui.TransparentLabel();
         description2 = new com.gawdscape.launcher.ui.TransparentLabel();
         closeButton = new com.gawdscape.launcher.ui.TransparentButton();
-        websiteButton = new com.gawdscape.launcher.ui.TransparentButton();
-        githubButton = new com.gawdscape.launcher.ui.TransparentButton();
         copyright = new com.gawdscape.launcher.ui.TransparentLabel();
         versionLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         version = new com.gawdscape.launcher.ui.TransparentLabel();
         directoryLabel = new com.gawdscape.launcher.ui.TransparentLabel();
-        directory = new com.gawdscape.launcher.ui.TransparentLabel();
+        directory = new com.gawdscape.launcher.ui.WhiteLinkLabel();
         gsVersionLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         gsVersion = new com.gawdscape.launcher.ui.TransparentLabel();
         mcVersionLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         mcVersion = new com.gawdscape.launcher.ui.TransparentLabel();
         gameDirLabel = new com.gawdscape.launcher.ui.TransparentLabel();
-        gameDir = new com.gawdscape.launcher.ui.TransparentLabel();
+        gameDir = new com.gawdscape.launcher.ui.WhiteLinkLabel();
         javaVersionLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         javaVersion = new com.gawdscape.launcher.ui.TransparentLabel();
+        forumsLink = new com.gawdscape.launcher.ui.HyperLinkLabel();
+        githubLink = new com.gawdscape.launcher.ui.HyperLinkLabel();
+        wikiLink = new com.gawdscape.launcher.ui.HyperLinkLabel();
+        issuesLink = new com.gawdscape.launcher.ui.HyperLinkLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About GawdScape Launcher");
@@ -106,20 +108,6 @@ public final class AboutDialog extends javax.swing.JDialog {
             }
         });
 
-        websiteButton.setText("Website");
-        websiteButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                websiteButtonActionPerformed(evt);
-            }
-        });
-
-        githubButton.setText("GitHub");
-        githubButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                githubButtonActionPerformed(evt);
-            }
-        });
-
         copyright.setText("GawdScapeLauncher  Copyright (C) 2014  GawdScape");
 
         versionLabel.setText("Launcher Version:");
@@ -128,7 +116,7 @@ public final class AboutDialog extends javax.swing.JDialog {
 
         directoryLabel.setText("Launcher Directory:");
 
-        directory.setText("<html><u>" + Directories.getWorkingDirectory().toString() + "<u></html>");
+        directory.setText(Directories.getWorkingDirectory().toString());
         directory.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 directoryMouseClicked(evt);
@@ -145,7 +133,7 @@ public final class AboutDialog extends javax.swing.JDialog {
 
         gameDirLabel.setText("Game Directory:");
 
-        gameDir.setText("<html><u>" + GawdScapeLauncher.config.getGameDir() + "<u></html>");
+        gameDir.setText(GawdScapeLauncher.config.getGameDir());
         gameDir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 gameDirMouseClicked(evt);
@@ -156,60 +144,94 @@ public final class AboutDialog extends javax.swing.JDialog {
 
         javaVersion.setText(System.getProperty("java.version"));
 
-        javax.swing.GroupLayout dirtPanel1Layout = new javax.swing.GroupLayout(dirtPanel1);
-        dirtPanel1.setLayout(dirtPanel1Layout);
-        dirtPanel1Layout.setHorizontalGroup(
-            dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dirtPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(websiteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(githubButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(dirtPanel1Layout.createSequentialGroup()
+        forumsLink.setText("Forums");
+        forumsLink.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                forumsLinkMouseClicked(evt);
+            }
+        });
+
+        githubLink.setText("GitHub");
+        githubLink.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                githubLinkMouseClicked(evt);
+            }
+        });
+
+        wikiLink.setText("Wiki");
+        wikiLink.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                wikiLinkMouseClicked(evt);
+            }
+        });
+
+        issuesLink.setText("Issues");
+        issuesLink.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                issuesLinkMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout aboutPanelLayout = new javax.swing.GroupLayout(aboutPanel);
+        aboutPanel.setLayout(aboutPanelLayout);
+        aboutPanelLayout.setHorizontalGroup(
+            aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutPanelLayout.createSequentialGroup()
                 .addGap(0, 10, Short.MAX_VALUE)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(dirtPanel1Layout.createSequentialGroup()
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
                         .addComponent(javaVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(javaVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(dirtPanel1Layout.createSequentialGroup()
+                    .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(aboutPanelLayout.createSequentialGroup()
                             .addComponent(gameDirLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(gameDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(dirtPanel1Layout.createSequentialGroup()
+                        .addGroup(aboutPanelLayout.createSequentialGroup()
                             .addComponent(mcVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(mcVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(dirtPanel1Layout.createSequentialGroup()
+                        .addGroup(aboutPanelLayout.createSequentialGroup()
                             .addComponent(gsVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(gsVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(dirtPanel1Layout.createSequentialGroup()
+                        .addGroup(aboutPanelLayout.createSequentialGroup()
                             .addComponent(directoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(directory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(copyright, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(dirtPanel1Layout.createSequentialGroup()
+                        .addGroup(aboutPanelLayout.createSequentialGroup()
                             .addComponent(versionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(version, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(dirtPanel1Layout.createSequentialGroup()
+                        .addGroup(aboutPanelLayout.createSequentialGroup()
                             .addComponent(gawdscapeImg, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(0, 0, 0)
                             .addComponent(launcherImg))
                         .addComponent(description1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(description2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(0, 10, Short.MAX_VALUE))
+            .addGroup(aboutPanelLayout.createSequentialGroup()
+                .addContainerGap(335, Short.MAX_VALUE)
+                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(aboutPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(forumsLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(githubLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(wikiLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(issuesLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        dirtPanel1Layout.setVerticalGroup(
-            dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(dirtPanel1Layout.createSequentialGroup()
+        aboutPanelLayout.setVerticalGroup(
+            aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(aboutPanelLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(launcherImg)
                     .addComponent(gawdscapeImg))
                 .addGap(20, 20, 20)
@@ -217,36 +239,39 @@ public final class AboutDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(description2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(versionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(version, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(directoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(directory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(gsVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(gsVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(mcVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(mcVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(gameDirLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(gameDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(javaVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(javaVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addGap(18, 18, 18)
                 .addComponent(copyright, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addGroup(dirtPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(websiteButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(githubButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(forumsLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(githubLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(wikiLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(issuesLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -254,13 +279,11 @@ public final class AboutDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(dirtPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(aboutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dirtPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(aboutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -270,14 +293,6 @@ public final class AboutDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
-    private void websiteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_websiteButtonActionPerformed
-        OperatingSystem.openLink(Constants.GS_WEBSITE_LINK);
-    }//GEN-LAST:event_websiteButtonActionPerformed
-
-    private void githubButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_githubButtonActionPerformed
-        OperatingSystem.openLink(Constants.GS_GITHUB_LINK);
-    }//GEN-LAST:event_githubButtonActionPerformed
-
     private void directoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryMouseClicked
         OperatingSystem.openFolder(Directories.getWorkingDirectory());
     }//GEN-LAST:event_directoryMouseClicked
@@ -285,6 +300,22 @@ public final class AboutDialog extends javax.swing.JDialog {
     private void gameDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gameDirMouseClicked
         OperatingSystem.openFolder(GawdScapeLauncher.config.getGameDirectory());
     }//GEN-LAST:event_gameDirMouseClicked
+
+    private void forumsLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forumsLinkMouseClicked
+        OperatingSystem.openLink(Constants.GS_FORUM_LINK);
+    }//GEN-LAST:event_forumsLinkMouseClicked
+
+    private void githubLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_githubLinkMouseClicked
+        OperatingSystem.openLink(Constants.GS_GITHUB_LINK);
+    }//GEN-LAST:event_githubLinkMouseClicked
+
+    private void wikiLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wikiLinkMouseClicked
+        OperatingSystem.openLink(Constants.LAUNCHER_WIKI_LINK);
+    }//GEN-LAST:event_wikiLinkMouseClicked
+
+    private void issuesLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_issuesLinkMouseClicked
+        OperatingSystem.openLink(Constants.LAUNCHER_ISSUE_LINK);
+    }//GEN-LAST:event_issuesLinkMouseClicked
 
     /**
      * @param args the command line arguments
@@ -329,19 +360,21 @@ public final class AboutDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.gawdscape.launcher.ui.DirtPanel aboutPanel;
     private com.gawdscape.launcher.ui.TransparentButton closeButton;
     private com.gawdscape.launcher.ui.TransparentLabel copyright;
     private com.gawdscape.launcher.ui.TransparentLabel description1;
     private com.gawdscape.launcher.ui.TransparentLabel description2;
-    private com.gawdscape.launcher.ui.TransparentLabel directory;
+    private com.gawdscape.launcher.ui.WhiteLinkLabel directory;
     private com.gawdscape.launcher.ui.TransparentLabel directoryLabel;
-    private com.gawdscape.launcher.ui.DirtPanel dirtPanel1;
-    private com.gawdscape.launcher.ui.TransparentLabel gameDir;
+    private com.gawdscape.launcher.ui.HyperLinkLabel forumsLink;
+    private com.gawdscape.launcher.ui.WhiteLinkLabel gameDir;
     private com.gawdscape.launcher.ui.TransparentLabel gameDirLabel;
     private javax.swing.JLabel gawdscapeImg;
-    private com.gawdscape.launcher.ui.TransparentButton githubButton;
+    private com.gawdscape.launcher.ui.HyperLinkLabel githubLink;
     private com.gawdscape.launcher.ui.TransparentLabel gsVersion;
     private com.gawdscape.launcher.ui.TransparentLabel gsVersionLabel;
+    private com.gawdscape.launcher.ui.HyperLinkLabel issuesLink;
     private com.gawdscape.launcher.ui.TransparentLabel javaVersion;
     private com.gawdscape.launcher.ui.TransparentLabel javaVersionLabel;
     private javax.swing.JLabel launcherImg;
@@ -349,6 +382,6 @@ public final class AboutDialog extends javax.swing.JDialog {
     private com.gawdscape.launcher.ui.TransparentLabel mcVersionLabel;
     private com.gawdscape.launcher.ui.TransparentLabel version;
     private com.gawdscape.launcher.ui.TransparentLabel versionLabel;
-    private com.gawdscape.launcher.ui.TransparentButton websiteButton;
+    private com.gawdscape.launcher.ui.HyperLinkLabel wikiLink;
     // End of variables declaration//GEN-END:variables
 }

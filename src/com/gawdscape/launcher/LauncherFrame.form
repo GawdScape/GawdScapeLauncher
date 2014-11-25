@@ -35,7 +35,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="scrollPane" pref="380" max="32767" attributes="0"/>
+              <Component id="scrollPane" pref="385" max="32767" attributes="0"/>
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               <Component id="bottomPanel" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -81,7 +81,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="logoLabel" min="-2" pref="264" max="-2" attributes="0"/>
-                  <EmptySpace pref="330" max="32767" attributes="0"/>
+                  <EmptySpace pref="346" max="32767" attributes="0"/>
                   <Component id="profilePanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -110,9 +110,13 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="greetingLabel" alignment="0" pref="133" max="32767" attributes="0"/>
+                          <Component id="greetingLabel" alignment="0" pref="117" max="32767" attributes="0"/>
                           <Component id="usernameLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="logoutLabel" alignment="1" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="switchUsersLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="logoutLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -134,7 +138,7 @@
                           <Component id="playButton" min="-2" max="-2" attributes="0"/>
                           <Component id="greetingLabel" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="optionsButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="usernameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -143,6 +147,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="logoutLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="aboutLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="switchUsersLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="12" max="32767" attributes="0"/>
                   </Group>
@@ -166,42 +171,46 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="optionsButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="logoutLabel">
+            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="greetingLabel">
               <Properties>
-                <Property name="horizontalAlignment" type="int" value="11"/>
+                <Property name="text" type="java.lang.String" value="Welcome back"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                  <FontInfo relative="true">
+                    <Font bold="true" component="greetingLabel" property="font" relativeSize="true" size="0"/>
+                  </FontInfo>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="usernameLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Guest"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+                  <FontInfo relative="true">
+                    <Font bold="true" component="usernameLabel" property="font" relativeSize="true" size="0"/>
+                  </FontInfo>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="usernameLabelMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="switchUsersLabel">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Switch Users"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="switchUsersLabelMouseClicked"/>
+              </Events>
+            </Component>
+            <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="logoutLabel">
+              <Properties>
                 <Property name="text" type="java.lang.String" value="Logout"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="logoutLabelMouseClicked"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="greetingLabel">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                  <FontInfo relative="true">
-                    <Font bold="true" component="greetingLabel" property="font" relativeSize="true" size="0"/>
-                  </FontInfo>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Welcome back"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="usernameLabel">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
-                  <FontInfo relative="true">
-                    <Font bold="true" component="usernameLabel" property="font" relativeSize="true" size="0"/>
-                  </FontInfo>
-                </Property>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Guest"/>
-              </Properties>
-            </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="aboutLabel">
+            <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="aboutLabel">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="About"/>

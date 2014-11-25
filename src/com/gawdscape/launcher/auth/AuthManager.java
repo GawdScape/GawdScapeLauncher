@@ -28,8 +28,8 @@ public class AuthManager {
     }
 
     // Login with UUID and ClientToken
-    public static SessionResponse refresh(String accessToken, String clientToken) {
-	RefreshRequest request = new RefreshRequest(accessToken, clientToken);
+    public static SessionResponse refresh(SessionToken token) {
+	RefreshRequest request = new RefreshRequest(token.getAccessToken(), token.getClientToken());
 	String result = postJson(Constants.MC_REFRESH, gson.toJson(request));
 	Log.fine("Refresh: " + result);
 	SessionResponse response = gson.fromJson(result, SessionResponse.class);
