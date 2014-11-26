@@ -237,11 +237,12 @@ public class LauncherFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_optionsButtonActionPerformed
 
     private void logoutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutLabelMouseClicked
-	GawdScapeLauncher.response = null;
-	GawdScapeLauncher.sessionManager.removeSession(username);
-	SessionManager.saveSessions(GawdScapeLauncher.sessionManager);
+	GawdScapeLauncher.session = null;
+	SessionManager manager = SessionManager.loadSessions();
+	manager.removeSession(username);
+	SessionManager.saveSessions(manager);
 	dispose();
-	GawdScapeLauncher.loginDialog = new LoginDialog(new javax.swing.JFrame(), true);
+	GawdScapeLauncher.loginDialog = new LoginDialog(new javax.swing.JFrame(), true, manager);
 	GawdScapeLauncher.loginDialog.setVisible(true);
     }//GEN-LAST:event_logoutLabelMouseClicked
 
@@ -260,9 +261,9 @@ public class LauncherFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameLabelMouseClicked
 
     private void switchUsersLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_switchUsersLabelMouseClicked
-	GawdScapeLauncher.response = null;
+	GawdScapeLauncher.session = null;
 	dispose();
-	GawdScapeLauncher.loginDialog = new LoginDialog(new javax.swing.JFrame(), true);
+	GawdScapeLauncher.loginDialog = new LoginDialog(new javax.swing.JFrame(), true, SessionManager.loadSessions());
 	GawdScapeLauncher.loginDialog.setVisible(true);
     }//GEN-LAST:event_switchUsersLabelMouseClicked
 

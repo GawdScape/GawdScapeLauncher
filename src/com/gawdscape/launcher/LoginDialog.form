@@ -30,27 +30,29 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="infoLabel" pref="230" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace pref="40" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="autoLoginCheckBox" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="usernameLabel" max="32767" attributes="0"/>
-                      <Component id="passwordLabel" alignment="0" max="32767" attributes="0"/>
-                      <Component id="passwordField" alignment="0" max="32767" attributes="0"/>
-                      <Component id="rememberCheckBox" alignment="0" pref="170" max="32767" attributes="0"/>
-                      <Component id="loginButton" alignment="0" max="32767" attributes="0"/>
-                      <Component id="helpLabel" alignment="0" max="32767" attributes="0"/>
-                      <Component id="buyLabel" alignment="0" max="32767" attributes="0"/>
-                      <Component id="usernameComboBox" alignment="0" max="32767" attributes="0"/>
+                  <Component id="infoLabel" alignment="0" pref="230" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="0" pref="30" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="autoLoginCheckBox" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="usernameLabel" max="32767" attributes="0"/>
+                              <Component id="passwordLabel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="passwordField" alignment="0" max="32767" attributes="0"/>
+                              <Component id="rememberCheckBox" alignment="0" pref="170" max="32767" attributes="0"/>
+                              <Component id="loginButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="helpLabel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="buyLabel" alignment="0" max="32767" attributes="0"/>
+                              <Component id="usernameComboBox" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="0" pref="30" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

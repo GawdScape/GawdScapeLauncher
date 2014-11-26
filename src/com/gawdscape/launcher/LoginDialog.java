@@ -17,11 +17,14 @@ import java.util.Iterator;
  */
 public final class LoginDialog extends javax.swing.JDialog {
 
+    private SessionManager sessionManager;
+
     /**
      * Creates new form LoginDialog
      */
-    public LoginDialog(java.awt.Frame parent, boolean modal) {
+    public LoginDialog(java.awt.Frame parent, boolean modal, SessionManager manager) {
 	super(parent, modal);
+	sessionManager = manager;
 	Log.debug("Initializing login dialog.");
 	initComponents();
 	setLocationRelativeTo(parent);
@@ -161,8 +164,8 @@ public final class LoginDialog extends javax.swing.JDialog {
 	String username = usernameComboBox.getSelectedItem().toString();
 	String password = new String(passwordField.getPassword());
 
-	if (GawdScapeLauncher.sessionManager.isUserSaved(username)) {
-	    doLogin(null, null, GawdScapeLauncher.sessionManager.getToken(username));
+	if (sessionManager.isUserSaved(username)) {
+	    doLogin(null, null, sessionManager.getToken(username));
 	    return;
 	}
 
@@ -195,19 +198,22 @@ public final class LoginDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_autoLoginCheckBoxActionPerformed
 
     private void usernameComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameComboBoxActionPerformed
-        boolean saved = GawdScapeLauncher.sessionManager.isUserSaved(usernameComboBox.getSelectedItem().toString());
+        String username = usernameComboBox.getSelectedItem().toString();
+	boolean saved = sessionManager.isUserSaved(username);
+	boolean autoLogin = sessionManager.isAutoLoginUser(username);
 	usernameComboBox.setEditable(!saved);
 	passwordField.setEditable(!saved);
 	rememberCheckBox.setSelected(saved);
+	autoLoginCheckBox.setSelected(autoLogin);
     }//GEN-LAST:event_usernameComboBoxActionPerformed
 
     public void loadUsers() {
-	Iterator it = GawdScapeLauncher.sessionManager.getSavedUsernames().iterator();
+	Iterator it = sessionManager.getSavedUsernames().iterator();
 	while (it.hasNext()) {
 	    usernameComboBox.addItem(it.next());
 	}
-	if (GawdScapeLauncher.sessionManager.getLastUser() != null) {
-	    usernameComboBox.setSelectedItem(GawdScapeLauncher.sessionManager.getLastUser());
+	if (sessionManager.getLastUser() != null) {
+	    usernameComboBox.setSelectedItem(sessionManager.getLastUser());
 	}
 	usernameComboBox.addItem("");
     }
@@ -226,21 +232,24 @@ public final class LoginDialog extends javax.swing.JDialog {
 	    } else {
 		response = AuthManager.authenticate(username, password, null);
 	    }
-	    GawdScapeLauncher.response = response;
+	    GawdScapeLauncher.session = response;
 
 	    if (response.getAccessToken() != null) {
 		String playerName = response.getSelectedProfile().getName();
 		if (rememberCheckBox.isSelected()) {
-		    GawdScapeLauncher.sessionManager.addSession(response);
-		    GawdScapeLauncher.sessionManager.setLastUser(playerName);
+		    sessionManager.addSession(response);
+		    sessionManager.setLastUser(playerName);
 		    if (autoLoginCheckBox.isSelected()) {
-			GawdScapeLauncher.sessionManager.setAutoLoginUser(playerName);
+			sessionManager.setAutoLoginUser(playerName);
 		    }
 		} else {
-		    GawdScapeLauncher.sessionManager.removeSession(playerName);
-		    GawdScapeLauncher.sessionManager.setLastUser(null);
+		    sessionManager.removeSession(playerName);
+		    sessionManager.setLastUser(null);
 		}
-		SessionManager.saveSessions(GawdScapeLauncher.sessionManager);
+		if (!autoLoginCheckBox.isSelected() && sessionManager.isAutoLoginUser(playerName)) {
+		    sessionManager.setAutoLoginUser(null);
+		}
+		SessionManager.saveSessions(sessionManager);
 		dispose();
 		GawdScapeLauncher.launcherFrame.setUsername(playerName);
 		GawdScapeLauncher.launcherFrame.setVisible(true);
@@ -266,7 +275,7 @@ public final class LoginDialog extends javax.swing.JDialog {
 	/* Create and display the dialog */
 	java.awt.EventQueue.invokeLater(new Runnable() {
 	    public void run() {
-		LoginDialog dialog = new LoginDialog(new javax.swing.JFrame(), true);
+		LoginDialog dialog = new LoginDialog(new javax.swing.JFrame(), true, SessionManager.loadSessions());
 		dialog.setVisible(true);
 	    }
 	});

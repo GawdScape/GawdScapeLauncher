@@ -1,5 +1,6 @@
 package com.gawdscape.launcher.launch;
 
+import com.gawdscape.launcher.Config;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.UUID;
 import javax.swing.SwingUtilities;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
+import com.gawdscape.launcher.auth.SessionResponse;
 import com.gawdscape.launcher.download.Updater;
 import com.gawdscape.launcher.game.AssetIndex;
 import com.gawdscape.launcher.game.GawdScape;
@@ -26,11 +28,13 @@ import com.gawdscape.launcher.util.OperatingSystem;
  */
 public class MinecraftLauncher implements MinecraftExit {
 
-    private final Object lock = new Object();
-    private boolean isWorking;
+    private Config config;
+    private SessionResponse session;
 
     public void launchGame(Minecraft mc, GawdScape gs) throws IOException {
 	Log.info("Prepare for launch...");
+	config = GawdScapeLauncher.config;
+	session = GawdScapeLauncher.session;
 	if (mc == null) {
 	    Log.severe("Aborting launch; Minecraft version is null?");
 	    return;
@@ -42,8 +46,7 @@ public class MinecraftLauncher implements MinecraftExit {
 	}
 
 	File nativeDir = new File(Directories.getNativesPath());
-	File assetsDir = new File(Directories.getAssetPath());
-	File gameDirectory = GawdScapeLauncher.config.getGameDirectory();
+	File gameDirectory = config.getGameDirectory();
 	Log.info("Launching in " + gameDirectory);
 	if (!gameDirectory.exists()) {
 	    if (!gameDirectory.mkdirs()) {
@@ -63,28 +66,28 @@ public class MinecraftLauncher implements MinecraftExit {
 	    processLauncher.addCommands(new String[]{"-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump"});
 	}
 	boolean is32Bit = "32".equals(System.getProperty("sun.arch.data.model"));
-	String memoryArgument = is32Bit ? "-Xmx512M" : "-Xmx" + GawdScapeLauncher.config.getMemory() + "M";
+	String memoryArgument = is32Bit ? "-Xmx512M" : "-Xmx" + config.getMemory() + "M";
 	processLauncher.addSplitCommands(memoryArgument);
 	processLauncher.addCommands(new String[]{"-Djava.library.path=" + nativeDir.getAbsolutePath()});
 	processLauncher.addCommands(new String[]{"-cp", constructClassPath(mc, gs)});
 	processLauncher.addCommands(new String[]{Updater.minecraft.getMainClass()});
 
-	String[] args = getMinecraftArguments(Updater.minecraft, gameDirectory, assetsDir);
+	String[] args = getMinecraftArguments(Updater.minecraft, gameDirectory);
 	if (args == null) {
 	    return;
 	}
 	processLauncher.addCommands(args);
 
-	if ((GawdScapeLauncher.response == null) || (GawdScapeLauncher.response.getSelectedProfile() == null)) {
+	if ((session == null) || (session.getSelectedProfile() == null)) {
 	    processLauncher.addCommands(new String[]{"--demo"});
 	}
 
-	if (GawdScapeLauncher.config.getFullscreen()) {
+	if (config.getFullscreen()) {
 	    processLauncher.addCommands(new String[]{"--fullscreen"});
 	}
 
-	if (GawdScapeLauncher.config.getjoinServer()) {
-	    String ip = GawdScapeLauncher.config.getServerIP();
+	if (config.getjoinServer()) {
+	    String ip = config.getServerIP();
 	    if (ip.contains(":")) {
 		String[] socket = ip.split(":");
 		processLauncher.addCommands(new String[]{"--server", String.valueOf(socket[0])});
@@ -94,9 +97,9 @@ public class MinecraftLauncher implements MinecraftExit {
 	    }
 	}
 
-	if (GawdScapeLauncher.config.getWindowSize()) {
-	    processLauncher.addCommands(new String[]{"--width", String.valueOf(GawdScapeLauncher.config.getWindowWidth())});
-	    processLauncher.addCommands(new String[]{"--height", String.valueOf(GawdScapeLauncher.config.getWindowHeight())});
+	if (config.getWindowSize()) {
+	    processLauncher.addCommands(new String[]{"--width", String.valueOf(config.getWindowWidth())});
+	    processLauncher.addCommands(new String[]{"--height", String.valueOf(config.getWindowHeight())});
 	}
 	try {
 	    MinecraftProcess process = processLauncher.start();
@@ -112,7 +115,7 @@ public class MinecraftLauncher implements MinecraftExit {
 	}
     }
 
-    private String[] getMinecraftArguments(Minecraft version, File gameDirectory, File assetsDirectory) {
+    private String[] getMinecraftArguments(Minecraft version, File gameDirectory) {
 	if (version.getMinecraftArguments() == null) {
 	    Log.severe("Can't run version, missing minecraftArguments");
 	    return null;
@@ -120,8 +123,8 @@ public class MinecraftLauncher implements MinecraftExit {
 
 	// There's probably a better way to do this... But fuck it.
 	String userProperties = "";
-	if (GawdScapeLauncher.response.getUser().getProperties() != null) {
-	    userProperties = GawdScapeLauncher.response.getUser().getProperties().toString();
+	if (session.getUser().getProperties() != null) {
+	    userProperties = session.getUser().getProperties().toString();
 	}
 
 	// Get Twitch Access Token
@@ -132,17 +135,17 @@ public class MinecraftLauncher implements MinecraftExit {
 	}
 
 	Map<String, String> map = new HashMap();
-	map.put("auth_access_token", GawdScapeLauncher.response.getAccessToken());
+	map.put("auth_access_token", session.getAccessToken());
 	map.put("user_properties", String.format("{%s}", twitchToken));
-	if (GawdScapeLauncher.response.getSessionId() != null) {
-	    map.put("auth_session", GawdScapeLauncher.response.getSessionId());
+	if (session.getSessionId() != null) {
+	    map.put("auth_session", session.getSessionId());
 	} else {
 	    map.put("auth_session", "-");
 	}
-	if (GawdScapeLauncher.response.getSelectedProfile().getId() != null) {
-	    map.put("auth_player_name", GawdScapeLauncher.response.getSelectedProfile().getName());
-	    map.put("auth_uuid", GawdScapeLauncher.response.getSelectedProfile().getId());
-	    map.put("user_type", GawdScapeLauncher.response.getSelectedProfile().isLegacy() ? "legacy" : "mojang");
+	if (session.getSelectedProfile().getId() != null) {
+	    map.put("auth_player_name", session.getSelectedProfile().getName());
+	    map.put("auth_uuid", session.getSelectedProfile().getId());
+	    map.put("user_type", session.getSelectedProfile().isLegacy() ? "legacy" : "mojang");
 	} else {
 	    map.put("auth_player_name", "Player");
 	    map.put("auth_uuid", new UUID(0L, 0L).toString());
@@ -267,7 +270,7 @@ public class MinecraftLauncher implements MinecraftExit {
 	int exitCode = process.getExitCode();
 	if (exitCode == 0) {
 	    Log.info("Game ended with no troubles detected (exit code " + exitCode + ")");
-	    if (GawdScapeLauncher.config.getCloseLog()) {
+	    if (config.getCloseLog()) {
 		System.exit(0);
 	    }
 	} else if (GawdScapeLauncher.logFrame != null) {

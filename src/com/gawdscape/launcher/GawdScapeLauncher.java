@@ -21,8 +21,7 @@ public class GawdScapeLauncher {
     public static LogFrame logFrame;
     public static LauncherFrame launcherFrame;
     public static LoginDialog loginDialog;
-    public static SessionManager sessionManager;
-    public static SessionResponse response;
+    public static SessionResponse session;
     public static Updater updater;
 
     /**
@@ -56,23 +55,20 @@ public class GawdScapeLauncher {
             GawdScapeLauncher.logFrame.setVisible(true);
         }
 
-	sessionManager = SessionManager.loadSessions();
-	if (sessionManager == null) {
-            sessionManager = new SessionManager();
-        }
+	SessionManager sessionManager = SessionManager.loadSessions();
 
         // Load and refresh last saved session
         Log.info("Checking for saved session...");
-        if (sessionManager.getAutoLoginUser() != null && sessionManager.isAutoLoginUserSaved()) {
+        if (sessionManager.shouldAutoLogin()) {
             Log.info("Session found. Refreshing session for " + sessionManager.getAutoLoginUser());
-            response = AuthManager.refresh(sessionManager.getAutoLoginToken());
-            sessionManager.addSession(response);
+            session = AuthManager.refresh(sessionManager.getAutoLoginToken());
+            sessionManager.addSession(session);
 	    SessionManager.saveSessions(sessionManager);
         }
 
         // Should we skip the launcher and just launch Minecraft?
-        if (config.getSkipLauncher() && (response != null && response.getAccessToken() != null)) {
-            Log.info("Refreshed session for " + response.getSelectedProfile().getName());
+        if (config.getSkipLauncher() && (session != null && session.getAccessToken() != null)) {
+            Log.info("Refreshed session for " + session.getSelectedProfile().getName());
             updater = new Updater();
             updater.start();
         } else {
@@ -80,17 +76,17 @@ public class GawdScapeLauncher {
             launcherFrame = new LauncherFrame();
 
             // Valid session, open launcher
-            if (response != null && response.getAccessToken() != null) {
-                Log.info("Refreshed session for " + response.getSelectedProfile().getName());
-                launcherFrame.setUsername(response.getSelectedProfile().getName());
+            if (session != null && session.getAccessToken() != null) {
+                Log.info("Refreshed session for " + session.getSelectedProfile().getName());
+                launcherFrame.setUsername(session.getSelectedProfile().getName());
                 launcherFrame.setVisible(true);
                 // Login, open login form
             } else {
-                loginDialog = new LoginDialog(launcherFrame, true);
-                if (response != null && response.getError() != null) {
-                    loginDialog.setError(response.getErrorMessage());
+                loginDialog = new LoginDialog(launcherFrame, true, sessionManager);
+                if (session != null && session.getError() != null) {
+                    loginDialog.setError(session.getErrorMessage());
                     Log.severe("Error refreshing session:");
-                    Log.severe(response.getErrorMessage());
+                    Log.severe(session.getErrorMessage());
                 }
                 loginDialog.setVisible(true);
             }

@@ -12,7 +12,7 @@ import java.net.URL;
  */
 public class Constants {
 
-    public static final int VERSION = 7;
+    public static final int VERSION = 8;
 
     public static final Agent MINECRAFT = new Agent("Minecraft", 1);
 

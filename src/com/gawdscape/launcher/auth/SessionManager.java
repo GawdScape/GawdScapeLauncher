@@ -6,7 +6,6 @@ import com.gawdscape.launcher.util.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -45,10 +44,6 @@ public class SessionManager {
 	return sessions.keySet();
     }
 
-    public Collection<SessionToken> getSavedSessions() {
-	return sessions.values();
-    }
-
     public void setLastUser(String username) {
 	lastUser = username;
     }
@@ -65,33 +60,45 @@ public class SessionManager {
 	return autoLoginUser;
     }
 
-    public boolean isAutoLoginUserSaved() {
-	return sessions.containsKey(autoLoginUser);
-    }
-
     public SessionToken getAutoLoginToken() {
 	return sessions.get(autoLoginUser);
     }
 
-    public static SessionManager loadSessions() {
-	String userJson = "";
-	try {
-	    userJson = JsonUtils.readJsonFromFile(userFile);
-	} catch (FileNotFoundException ex) {
-	    Log.error("Last login not found", ex);
-	} catch (IOException ex) {
-	    Log.error("Error saving last login", ex);
-	}
-	SessionManager user = JsonUtils.getGson().fromJson(userJson, SessionManager.class);
-	return user;
+    public boolean isAutoLoginUser(String username) {
+	if (autoLoginUser == null)
+	    return false;
+	return autoLoginUser.equals(username);
     }
 
-    public static void saveSessions(SessionManager profile) {
-	String userJson = JsonUtils.getGson().toJson(profile);
+    public boolean shouldAutoLogin() {
+	if (autoLoginUser != null) {
+	    return sessions.containsKey(autoLoginUser);
+	}
+	return false;
+    }
+
+    public static SessionManager loadSessions() {
+	String sessionJson = "";
 	try {
-	    JsonUtils.writeJsonToFile(userJson, userFile);
+	    sessionJson = JsonUtils.readJsonFromFile(userFile);
+	} catch (FileNotFoundException ex) {
+	    Log.warning("Saved sessions not found.");
 	} catch (IOException ex) {
-	    Log.error("Error saving last login", ex);
+	    Log.error("Error loading saved sessions.", ex);
+	}
+	SessionManager manager = JsonUtils.getGson().fromJson(sessionJson, SessionManager.class);
+	if (manager == null) {
+	    manager = new SessionManager();
+	}
+	return manager;
+    }
+
+    public static void saveSessions(SessionManager manager) {
+	String sessionJson = JsonUtils.getGson().toJson(manager);
+	try {
+	    JsonUtils.writeJsonToFile(sessionJson, userFile);
+	} catch (IOException ex) {
+	    Log.error("Error saving sessions.", ex);
 	}
     }
 
