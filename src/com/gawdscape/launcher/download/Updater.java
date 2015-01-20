@@ -2,6 +2,7 @@ package com.gawdscape.launcher.download;
 
 import com.gawdscape.launcher.Config;
 import com.gawdscape.launcher.GawdScapeLauncher;
+import com.gawdscape.launcher.LauncherFrame;
 import com.gawdscape.launcher.game.AssetIndex;
 import com.gawdscape.launcher.game.GawdScape;
 import com.gawdscape.launcher.game.Minecraft;
@@ -10,6 +11,7 @@ import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
+import com.gawdscape.launcher.util.OperatingSystem;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -130,17 +132,37 @@ public class Updater extends Thread {
     }
 
     public void promptUpdate() {
-	int n = JOptionPane.showConfirmDialog(
-		GawdScapeLauncher.launcherFrame,
-		"GawdScape version " + gawdscape.getId() + " has been released."
-		+ "\nWould you like to download now?",
-		"GawdScape Update",
-		JOptionPane.YES_NO_OPTION);
-	if (n == 0) {
-	    update();
-	} else {
-	    launch();
-	}
+		Object[] options = {"Yes", "No", "Release Notes"};
+		int n = JOptionPane.showOptionDialog(
+			GawdScapeLauncher.launcherFrame,
+			"GawdScape version " + gawdscape.getId() + " has been released."
+			+ "\nWould you like to download now?",
+			"GawdScape Update",
+			JOptionPane.YES_NO_CANCEL_OPTION,
+			JOptionPane.QUESTION_MESSAGE,
+			null,
+			options,
+			options[0]);
+		switch (n) {
+			case JOptionPane.YES_OPTION:
+				update();
+				break;
+			case JOptionPane.NO_OPTION:
+				launch();
+				break;
+			case JOptionPane.CANCEL_OPTION:
+				releaseNotes();
+			default:
+				LauncherFrame.playButton.setEnabled(true);
+		}
+    }
+
+    public void releaseNotes() {
+		OperatingSystem.openLink(
+			Constants.constantURI(
+				Constants.GS_VERSION_NOTES_URL + gawdscape.getId()
+			)
+		);
     }
 
     public void update() {
@@ -182,10 +204,10 @@ public class Updater extends Thread {
     }
 
     public void downloadGame() {
-	// Queue all nessary game files
-	DownloadManager.queueLibraries(minecraft.getRelevantLibraries(), gawdscape.getRelevantLibraries());
-	DownloadManager.queueMinecraft(minecraft.getId(), gawdscape.getId());
-	DownloadManager.queueAssets(assetIndex);
+		// Queue all nessary game files
+		DownloadManager.queueLibraries(minecraft.getRelevantLibraries(), gawdscape.getRelevantLibraries());
+		DownloadManager.queueMinecraft(minecraft.getId(), gawdscape.getId());
+		DownloadManager.queueAssets(assetIndex);
         DownloadManager.completeQueue();
     }
 
@@ -196,7 +218,7 @@ public class Updater extends Thread {
             if (modFile.isFile()) {
                 String modName = modFile.getName();
 		if (modName.toLowerCase().endsWith(".jar") || modName.toLowerCase().endsWith(".zip")) {
-		    modFile.renameTo(new File(modName + ".disabled"));
+		    modFile.renameTo(new File(modDir, modName + ".disabled"));
 		    Log.info("Disabled mod: " + modName);
 		}
             }
@@ -207,8 +229,8 @@ public class Updater extends Thread {
         long startTime = System.currentTimeMillis();
 	loadLocalMinecraftData();
 	try {
-	    MinecraftLauncher launcher = new MinecraftLauncher();
-	    launcher.launchGame(minecraft, gawdscape);
+	    GawdScapeLauncher.launcher = new MinecraftLauncher();
+	    GawdScapeLauncher.launcher.launchGame(minecraft, gawdscape);
 	    GawdScapeLauncher.launcherFrame.dispose();
             GawdScapeLauncher.launcherFrame = null;
 	} catch (IOException ex) {
@@ -220,6 +242,7 @@ public class Updater extends Thread {
 
     @Override
     public void run() {
+	setName("Updater");
         if (Config.forceUpdate) {
             Log.info("Forcing update...");
             update();

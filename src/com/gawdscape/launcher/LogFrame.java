@@ -123,25 +123,6 @@ public class LogFrame extends javax.swing.JFrame {
     }
 
     public void formatAndPrint(String text) {
-        // Properly color usernames and chat.
-        if ((text.contains("<") && text.contains(">")) && (text.indexOf("<") == 40)) {
-            int start = 41;
-            int end = text.indexOf(">", start);
-            String firstText = text.substring(0, start);
-            String lastText = text.substring(end);
-            String username = text.substring(start, end);
-            if (!username.startsWith(selectionSymbol))
-                username = selectionSymbol + "e" + username;
-            text = firstText + username + selectionSymbol + "r" + lastText;
-        }
-        // Properly color private messages.
-        else if (text.contains(" whispers to you: ")) {
-            int start = text.indexOf(" whispers to you: ");
-            String firstText = text.substring(0, start);
-            String lastText = text.substring(start);
-            text = firstText + selectionSymbol + "r" + lastText;
-        }
-
         String[] selection = text.split(selectionSymbol);
         for (int i = 0; i < selection.length; i++) {
             if (i == 0) {

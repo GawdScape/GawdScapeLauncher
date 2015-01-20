@@ -20,8 +20,10 @@ public class GawdScape {
     private String id;
     private Date time;
     private String minecraftVersion;
+    private String mainClass;
+    private String minecraftArguments;
     private List<Library> libraries;
-    private List<Rule> rules;
+    private List<Mod> mods;
 
     public GawdScape() {
     }
@@ -133,19 +135,5 @@ public class GawdScape {
 
     public String toString() {
 	return "GawdScape{id='" + id + '\'' + ", time=" + time + ", minecraftVersion=" + minecraftVersion + ", libraries=" + libraries + '}';
-    }
-
-    public boolean appliesToCurrentEnvironment() {
-	if (rules == null) {
-	    return true;
-	}
-	Rule.Action lastAction = Rule.Action.DISALLOW;
-	for (Rule rule : rules) {
-	    Rule.Action action = rule.getAppliedAction();
-	    if (action != null) {
-		lastAction = action;
-	    }
-	}
-	return lastAction == Rule.Action.ALLOW;
     }
 }

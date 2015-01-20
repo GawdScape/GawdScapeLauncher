@@ -4,6 +4,7 @@ import com.gawdscape.launcher.auth.AuthManager;
 import com.gawdscape.launcher.auth.SessionManager;
 import com.gawdscape.launcher.auth.SessionResponse;
 import com.gawdscape.launcher.download.Updater;
+import com.gawdscape.launcher.launch.MinecraftLauncher;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
@@ -23,6 +24,7 @@ public class GawdScapeLauncher {
     public static LoginDialog loginDialog;
     public static SessionResponse session;
     public static Updater updater;
+    public static MinecraftLauncher launcher;
 
     /**
      * @param args the command line arguments
@@ -51,8 +53,8 @@ public class GawdScapeLauncher {
             Log.info("Initializing Log.");
             Log.showLog = config.getShowLog();
             Log.formatLog = config.getStyleLog();
-            GawdScapeLauncher.logFrame = new LogFrame(config.getStyleLog());
-            GawdScapeLauncher.logFrame.setVisible(true);
+            logFrame = new LogFrame(config.getStyleLog());
+            logFrame.setVisible(true);
         }
 
 	SessionManager sessionManager = SessionManager.loadSessions();

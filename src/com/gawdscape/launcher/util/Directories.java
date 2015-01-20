@@ -69,9 +69,9 @@ public class Directories {
     }
 
     public static void createGameDirs(File gameDir) {
-	gameDir.mkdirs();
-	new File(gameDir, "resourcepacks").mkdir();
-	new File(gameDir, "saves").mkdir();
-	new File(gameDir, "screenshots").mkdir();
+		gameDir.mkdirs();
+		new File(gameDir, "resourcepacks").mkdir();
+		new File(gameDir, "saves").mkdir();
+		new File(gameDir, "screenshots").mkdir();
     }
 }

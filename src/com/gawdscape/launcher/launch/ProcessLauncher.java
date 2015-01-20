@@ -17,13 +17,20 @@ public final class ProcessLauncher {
     private final List<String> commands;
     private File directory;
 
-    public ProcessLauncher(String jvmPath, String... commands) {
+    public ProcessLauncher(String jvmPath, int memory, String commands) {
 	if (jvmPath == null) {
-	    jvmPath = getJavaDir();
+	    jvmPath = OperatingSystem.getJavaDir();
 	}
 	this.jvmPath = jvmPath;
-	this.commands = new ArrayList(commands.length);
-	addCommands(commands);
+	this.commands = new ArrayList();
+	if (commands != null && !commands.isEmpty()) {
+	    if (!commands.toLowerCase().contains("-xmx")) {
+		addCommands("-Xmx" + memory + "M");
+	    }
+	    addSplitCommands(commands);
+	} else {
+	    addCommands("-Xmx" + memory + "M");
+	}
     }
 
     public MinecraftProcess start()
@@ -63,16 +70,6 @@ public final class ProcessLauncher {
 
     protected String getJavaPath() {
 	return jvmPath;
-    }
-
-    public String getJavaDir() {
-	String separator = System.getProperty("file.separator");
-	String path = System.getProperty("java.home") + separator + "bin" + separator;
-	if ((OperatingSystem.getCurrentPlatform() == OperatingSystem.WINDOWS)
-		&& (new File(path + "javaw.exe").isFile())) {
-	    return path + "javaw.exe";
-	}
-	return path + "java";
     }
 
     public String toString() {

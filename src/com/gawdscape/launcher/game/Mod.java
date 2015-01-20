@@ -11,8 +11,10 @@ import com.gawdscape.launcher.util.OperatingSystem;
 /**
  *
  * @author Vinnie
+ *
+ * Not yet implemented
  */
-public class Library {
+public class Mod {
 
     private String name;
     private List<Rule> rules;
@@ -20,31 +22,31 @@ public class Library {
     private ExtractRules extract;
     private String url;
 
-    public Library() {
+    public Mod() {
     }
 
-    public Library(String name) {
+    public Mod(String name) {
 	if ((name == null) || (name.length() == 0)) {
-	    throw new IllegalArgumentException("Library name cannot be null or empty");
+	    throw new IllegalArgumentException("Mod name cannot be null or empty");
 	}
 	this.name = name;
     }
 
-    public Library(Library library) {
-	name = library.name;
-	url = library.url;
-	if (library.extract != null) {
-	    extract = new ExtractRules(library.extract);
+    public Mod(Mod mod) {
+	name = mod.name;
+	url = mod.url;
+	if (mod.extract != null) {
+	    extract = new ExtractRules(mod.extract);
 	}
-	if (library.rules != null) {
+	if (mod.rules != null) {
 	    rules = new ArrayList();
-	    for (Rule rule : library.rules) {
+	    for (Rule rule : mod.rules) {
 		rules.add(new Rule(rule));
 	    }
 	}
-	if (library.natives != null) {
+	if (mod.natives != null) {
 	    natives = new LinkedHashMap();
-	    for (Map.Entry<OperatingSystem, String> entry : library.getNatives().entrySet()) {
+	    for (Map.Entry<OperatingSystem, String> entry : mod.getNatives().entrySet()) {
 		natives.put(entry.getKey(), entry.getValue());
 	    }
 	}
@@ -54,7 +56,7 @@ public class Library {
 	return name;
     }
 
-    public Library addNative(OperatingSystem operatingSystem, String name) {
+    public Mod addNative(OperatingSystem operatingSystem, String name) {
 	if ((operatingSystem == null) || (!operatingSystem.isSupported())) {
 	    throw new IllegalArgumentException("Cannot add native for unsupported OS");
 	}
@@ -94,7 +96,7 @@ public class Library {
 	return extract;
     }
 
-    public Library setExtractRules(ExtractRules rules) {
+    public Mod setExtractRules(ExtractRules rules) {
 	extract = rules;
 	return this;
     }
@@ -132,6 +134,6 @@ public class Library {
     }
 
     public String toString() {
-	return "Library{name='" + name + '\'' + ", rules=" + rules + ", natives=" + natives + ", extract=" + extract + '}';
+	return "Mod{name='" + name + '\'' + ", rules=" + rules + ", natives=" + natives + ", extract=" + extract + '}';
     }
 }

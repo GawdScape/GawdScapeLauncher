@@ -19,6 +19,7 @@ public class ProcessMonitorThread
     }
 
     public void run() {
+	setName("ProcessMonitor");
 	InputStreamReader reader = new InputStreamReader(process.getRawProcess().getInputStream());
 	BufferedReader buf = new BufferedReader(reader);
 	String line = null;

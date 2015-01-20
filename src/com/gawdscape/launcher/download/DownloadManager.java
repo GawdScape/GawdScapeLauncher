@@ -41,40 +41,40 @@ public class DownloadManager {
     public static DownloadDialog downloadDialog;
 
     public static void createDialog() {
-	Log.info("Downloading with " + processorCores + " threads...");
-	java.awt.EventQueue.invokeLater(new Runnable() {
-	    public void run() {
-		downloadDialog = new DownloadDialog(GawdScapeLauncher.launcherFrame, true);
-		downloadDialog.changeTitle("Downloading GawdScape...");
-		downloadDialog.setVisible(true);
-	    }
-	});
+		Log.info("Downloading with " + processorCores + " threads...");
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				downloadDialog = new DownloadDialog(GawdScapeLauncher.launcherFrame, true);
+				downloadDialog.changeTitle("Downloading GawdScape...");
+				downloadDialog.setVisible(true);
+			}
+		});
     }
 
     public static void addToQueue(String url, String toPath) {
-	poolSize++;
-	pool.submit(new DownloadTask(url, toPath));
+		poolSize++;
+		pool.submit(new DownloadTask(url, toPath));
     }
 
     public static boolean completeQueue() {
-	pool.shutdown();
-	try {
-	    pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
-	    return true;
-	} catch (InterruptedException ex) {
-	    Log.error("Download queue interrupted", ex);
-	    return false;
-	}
+		pool.shutdown();
+		try {
+			pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+			return true;
+		} catch (InterruptedException ex) {
+			Log.error("Download queue interrupted", ex);
+			return false;
+		}
     }
 
     public static void queueAssets(AssetIndex index) {
-	for (AssetIndex.AssetObject object : index.getUniqueObjects()) {
-	    String filename = object.getHash().substring(0, 2) + "/" + object.getHash();
-	    addToQueue(
-		    Constants.MC_ASSET_URL + filename,
-		    Directories.getAssetObjectPath() + filename
-	    );
-	}
+		for (AssetIndex.AssetObject object : index.getUniqueObjects()) {
+			String filename = object.getHash().substring(0, 2) + "/" + object.getHash();
+			addToQueue(
+				Constants.MC_ASSET_URL + filename,
+				Directories.getAssetObjectPath() + filename
+			);
+		}
     }
 
     public static void queueMinecraft(String mcVer, String gsVer) {
@@ -88,11 +88,16 @@ public class DownloadManager {
 	);
     }
 
+
+	/**
+	 * TODO : Specify Library URLs per Library in Class
+	 * Iterate through libraries and create Downloadable Wrapper
+	 */
     public static void queueLibraries(Collection<Library> mcLibraries, Collection<Library> gsLibraries) {
 	if (mcLibraries != null) {
 	    for (Library library : mcLibraries) {
 		if (library.getNatives() != null) {
-		    String natives = (String) library.getNatives().get(OperatingSystem.getCurrentPlatform());
+		    String natives = library.getNatives().get(OperatingSystem.getCurrentPlatform());
 		    if (natives != null) {
 			String path = library.getArtifactPath(natives);
 			if (path.contains("${arch}")) {
@@ -136,33 +141,33 @@ public class DownloadManager {
     }
 
     public static void extractNatives(Collection<Library> mcLibraries) {
-	File nativesDir = new File(Directories.getNativesPath());
-	if (nativesDir.exists()) {
-	    try {
-		FileUtils.delete(nativesDir);
-	    } catch (IOException ex) {
-		Log.error("Error deleting old natives directory", ex);
-	    }
-	}
-	downloadDialog.setExtracting();
-	if (mcLibraries != null) {
-	    for (Library library : mcLibraries) {
-		if (library.getNatives() != null) {
-		    String natives = (String) library.getNatives().get(OperatingSystem.getCurrentPlatform());
-		    if (natives != null) {
-			String path = library.getArtifactPath(natives);
-			if (path.contains("${arch}")) {
-			    path = path.replace("${arch}", OperatingSystem.getArchDataModel());
-			}
+		File nativesDir = new File(Directories.getNativesPath());
+		if (nativesDir.exists()) {
 			try {
-			    unZipNazives(path);
+			FileUtils.delete(nativesDir);
 			} catch (IOException ex) {
-			    Log.error("Error extracting " + path, ex);
+			Log.error("Error deleting old natives directory", ex);
 			}
-		    }
 		}
-	    }
-	}
+		downloadDialog.setExtracting();
+		if (mcLibraries != null) {
+			for (Library library : mcLibraries) {
+			if (library.getNatives() != null) {
+				String natives = library.getNatives().get(OperatingSystem.getCurrentPlatform());
+				if (natives != null) {
+				String path = library.getArtifactPath(natives);
+				if (path.contains("${arch}")) {
+					path = path.replace("${arch}", OperatingSystem.getArchDataModel());
+				}
+				try {
+					unZipNazives(path);
+				} catch (IOException ex) {
+					Log.error("Error extracting " + path, ex);
+				}
+				}
+			}
+			}
+		}
     }
 
     public static void unZipNazives(String path) throws IOException {
@@ -176,69 +181,69 @@ public class DownloadManager {
 	    downloadDialog.setFile(target.getName(), archive.getName(), target.getParent());
 
 	    if (entry.getName().contains("META-INF")) {
-		continue;
+			continue;
 	    }
 
 	    target.getParentFile().mkdirs();
 
 	    if (!entry.isDirectory()) {
-		BufferedInputStream inputStream = new BufferedInputStream(zip.getInputStream(entry));
+			BufferedInputStream inputStream = new BufferedInputStream(zip.getInputStream(entry));
 
-		byte[] buffer = new byte[2048];
-		FileOutputStream outputStream = new FileOutputStream(target);
-		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-		try {
-		    int length;
-		    while ((length = inputStream.read(buffer, 0, buffer.length)) != -1) {
-			bufferedOutputStream.write(buffer, 0, length);
-		    }
-		} finally {
-		    bufferedOutputStream.close();
-		    outputStream.close();
-		    inputStream.close();
-		}
+			byte[] buffer = new byte[2048];
+			FileOutputStream outputStream = new FileOutputStream(target);
+			BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+			try {
+				int length;
+				while ((length = inputStream.read(buffer, 0, buffer.length)) != -1) {
+				bufferedOutputStream.write(buffer, 0, length);
+				}
+			} finally {
+				bufferedOutputStream.close();
+				outputStream.close();
+				inputStream.close();
+			}
 	    }
 	}
     }
 
     public static void removeMinecraftMetaInf() {
-	Log.info("Removing META-INF from minecraft.jar...");
-	downloadDialog.changeTitle("Removing META-INF...");
-	File inputFile = new File(Directories.getBinPath(), "minecraft.jar");
-	File outputTmpFile = new File(Directories.getBinPath(), "minecraft.jar.tmp");
+		Log.info("Removing META-INF from minecraft.jar...");
+		downloadDialog.changeTitle("Removing META-INF...");
+		File inputFile = new File(Directories.getBinPath(), "minecraft.jar");
+		File outputTmpFile = new File(Directories.getBinPath(), "minecraft.jar.tmp");
 
-	downloadDialog.setFile("/META-INF", inputFile.getName(), outputTmpFile.toString());
+		downloadDialog.setFile("/META-INF", inputFile.getName(), outputTmpFile.toString());
 
-	try {
-	    JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
-	    JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
-	    JarEntry entry;
+		try {
+			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
+			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
+			JarEntry entry;
 
-	    while ((entry = input.getNextJarEntry()) != null) {
-		if (entry.getName().contains("META-INF")) {
-		    continue;
+			while ((entry = input.getNextJarEntry()) != null) {
+			if (entry.getName().contains("META-INF")) {
+				continue;
+			}
+			output.putNextEntry(entry);
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = input.read(buffer, 0, buffer.length)) != -1) {
+				output.write(buffer, 0, length);
+			}
+			output.closeEntry();
+			}
+
+			input.close();
+			output.close();
+
+			if (!inputFile.delete()) {
+			Log.severe("Failed to delete minecraft.jar");
+			return;
+			}
+			if (!outputTmpFile.renameTo(inputFile)) {
+			Log.severe("Failed to rename minecraft.jar.tmp");
+			}
+		} catch (IOException e) {
+			Log.error("Error removing META-INF", e);
 		}
-		output.putNextEntry(entry);
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((length = input.read(buffer, 0, buffer.length)) != -1) {
-		    output.write(buffer, 0, length);
-		}
-		output.closeEntry();
-	    }
-
-	    input.close();
-	    output.close();
-
-	    if (!inputFile.delete()) {
-		Log.severe("Failed to delete minecraft.jar");
-		return;
-	    }
-	    if (!outputTmpFile.renameTo(inputFile)) {
-		Log.severe("Failed to rename minecraft.jar.tmp");
-	    }
-	} catch (IOException e) {
-	    Log.error("Error removing META-INF", e);
-	}
     }
 }

@@ -3,11 +3,7 @@ package com.gawdscape.launcher.launch;
 import com.gawdscape.launcher.Config;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import javax.swing.SwingUtilities;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
@@ -56,7 +52,8 @@ public class MinecraftLauncher implements MinecraftExit {
 	    Log.severe("Aborting launch; game directory is not actually a directory");
 	    return;
 	}
-	ProcessLauncher processLauncher = new ProcessLauncher(null, new String[0]);
+	String javaPath = config.getCustomJava() ? config.getJavaPath() : null;
+	ProcessLauncher processLauncher = new ProcessLauncher(javaPath, config.getMemory(), config.getJavaArgs());
 	processLauncher.directory(gameDirectory);
 
 	OperatingSystem os = OperatingSystem.getCurrentPlatform();
@@ -65,9 +62,6 @@ public class MinecraftLauncher implements MinecraftExit {
 	} else if (os.equals(OperatingSystem.WINDOWS)) {
 	    processLauncher.addCommands(new String[]{"-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump"});
 	}
-	boolean is32Bit = "32".equals(System.getProperty("sun.arch.data.model"));
-	String memoryArgument = is32Bit ? "-Xmx512M" : "-Xmx" + config.getMemory() + "M";
-	processLauncher.addSplitCommands(memoryArgument);
 	processLauncher.addCommands(new String[]{"-Djava.library.path=" + nativeDir.getAbsolutePath()});
 	processLauncher.addCommands(new String[]{"-cp", constructClassPath(mc, gs)});
 	processLauncher.addCommands(new String[]{Updater.minecraft.getMainClass()});
@@ -98,16 +92,16 @@ public class MinecraftLauncher implements MinecraftExit {
 	}
 
 	if (config.getWindowSize()) {
-	    processLauncher.addCommands(new String[]{"--width", String.valueOf(config.getWindowWidth())});
-	    processLauncher.addCommands(new String[]{"--height", String.valueOf(config.getWindowHeight())});
+	    processLauncher.addCommands(new String[]{"--width", config.getWindowWidth()});
+	    processLauncher.addCommands(new String[]{"--height", config.getWindowHeight()});
 	}
 	try {
 	    MinecraftProcess process = processLauncher.start();
-	    Log.info(process.toString());
             Log.println(
 "#==============================================================================#\n" + 
 "#--------------------------------- Minecraft ----------------------------------#\n" + 
 "#==============================================================================#");
+	    Log.info(process.toString());
 	    process.safeSetExitRunnable(this);
 	} catch (IOException e) {
 	    Log.error("Couldn't launch game", e);
@@ -181,9 +175,9 @@ public class MinecraftLauncher implements MinecraftExit {
 	File objectsDir = new File(assetsDir, "objects");
 	String assetVersion = Updater.minecraft.getAssets();
 	File indexFile = new File(indexDir, assetVersion + ".json");
-	AssetIndex index = (AssetIndex) JsonUtils.getGson().fromJson(JsonUtils.readJsonFromFile(indexFile), AssetIndex.class);
+	AssetIndex index = JsonUtils.getGson().fromJson(JsonUtils.readJsonFromFile(indexFile), AssetIndex.class);
 
-	String hash = ((AssetIndex.AssetObject) index.getFileMap().get(name)).getHash();
+	String hash = (index.getFileMap().get(name)).getHash();
 	return new File(objectsDir, hash.substring(0, 2) + "/" + hash);
     }
 
@@ -200,15 +194,15 @@ public class MinecraftLauncher implements MinecraftExit {
 	}
 	AssetIndex index = null;
 	try {
-	    index = (AssetIndex) JsonUtils.getGson().fromJson(JsonUtils.readJsonFromFile(indexFile), AssetIndex.class);
+	    index = JsonUtils.getGson().fromJson(JsonUtils.readJsonFromFile(indexFile), AssetIndex.class);
 	} catch (IOException ex) {
 	    Log.error("Error loading asset index", ex);
 	}
 	if (index.isVirtual()) {
 	    Log.info("Reconstructing virtual assets folder at " + virtualRoot);
 	    for (Map.Entry<String, AssetIndex.AssetObject> entry : index.getFileMap().entrySet()) {
-		File target = new File(virtualRoot, (String) entry.getKey());
-		File original = new File(new File(objectDir, ((AssetIndex.AssetObject) entry.getValue()).getHash().substring(0, 2)), ((AssetIndex.AssetObject) entry.getValue()).getHash());
+		File target = new File(virtualRoot, entry.getKey());
+		File original = new File(new File(objectDir, (entry.getValue()).getHash().substring(0, 2)), (entry.getValue()).getHash());
 		if (!target.isFile()) {
 		    try {
 			FileUtils.copyFile(original, target);
@@ -238,15 +232,16 @@ public class MinecraftLauncher implements MinecraftExit {
 	try {
 	    File modDir = new File(Directories.getModPath());
 	    if (!modDir.exists()) {
-		modDir.mkdir();
+			modDir.mkdir();
 	    }
-	    String[] mods = modDir.list();
-	    for (String mod : mods) {
-		if (mod.toLowerCase().endsWith(".jar") || mod.toLowerCase().endsWith(".zip")) {
-		    classPath.add(new File(modDir, mod));
-		    Log.info("Loaded Mod: " + mod);
+		String[] mods = modDir.list();
+		for (String mod : mods) {
+			if (mod.toLowerCase().endsWith(".jar") || mod.toLowerCase().endsWith(".zip")) {
+				classPath.add(new File(modDir, mod));
+				Log.info("Loaded Mod: " + mod);
+			}
 		}
-	    }
+
 	} catch (Exception e) {
 	    Log.severe("Error loading mods");
 	}
@@ -267,22 +262,22 @@ public class MinecraftLauncher implements MinecraftExit {
 
     @Override
     public void onMinecraftExit(MinecraftProcess process) {
-	int exitCode = process.getExitCode();
-	if (exitCode == 0) {
-	    Log.info("Game ended with no troubles detected (exit code " + exitCode + ")");
-	    if (config.getCloseLog()) {
-		System.exit(0);
-	    }
-	} else if (GawdScapeLauncher.logFrame != null) {
-	    Log.severe("Game ended with bad state (exit code " + exitCode + ")");
-	    SwingUtilities.invokeLater(new Runnable() {
-		public void run() {
-		    Log.info("Ignoring visibility rule and showing log due to a game crash");
-		    GawdScapeLauncher.logFrame.setVisible(true);
+		int exitCode = process.getExitCode();
+		if (exitCode == 0) {
+			Log.info("Game ended with no troubles detected (exit code " + exitCode + ")");
+			if (config.getCloseLog()) {
+			System.exit(0);
+			}
+		} else if (GawdScapeLauncher.logFrame != null) {
+			Log.severe("Game ended with bad state (exit code " + exitCode + ")");
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					Log.info("Ignoring visibility rule and showing log due to a game crash");
+					GawdScapeLauncher.logFrame.setVisible(true);
+				}
+			});
 		}
-	    });
-	}
-	// You close log, what you know??
+		// You close log, what you know??
     }
 
     public void cleanupSkinCache() {

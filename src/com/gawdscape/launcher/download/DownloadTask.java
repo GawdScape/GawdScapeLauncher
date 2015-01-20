@@ -27,13 +27,13 @@ public class DownloadTask implements Callable, RBCWrapperDelegate {
     String currentMD5;
 
     public DownloadTask(String remoteURL, String localPath) {
-	try {
-	    url = new URL(remoteURL);
-	} catch (MalformedURLException ex) {
-	    Log.error("Bad download URL", ex);
-	}
-	file = new File(localPath);
-	file.getParentFile().mkdirs();
+		try {
+			url = new URL(remoteURL);
+		} catch (MalformedURLException ex) {
+			Log.error("Bad download URL", ex);
+		}
+		file = new File(localPath);
+		file.getParentFile().mkdirs();
     }
 
     public void downloadFile(URL url, File file) {
@@ -66,7 +66,9 @@ public class DownloadTask implements Callable, RBCWrapperDelegate {
 	    try {
 		rbc = new RBCWrapper(Channels.newChannel(connection.getInputStream()), connection.getContentLength(), this);
 		fos = new FileOutputStream(file);
+			// The actual fucking download line
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			// ^^
 		fos.close();
 	    } catch (IOException e) {
 		Log.error("Error downloading file", e);

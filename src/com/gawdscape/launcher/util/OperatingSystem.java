@@ -36,7 +36,7 @@ public enum OperatingSystem {
 	return System.getProperty("sun.arch.data.model");
     }
 
-    public String getJavaDir() {
+    public static String getJavaDir() {
 	String separator = System.getProperty("file.separator");
 	String path = System.getProperty("java.home") + separator + "bin" + separator;
 	if ((getCurrentPlatform() == WINDOWS)

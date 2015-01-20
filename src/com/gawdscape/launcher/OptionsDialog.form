@@ -179,7 +179,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="newsCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getShowNews()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getShowNews()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Show News"/>
               </Properties>
@@ -187,7 +187,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="skipLauncherCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getSkipLauncher()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getSkipLauncher()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Skip Launcher, Open Minecraft"/>
               </Properties>
@@ -209,20 +209,16 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="logCheckBox" min="-2" pref="180" max="32767" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="closeLogCheckBox" min="-2" pref="180" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="styleLogCheckBox" min="-2" pref="180" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="styleLogCheckBox" min="-2" pref="180" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -235,9 +231,7 @@
                           <Component id="closeLogCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="styleLogCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="styleLogCheckBox" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -247,7 +241,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="logCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getShowLog()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getShowLog()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Show Log"/>
               </Properties>
@@ -255,7 +249,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="closeLogCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getCloseLog()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getCloseLog()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Close Log with Game"/>
               </Properties>
@@ -263,7 +257,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="styleLogCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getStyleLog()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getStyleLog()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Parse Colors and Links"/>
               </Properties>
@@ -313,16 +307,24 @@
                                   <Component id="windowSizeCheckBox" pref="175" max="32767" attributes="0"/>
                                   <Component id="fullscreenCheckBox" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="windowWidth" pref="66" max="32767" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="transparentLabel1" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="windowHeight" pref="65" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <Component id="windowWidth" pref="66" max="32767" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="x" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="windowHeight" pref="65" max="32767" attributes="0"/>
+                                          </Group>
+                                          <Component id="serverIP" max="32767" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <Component id="serverIP" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="javaSettings" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
@@ -362,11 +364,14 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="windowSizeCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="windowWidth" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="transparentLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="x" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="windowHeight" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="fullscreenCheckBox" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="fullscreenCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="javaSettings" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -397,7 +402,7 @@
             <Component class="javax.swing.JTextField" name="gameDirField">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getGameDir()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getGameDir()" type="code"/>
                 </Property>
               </Properties>
             </Component>
@@ -409,7 +414,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="allocatedMemoryLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getMemory() + &quot; MB&quot;" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getMemory() + &quot; MB&quot;" type="code"/>
                 </Property>
               </Properties>
             </Component>
@@ -424,7 +429,7 @@
                 <Property name="paintTicks" type="boolean" value="true"/>
                 <Property name="snapToTicks" type="boolean" value="true"/>
                 <Property name="value" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getMemory()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getMemory()" type="code"/>
                 </Property>
               </Properties>
               <Events>
@@ -447,7 +452,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="joinServerCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getjoinServer()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getjoinServer()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Join Server on Launch"/>
               </Properties>
@@ -458,17 +463,17 @@
             <Component class="javax.swing.JTextField" name="serverIP">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getServerIP()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getServerIP()" type="code"/>
                 </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getjoinServer()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getjoinServer()" type="code"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="windowSizeCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getWindowSize()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getWindowSize()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Set Minecraft Window Size"/>
               </Properties>
@@ -479,14 +484,14 @@
             <Component class="javax.swing.JTextField" name="windowWidth">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getWindowWidth()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getWindowWidth()" type="code"/>
                 </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getWindowSize()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getWindowSize()" type="code"/>
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="transparentLabel1">
+            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="x">
               <Properties>
                 <Property name="text" type="java.lang.String" value="x"/>
               </Properties>
@@ -494,20 +499,28 @@
             <Component class="javax.swing.JTextField" name="windowHeight">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getWindowHeight()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getWindowHeight()" type="code"/>
                 </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getWindowSize()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getWindowSize()" type="code"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="fullscreenCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="config.getFullscreen()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getFullscreen()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Launch in Fullscreen"/>
               </Properties>
+            </Component>
+            <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="javaSettings">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Java Settings"/>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="javaSettingsMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

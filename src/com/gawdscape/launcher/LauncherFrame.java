@@ -38,7 +38,7 @@ public class LauncherFrame extends javax.swing.JFrame {
 	    }
 	} else {
 	    remove(scrollPane);
-	    setSize(554, 139);
+	    setSize(554, 134);
 	}
     }
 
@@ -52,7 +52,7 @@ public class LauncherFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         scrollPane = new javax.swing.JScrollPane();
-        newsPane = new javax.swing.JTextPane();
+        newsPane = new javax.swing.JEditorPane();
         bottomPanel = new com.gawdscape.launcher.ui.CobblestonePanel();
         profilePanel = new com.gawdscape.launcher.ui.TransparentPanel();
         playButton = new com.gawdscape.launcher.ui.TransparentButton();
@@ -138,11 +138,13 @@ public class LauncherFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(greetingLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                    .addComponent(usernameLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(profilePanelLayout.createSequentialGroup()
                         .addComponent(switchUsersLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(logoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(logoutLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, profilePanelLayout.createSequentialGroup()
+                        .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(profilePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -170,8 +172,6 @@ public class LauncherFrame extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        logoLabel.setFont(logoLabel.getFont().deriveFont(logoLabel.getFont().getSize()+11f));
-        logoLabel.setForeground(new java.awt.Color(255, 255, 255));
         logoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gawdscape/launcher/images/gawdscape.png"))); // NOI18N
 
@@ -312,9 +312,9 @@ public class LauncherFrame extends javax.swing.JFrame {
     private com.gawdscape.launcher.ui.TransparentLabel greetingLabel;
     private javax.swing.JLabel logoLabel;
     private com.gawdscape.launcher.ui.WhiteLinkLabel logoutLabel;
-    private static javax.swing.JTextPane newsPane;
+    private static javax.swing.JEditorPane newsPane;
     private com.gawdscape.launcher.ui.TransparentButton optionsButton;
-    private com.gawdscape.launcher.ui.TransparentButton playButton;
+    public static com.gawdscape.launcher.ui.TransparentButton playButton;
     private com.gawdscape.launcher.ui.TransparentPanel profilePanel;
     private javax.swing.JScrollPane scrollPane;
     private com.gawdscape.launcher.ui.WhiteLinkLabel switchUsersLabel;

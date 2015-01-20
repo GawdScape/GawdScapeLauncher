@@ -4,6 +4,7 @@ import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
+import com.gawdscape.launcher.util.OperatingSystem;
 import java.io.File;
 import java.io.IOException;
 
@@ -29,6 +30,9 @@ public class Config {
     private String serverIP;
     private String windowWidth;
     private String windowHeight;
+    private boolean customJava;
+    private String javaPath;
+    private String javaArgs;
 
     public Config() {
 	gameDir = Directories.getWorkingDirectory().toString();
@@ -44,6 +48,9 @@ public class Config {
 	serverIP = Constants.GS_SERVER_IP;
 	windowWidth = "854";
 	windowHeight = "480";
+	customJava = false;
+	javaPath = OperatingSystem.getJavaDir();
+	javaArgs = "";
     }
 
     public Config(
@@ -59,7 +66,10 @@ public class Config {
             boolean styleLog,
 	    String serverIP,
 	    String windowWidth,
-	    String windowHeight
+	    String windowHeight,
+	    boolean customJava,
+	    String javaPath,
+	    String javaArgs
     ) {
 	this.gameDir = gameDir;
 	this.memory = memory;
@@ -74,6 +84,9 @@ public class Config {
 	this.serverIP = serverIP;
 	this.windowWidth = windowWidth;
 	this.windowHeight = windowHeight;
+	this.customJava = customJava;
+	this.javaPath = javaPath;
+	this.javaArgs = javaArgs;
     }
 
     public void setConfig(
@@ -104,6 +117,16 @@ public class Config {
 	this.serverIP = serverIP;
 	this.windowWidth = windowWidth;
 	this.windowHeight = windowHeight;
+    }
+
+    public void setJava(
+	    boolean customJava,
+	    String javaPath,
+	    String javaArgs
+    ) {
+	this.customJava = customJava;
+	this.javaPath = javaPath;
+	this.javaArgs = javaArgs;
     }
 
     public String getGameDir() {
@@ -160,6 +183,18 @@ public class Config {
 
     public String getWindowHeight() {
 	return windowHeight;
+    }
+
+    public boolean getCustomJava() {
+	return customJava;
+    }
+
+    public String getJavaPath() {
+	return javaPath;
+    }
+
+    public String getJavaArgs() {
+	return javaArgs;
     }
 
     public static Config loadConfig() {
