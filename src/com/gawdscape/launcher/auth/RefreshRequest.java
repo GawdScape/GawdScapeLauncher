@@ -6,21 +6,21 @@ package com.gawdscape.launcher.auth;
  */
 public class RefreshRequest {
 
-    private String accessToken;
-    private String clientToken;
-    private boolean requestUser = true;
+	private String accessToken;
+	private String clientToken;
+	private boolean requestUser = true;
 
-    public RefreshRequest(String access, String client) {
-	this.accessToken = access;
-	this.clientToken = client;
-    }
+	public RefreshRequest(String access, String client) {
+		this.accessToken = access;
+		this.clientToken = client;
+	}
 
-    public String getAccessToken() {
-	return this.accessToken;
-    }
+	public String getAccessToken() {
+		return this.accessToken;
+	}
 
-    public String getClientToken() {
-	return this.clientToken;
-    }
+	public String getClientToken() {
+		return this.clientToken;
+	}
 
 }

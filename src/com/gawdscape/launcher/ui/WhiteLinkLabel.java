@@ -9,13 +9,14 @@ import javax.swing.JLabel;
  * @author Vinnie
  */
 public class WhiteLinkLabel extends JLabel {
-    public WhiteLinkLabel() {
-	super();
-	setForeground(Color.WHITE);
-	setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
 
-    public boolean isOpaque() {
-	return false;
-    }
+	public WhiteLinkLabel() {
+		super();
+		setForeground(Color.WHITE);
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+	public boolean isOpaque() {
+		return false;
+	}
 }

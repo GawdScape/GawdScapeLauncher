@@ -69,45 +69,45 @@
     properties which you can use, check the target you are overriding in the
     nbproject/build-impl.xml file. 
 
-    -->
-    <target name="package-jar" depends="clean,compile,jar">
-	<property name="store.jar.name" value="GawdScape"/>
+	-->
+	<target name="package-jar" depends="clean,compile,jar">
+		<property name="store.jar.name" value="GawdScape"/>
 
-	<property name="store.dir" value="deploy"/>
-	<property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
+		<property name="store.dir" value="deploy"/>
+		<property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
 
-	<echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
+		<echo message="Packaging ${application.title} into a single JAR at ${store.jar}"/>
 
-	<delete dir="${store.dir}"/>
-	<mkdir dir="${store.dir}"/>
+		<delete dir="${store.dir}"/>
+		<mkdir dir="${store.dir}"/>
 
-	<jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
-            <fileset dir="" includes="LICENSE"/>
-	    <zipgroupfileset dir="dist" includes="*.jar"/>
-	    <zipgroupfileset dir="dist/lib" includes="*.jar"/>
+		<jar destfile="${store.dir}/temp_final.jar" filesetmanifest="skip">
+			<fileset dir="" includes="LICENSE"/>
+			<zipgroupfileset dir="dist" includes="*.jar"/>
+			<zipgroupfileset dir="dist/lib" includes="*.jar"/>
 
-	    <manifest>
-		<attribute name="Main-Class" value="${main.class}"/>
-	    </manifest>
-	</jar>
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}"/>
+			</manifest>
+		</jar>
 
-	<zip destfile="${store.jar}">
-	    <zipfileset src="${store.dir}/temp_final.jar"
-			excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
-	</zip>
+		<zip destfile="${store.jar}">
+			<zipfileset src="${store.dir}/temp_final.jar"
+						excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+		</zip>
 
-	<delete file="${store.dir}/temp_final.jar"/>
+		<delete file="${store.dir}/temp_final.jar"/>
 
-    </target>
+	</target>
 
-    <target name="package-exe" depends="clean,compile,jar,package-jar">
-	<property name="launch4j.dir" location="C:\Program Files (x86)\Launch4j" />
+	<target name="package-exe" depends="clean,compile,jar,package-jar">
+		<property name="launch4j.dir" location="C:\Program Files (x86)\Launch4j" />
 
-	<taskdef name="launch4j"
-		 classname="net.sf.launch4j.ant.Launch4jTask"
-		 classpath="${launch4j.dir}/launch4j.jar
+		<taskdef name="launch4j"
+				 classname="net.sf.launch4j.ant.Launch4jTask"
+				 classpath="${launch4j.dir}/launch4j.jar
 		:${launch4j.dir}/lib/xstream.jar" />
 
-	<launch4j configFile="launch4j.xml" />
-    </target>
+		<launch4j configFile="launch4j.xml" />
+	</target>
 </project>

@@ -6,36 +6,36 @@ package com.gawdscape.launcher.auth;
  */
 public class SessionResponse extends ErrorResponse {
 
-    private String accessToken;
-    private String clientToken;
-    private Profile[] availableProfiles;
-    private Profile selectedProfile;
-    private User user;
+	private String accessToken;
+	private String clientToken;
+	private Profile[] availableProfiles;
+	private Profile selectedProfile;
+	private User user;
 
-    // User UUID
-    public String getAccessToken() {
-	return this.accessToken;
-    }
+	// User UUID
+	public String getAccessToken() {
+		return this.accessToken;
+	}
 
-    // Client UUID
-    public String getClientToken() {
-	return this.clientToken;
-    }
+	// Client UUID
+	public String getClientToken() {
+		return this.clientToken;
+	}
 
-    public Profile[] getAvailableProfiles() {
-	return this.availableProfiles;
-    }
+	public Profile[] getAvailableProfiles() {
+		return this.availableProfiles;
+	}
 
-    public Profile getSelectedProfile() {
-	return this.selectedProfile;
-    }
+	public Profile getSelectedProfile() {
+		return this.selectedProfile;
+	}
 
-    public User getUser() {
-	return user;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    // Session Token
-    public String getSessionId() {
-	return "token:" + this.accessToken + ":" + this.selectedProfile.getId();
-    }
+	// Session Token
+	public String getSessionId() {
+		return "token:" + this.accessToken + ":" + this.selectedProfile.getId();
+	}
 }

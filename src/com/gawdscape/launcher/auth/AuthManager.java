@@ -16,27 +16,28 @@ import java.nio.charset.Charset;
  * @author Vinnie
  */
 public class AuthManager {
-    private static final Gson gson = JsonUtils.getGson();
 
-    // Login with username and password
-    public static SessionResponse authenticate(String username, String password, String clientToken) {
+	private static final Gson gson = JsonUtils.getGson();
+
+	// Login with username and password
+	public static SessionResponse authenticate(String username, String password, String clientToken) {
 		AuthRequest request = new AuthRequest(Constants.MINECRAFT, username, password, clientToken);
 		String result = postJson(Constants.MC_AUTH, gson.toJson(request));
 		Log.fine("Authentication: " + result);
 		SessionResponse response = gson.fromJson(result, SessionResponse.class);
 		return response;
-    }
+	}
 
-    // Login with UUID and ClientToken
-    public static SessionResponse refresh(SessionToken token) {
+	// Login with UUID and ClientToken
+	public static SessionResponse refresh(SessionToken token) {
 		RefreshRequest request = new RefreshRequest(token.getAccessToken(), token.getClientToken());
 		String result = postJson(Constants.MC_REFRESH, gson.toJson(request));
 		Log.fine("Refresh: " + result);
 		SessionResponse response = gson.fromJson(result, SessionResponse.class);
 		return response;
-    }
+	}
 
-    private static String postJson(URL url, String json) {
+	private static String postJson(URL url, String json) {
 		try {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			byte[] payloadAsBytes = json.getBytes(Charset.forName("UTF-8"));
@@ -74,5 +75,5 @@ public class AuthManager {
 			Log.error("Authentication Error: ", e);
 		}
 		return null;
-    }
+	}
 }

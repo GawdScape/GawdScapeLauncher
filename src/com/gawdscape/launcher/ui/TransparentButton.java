@@ -8,11 +8,11 @@ import javax.swing.JButton;
  */
 public class TransparentButton extends JButton {
 
-    public TransparentButton() {
-	super();
-    }
+	public TransparentButton() {
+		super();
+	}
 
-    public boolean isOpaque() {
-	return false;
-    }
+	public boolean isOpaque() {
+		return false;
+	}
 }

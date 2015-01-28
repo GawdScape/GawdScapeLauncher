@@ -7,14 +7,15 @@ import com.google.gson.JsonElement;
  * @author Vinnie
  */
 public class User {
-    private String id;
-    private JsonElement properties;
 
-    public String getId() {
-	return id;
-    }
+	private String id;
+	private JsonElement properties;
 
-  public JsonElement getProperties() {
-    return properties;
-  }
+	public String getId() {
+		return id;
+	}
+
+	public JsonElement getProperties() {
+		return properties;
+	}
 }

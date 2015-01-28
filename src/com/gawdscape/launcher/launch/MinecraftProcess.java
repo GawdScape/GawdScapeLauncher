@@ -8,69 +8,69 @@ import java.util.List;
  */
 public class MinecraftProcess {
 
-    private final List<String> commands;
-    private final Process process;
-    private MinecraftExit onExit;
-    private ProcessMonitorThread monitor = new ProcessMonitorThread(this);
+	private final List<String> commands;
+	private final Process process;
+	private MinecraftExit onExit;
+	private ProcessMonitorThread monitor = new ProcessMonitorThread(this);
 
-    public MinecraftProcess(List<String> commands, Process process) {
-	this.commands = commands;
-	this.process = process;
+	public MinecraftProcess(List<String> commands, Process process) {
+		this.commands = commands;
+		this.process = process;
 
-	monitor.start();
-    }
-
-    public Process getRawProcess() {
-	return process;
-    }
-
-    public List<String> getStartupCommands() {
-	return commands;
-    }
-
-    public String getStartupCommand() {
-	return process.toString();
-    }
-
-    public boolean isRunning() {
-	try {
-	    process.exitValue();
-	} catch (IllegalThreadStateException ex) {
-	    return true;
+		monitor.start();
 	}
-	return false;
-    }
 
-    public void setExitRunnable(MinecraftExit runnable) {
-	onExit = runnable;
-    }
-
-    public void safeSetExitRunnable(MinecraftExit runnable) {
-	setExitRunnable(runnable);
-	if ((!isRunning())
-		&& (runnable != null)) {
-	    runnable.onMinecraftExit(this);
+	public Process getRawProcess() {
+		return process;
 	}
-    }
 
-    public MinecraftExit getExitRunnable() {
-	return onExit;
-    }
-
-    public int getExitCode() {
-	try {
-	    return process.exitValue();
-	} catch (IllegalThreadStateException ex) {
-	    ex.fillInStackTrace();
-	    throw ex;
+	public List<String> getStartupCommands() {
+		return commands;
 	}
-    }
 
-    public String toString() {
-	return "MinecraftProcess[commands=" + commands + ", isRunning=" + isRunning() + "]";
-    }
+	public String getStartupCommand() {
+		return process.toString();
+	}
 
-    public void stop() {
-	process.destroy();
-    }
+	public boolean isRunning() {
+		try {
+			process.exitValue();
+		} catch (IllegalThreadStateException ex) {
+			return true;
+		}
+		return false;
+	}
+
+	public void setExitRunnable(MinecraftExit runnable) {
+		onExit = runnable;
+	}
+
+	public void safeSetExitRunnable(MinecraftExit runnable) {
+		setExitRunnable(runnable);
+		if ((!isRunning())
+				&& (runnable != null)) {
+			runnable.onMinecraftExit(this);
+		}
+	}
+
+	public MinecraftExit getExitRunnable() {
+		return onExit;
+	}
+
+	public int getExitCode() {
+		try {
+			return process.exitValue();
+		} catch (IllegalThreadStateException ex) {
+			ex.fillInStackTrace();
+			throw ex;
+		}
+	}
+
+	public String toString() {
+		return "MinecraftProcess[commands=" + commands + ", isRunning=" + isRunning() + "]";
+	}
+
+	public void stop() {
+		process.destroy();
+	}
 }

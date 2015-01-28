@@ -11,17 +11,17 @@ import javax.swing.ImageIcon;
  */
 public class ImageUtils {
 
-    public static ImageIcon createImageIcon(String path) {
-	URL imgURL = GawdScapeLauncher.class.getResource("images/" + path);
-	if (imgURL != null) {
-	    return new ImageIcon(imgURL);
-	} else {
-	    System.err.println("Couldn't find file: " + path);
-	    return null;
+	public static ImageIcon createImageIcon(String path) {
+		URL imgURL = GawdScapeLauncher.class.getResource("images/" + path);
+		if (imgURL != null) {
+			return new ImageIcon(imgURL);
+		} else {
+			System.err.println("Couldn't find file: " + path);
+			return null;
+		}
 	}
-    }
 
-    public static Image getFavIcon() {
-	return createImageIcon("favicon.png").getImage();
-    }
+	public static Image getFavIcon() {
+		return createImageIcon("favicon.png").getImage();
+	}
 }

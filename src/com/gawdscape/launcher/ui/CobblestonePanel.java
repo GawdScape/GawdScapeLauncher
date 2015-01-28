@@ -9,14 +9,14 @@ import javax.imageio.ImageIO;
  */
 public class CobblestonePanel extends TexturedPanel {
 
-    public CobblestonePanel() {
-	setOpaque(true);
-	try {
-	    bgImage = ImageIO.read(
-		    GawdScapeLauncher.class.getResource("images/cobblestone.png")
-	    ).getScaledInstance(32, 32, 16);
-	} catch (Exception e) {
-	    e.printStackTrace();
+	public CobblestonePanel() {
+		setOpaque(true);
+		try {
+			bgImage = ImageIO.read(
+					GawdScapeLauncher.class.getResource("images/cobblestone.png")
+			).getScaledInstance(32, 32, 16);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-    }
 }

@@ -9,12 +9,12 @@ import javax.swing.JCheckBox;
  */
 public class TransparentCheckBox extends JCheckBox {
 
-    public TransparentCheckBox() {
-	super();
-	setForeground(Color.WHITE);
-    }
+	public TransparentCheckBox() {
+		super();
+		setForeground(Color.WHITE);
+	}
 
-    public boolean isOpaque() {
-	return false;
-    }
+	public boolean isOpaque() {
+		return false;
+	}
 }

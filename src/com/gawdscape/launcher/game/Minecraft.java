@@ -18,228 +18,229 @@ import com.gawdscape.launcher.util.OperatingSystem;
  */
 public class Minecraft {
 
-    public enum ReleaseType {
-	SNAPSHOT, RELEASE, OLD_BETA, OLD_ALPHA
-    }
+	public enum ReleaseType {
 
-    private String id;
-    private Date time;
-    private Date releaseTime;
-    private ReleaseType type;
-    private String minecraftArguments;
-    private List<Library> libraries;
-    private String mainClass;
-    private int minimumLauncherVersion;
-    private String incompatibilityReason;
-    private String assets;
-    private List<Rule> rules;
-    private transient boolean synced = false;
-
-    public Minecraft() {
-    }
-
-    public Minecraft(String id, Date releaseTime, Date updateTime, ReleaseType type, String mainClass, String minecraftArguments) {
-	if ((id == null) || (id.length() == 0)) {
-	    throw new IllegalArgumentException("ID cannot be null or empty");
+		SNAPSHOT, RELEASE, OLD_BETA, OLD_ALPHA
 	}
-	if (releaseTime == null) {
-	    throw new IllegalArgumentException("Release time cannot be null");
+
+	private String id;
+	private Date time;
+	private Date releaseTime;
+	private ReleaseType type;
+	private String minecraftArguments;
+	private List<Library> libraries;
+	private String mainClass;
+	private int minimumLauncherVersion;
+	private String incompatibilityReason;
+	private String assets;
+	private List<Rule> rules;
+	private transient boolean synced = false;
+
+	public Minecraft() {
 	}
-	if (updateTime == null) {
-	    throw new IllegalArgumentException("Update time cannot be null");
-	}
-	if (type == null) {
-	    throw new IllegalArgumentException("Release type cannot be null");
-	}
-	if ((mainClass == null) || (mainClass.length() == 0)) {
-	    throw new IllegalArgumentException("Main class cannot be null or empty");
-	}
-	if (minecraftArguments == null) {
-	    throw new IllegalArgumentException("Process arguments cannot be null or empty");
-	}
-	this.id = id;
-	this.releaseTime = releaseTime;
-	this.time = updateTime;
-	this.type = type;
-	this.mainClass = mainClass;
-	libraries = new ArrayList();
-	this.minecraftArguments = minecraftArguments;
-    }
 
-    public Minecraft(Minecraft version) {
-	this(version.getId(), version.getReleaseTime(), version.getUpdatedTime(), version.getType(), version.getMainClass(), version.getMinecraftArguments());
-	minimumLauncherVersion = minimumLauncherVersion;
-	incompatibilityReason = incompatibilityReason;
-	for (Library library : version.getLibraries()) {
-	    libraries.add(new Library(library));
-	}
-    }
-
-    public Minecraft(Minecraft version, String mainClass, String minecraftArguments) {
-	this(version.getId(), version.getReleaseTime(), version.getUpdatedTime(), version.getType(), mainClass, minecraftArguments);
-    }
-
-    public String getId() {
-	return id;
-    }
-
-    public ReleaseType getType() {
-	return type;
-    }
-
-    public Date getUpdatedTime() {
-	return time;
-    }
-
-    public Date getReleaseTime() {
-	return releaseTime;
-    }
-
-    public List<Library> getLibraries() {
-	return libraries;
-    }
-
-    public String getMainClass() {
-	return mainClass;
-    }
-
-    public void setUpdatedTime(Date time) {
-	if (time == null) {
-	    throw new IllegalArgumentException("Time cannot be null");
-	}
-	this.time = time;
-    }
-
-    public void setReleaseTime(Date time) {
-	if (time == null) {
-	    throw new IllegalArgumentException("Time cannot be null");
-	}
-	releaseTime = time;
-    }
-
-    public void setType(ReleaseType type) {
-	if (type == null) {
-	    throw new IllegalArgumentException("Release type cannot be null");
-	}
-	this.type = type;
-    }
-
-    public void setMainClass(String mainClass) {
-	if ((mainClass == null) || (mainClass.length() == 0)) {
-	    throw new IllegalArgumentException("Main class cannot be null or empty");
-	}
-	this.mainClass = mainClass;
-    }
-
-    public Collection<Library> getRelevantLibraries() {
-	List<Library> result = new ArrayList();
-	for (Library library : libraries) {
-	    if (library.appliesToCurrentEnvironment()) {
-		result.add(library);
-	    }
-	}
-	return result;
-    }
-
-    public Collection<File> getClassPath() {
-	Collection<Library> libraries = getRelevantLibraries();
-	Collection<File> result = new ArrayList();
-	for (Library library : libraries) {
-	    if (library.getNatives() == null) {
-		result.add(new File(Directories.getLibraryPath(), library.getArtifactPath()));
-	    }
-	}
-	return result;
-    }
-
-    public Collection<String> getExtractFiles(OperatingSystem os) {
-	Collection<Library> libraries = getRelevantLibraries();
-	Collection<String> result = new ArrayList();
-	for (Library library : libraries) {
-	    Map<OperatingSystem, String> natives = library.getNatives();
-	    if ((natives != null) && (natives.containsKey(os))) {
-		result.add("libraries/" + library.getArtifactPath((String) natives.get(os)));
-	    }
-	}
-	return result;
-    }
-
-    public Set<String> getRequiredFiles(OperatingSystem os) {
-	Set<String> neededFiles = new HashSet();
-	for (Library library : getRelevantLibraries()) {
-	    if (library.getNatives() != null) {
-		String natives = (String) library.getNatives().get(os);
-		if (natives != null) {
-		    neededFiles.add("libraries/" + library.getArtifactPath(natives));
+	public Minecraft(String id, Date releaseTime, Date updateTime, ReleaseType type, String mainClass, String minecraftArguments) {
+		if ((id == null) || (id.length() == 0)) {
+			throw new IllegalArgumentException("ID cannot be null or empty");
 		}
-	    } else {
-		neededFiles.add("libraries/" + library.getArtifactPath());
-	    }
+		if (releaseTime == null) {
+			throw new IllegalArgumentException("Release time cannot be null");
+		}
+		if (updateTime == null) {
+			throw new IllegalArgumentException("Update time cannot be null");
+		}
+		if (type == null) {
+			throw new IllegalArgumentException("Release type cannot be null");
+		}
+		if ((mainClass == null) || (mainClass.length() == 0)) {
+			throw new IllegalArgumentException("Main class cannot be null or empty");
+		}
+		if (minecraftArguments == null) {
+			throw new IllegalArgumentException("Process arguments cannot be null or empty");
+		}
+		this.id = id;
+		this.releaseTime = releaseTime;
+		this.time = updateTime;
+		this.type = type;
+		this.mainClass = mainClass;
+		libraries = new ArrayList();
+		this.minecraftArguments = minecraftArguments;
 	}
-	return neededFiles;
-    }
 
-    public String toString() {
-	return "Minecraft{id='" + id + '\'' + ", time=" + time + ", type=" + type + ", libraries=" + libraries + ", mainClass='" + mainClass + '\'' + ", minimumLauncherVersion=" + minimumLauncherVersion + '}';
-    }
-
-    public String getMinecraftArguments() {
-	return minecraftArguments;
-    }
-
-    public void setMinecraftArguments(String minecraftArguments) {
-	if (minecraftArguments == null) {
-	    throw new IllegalArgumentException("Process arguments cannot be null or empty");
+	public Minecraft(Minecraft version) {
+		this(version.getId(), version.getReleaseTime(), version.getUpdatedTime(), version.getType(), version.getMainClass(), version.getMinecraftArguments());
+		minimumLauncherVersion = minimumLauncherVersion;
+		incompatibilityReason = incompatibilityReason;
+		for (Library library : version.getLibraries()) {
+			libraries.add(new Library(library));
+		}
 	}
-	this.minecraftArguments = minecraftArguments;
-    }
 
-    public int getMinimumLauncherVersion() {
-	return minimumLauncherVersion;
-    }
-
-    public void setMinimumLauncherVersion(int minimumLauncherVersion) {
-	this.minimumLauncherVersion = minimumLauncherVersion;
-    }
-
-    public boolean appliesToCurrentEnvironment() {
-	if (rules == null) {
-	    return true;
+	public Minecraft(Minecraft version, String mainClass, String minecraftArguments) {
+		this(version.getId(), version.getReleaseTime(), version.getUpdatedTime(), version.getType(), mainClass, minecraftArguments);
 	}
-	Rule.Action lastAction = Rule.Action.DISALLOW;
-	for (Rule rule : rules) {
-	    Rule.Action action = rule.getAppliedAction();
-	    if (action != null) {
-		lastAction = action;
-	    }
+
+	public String getId() {
+		return id;
 	}
-	return lastAction == Rule.Action.ALLOW;
-    }
 
-    public void setIncompatibilityReason(String incompatibilityReason) {
-	this.incompatibilityReason = incompatibilityReason;
-    }
-
-    public String getIncompatibilityReason() {
-	return incompatibilityReason;
-    }
-
-    public boolean isSynced() {
-	return synced;
-    }
-
-    public void setSynced(boolean synced) {
-	this.synced = synced;
-    }
-
-    public String getAssets() {
-	if (assets == null) {
-	    return "legacy";
+	public ReleaseType getType() {
+		return type;
 	}
-	return assets;
-    }
 
-    public void setAssets(String assets) {
-	this.assets = assets;
-    }
+	public Date getUpdatedTime() {
+		return time;
+	}
+
+	public Date getReleaseTime() {
+		return releaseTime;
+	}
+
+	public List<Library> getLibraries() {
+		return libraries;
+	}
+
+	public String getMainClass() {
+		return mainClass;
+	}
+
+	public void setUpdatedTime(Date time) {
+		if (time == null) {
+			throw new IllegalArgumentException("Time cannot be null");
+		}
+		this.time = time;
+	}
+
+	public void setReleaseTime(Date time) {
+		if (time == null) {
+			throw new IllegalArgumentException("Time cannot be null");
+		}
+		releaseTime = time;
+	}
+
+	public void setType(ReleaseType type) {
+		if (type == null) {
+			throw new IllegalArgumentException("Release type cannot be null");
+		}
+		this.type = type;
+	}
+
+	public void setMainClass(String mainClass) {
+		if ((mainClass == null) || (mainClass.length() == 0)) {
+			throw new IllegalArgumentException("Main class cannot be null or empty");
+		}
+		this.mainClass = mainClass;
+	}
+
+	public Collection<Library> getRelevantLibraries() {
+		List<Library> result = new ArrayList();
+		for (Library library : libraries) {
+			if (library.appliesToCurrentEnvironment()) {
+				result.add(library);
+			}
+		}
+		return result;
+	}
+
+	public Collection<File> getClassPath() {
+		Collection<Library> libraries = getRelevantLibraries();
+		Collection<File> result = new ArrayList();
+		for (Library library : libraries) {
+			if (library.getNatives() == null) {
+				result.add(new File(Directories.getLibraryPath(), library.getArtifactPath()));
+			}
+		}
+		return result;
+	}
+
+	public Collection<String> getExtractFiles(OperatingSystem os) {
+		Collection<Library> libraries = getRelevantLibraries();
+		Collection<String> result = new ArrayList();
+		for (Library library : libraries) {
+			Map<OperatingSystem, String> natives = library.getNatives();
+			if ((natives != null) && (natives.containsKey(os))) {
+				result.add("libraries/" + library.getArtifactPath((String) natives.get(os)));
+			}
+		}
+		return result;
+	}
+
+	public Set<String> getRequiredFiles(OperatingSystem os) {
+		Set<String> neededFiles = new HashSet();
+		for (Library library : getRelevantLibraries()) {
+			if (library.getNatives() != null) {
+				String natives = (String) library.getNatives().get(os);
+				if (natives != null) {
+					neededFiles.add("libraries/" + library.getArtifactPath(natives));
+				}
+			} else {
+				neededFiles.add("libraries/" + library.getArtifactPath());
+			}
+		}
+		return neededFiles;
+	}
+
+	public String toString() {
+		return "Minecraft{id='" + id + '\'' + ", time=" + time + ", type=" + type + ", libraries=" + libraries + ", mainClass='" + mainClass + '\'' + ", minimumLauncherVersion=" + minimumLauncherVersion + '}';
+	}
+
+	public String getMinecraftArguments() {
+		return minecraftArguments;
+	}
+
+	public void setMinecraftArguments(String minecraftArguments) {
+		if (minecraftArguments == null) {
+			throw new IllegalArgumentException("Process arguments cannot be null or empty");
+		}
+		this.minecraftArguments = minecraftArguments;
+	}
+
+	public int getMinimumLauncherVersion() {
+		return minimumLauncherVersion;
+	}
+
+	public void setMinimumLauncherVersion(int minimumLauncherVersion) {
+		this.minimumLauncherVersion = minimumLauncherVersion;
+	}
+
+	public boolean appliesToCurrentEnvironment() {
+		if (rules == null) {
+			return true;
+		}
+		Rule.Action lastAction = Rule.Action.DISALLOW;
+		for (Rule rule : rules) {
+			Rule.Action action = rule.getAppliedAction();
+			if (action != null) {
+				lastAction = action;
+			}
+		}
+		return lastAction == Rule.Action.ALLOW;
+	}
+
+	public void setIncompatibilityReason(String incompatibilityReason) {
+		this.incompatibilityReason = incompatibilityReason;
+	}
+
+	public String getIncompatibilityReason() {
+		return incompatibilityReason;
+	}
+
+	public boolean isSynced() {
+		return synced;
+	}
+
+	public void setSynced(boolean synced) {
+		this.synced = synced;
+	}
+
+	public String getAssets() {
+		if (assets == null) {
+			return "legacy";
+		}
+		return assets;
+	}
+
+	public void setAssets(String assets) {
+		this.assets = assets;
+	}
 }

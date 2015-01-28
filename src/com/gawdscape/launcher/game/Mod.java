@@ -1,12 +1,6 @@
 package com.gawdscape.launcher.game;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.gawdscape.launcher.util.OperatingSystem;
+import com.gawdscape.launcher.util.Constants;
 
 /**
  *
@@ -16,124 +10,96 @@ import com.gawdscape.launcher.util.OperatingSystem;
  */
 public class Mod {
 
-    private String name;
-    private List<Rule> rules;
-    private Map<OperatingSystem, String> natives;
-    private ExtractRules extract;
-    private String url;
+	private String name;
+	private ModType type;
+	private ExtractRules extract;
+	private String url;
 
-    public Mod() {
-    }
-
-    public Mod(String name) {
-	if ((name == null) || (name.length() == 0)) {
-	    throw new IllegalArgumentException("Mod name cannot be null or empty");
+	public Mod() {
 	}
-	this.name = name;
-    }
 
-    public Mod(Mod mod) {
-	name = mod.name;
-	url = mod.url;
-	if (mod.extract != null) {
-	    extract = new ExtractRules(mod.extract);
+	public Mod(String name) {
+		if ((name == null) || (name.length() == 0)) {
+			throw new IllegalArgumentException("Mod name cannot be null or empty");
+		}
+		this.name = name;
+		this.type = ModType.FORGE;
 	}
-	if (mod.rules != null) {
-	    rules = new ArrayList();
-	    for (Rule rule : mod.rules) {
-		rules.add(new Rule(rule));
-	    }
+
+	public Mod(Mod mod) {
+		name = mod.name;
+		type = mod.getType();
+		url = mod.url;
+		if (mod.extract != null) {
+			extract = new ExtractRules(mod.extract);
+		}
 	}
-	if (mod.natives != null) {
-	    natives = new LinkedHashMap();
-	    for (Map.Entry<OperatingSystem, String> entry : mod.getNatives().entrySet()) {
-		natives.put(entry.getKey(), entry.getValue());
-	    }
+
+	public String getName() {
+		return name;
 	}
-    }
 
-    public String getName() {
-	return name;
-    }
-
-    public Mod addNative(OperatingSystem operatingSystem, String name) {
-	if ((operatingSystem == null) || (!operatingSystem.isSupported())) {
-	    throw new IllegalArgumentException("Cannot add native for unsupported OS");
+	public ModType getType() {
+		return type;
 	}
-	if ((name == null) || (name.length() == 0)) {
-	    throw new IllegalArgumentException("Cannot add native for null or empty name");
+
+	public ExtractRules getExtractRules() {
+		return extract;
 	}
-	if (natives == null) {
-	    natives = new EnumMap(OperatingSystem.class);
+
+	public Mod setExtractRules(ExtractRules rules) {
+		extract = rules;
+		return this;
 	}
-	natives.put(operatingSystem, name);
-	return this;
-    }
 
-    public List<Rule> getRules() {
-	return rules;
-    }
-
-    public boolean appliesToCurrentEnvironment() {
-	if (rules == null) {
-	    return true;
+	public String getArtifactBaseDir() {
+		if (name == null) {
+			throw new IllegalStateException("Cannot get artifact dir of empty/blank artifact");
+		}
+		String[] parts = name.split(":", 3);
+		return String.format("%s/%s/%s", new Object[]{parts[0].replaceAll("\\.", "/"), parts[1], parts[2]});
 	}
-	Rule.Action lastAction = Rule.Action.DISALLOW;
-	for (Rule rule : rules) {
-	    Rule.Action action = rule.getAppliedAction();
-	    if (action != null) {
-		lastAction = action;
-	    }
+
+	public String getArtifactPath() {
+		return getArtifactPath(null);
 	}
-	return lastAction == Rule.Action.ALLOW;
-    }
 
-    public Map<OperatingSystem, String> getNatives() {
-	return natives;
-    }
-
-    public ExtractRules getExtractRules() {
-	return extract;
-    }
-
-    public Mod setExtractRules(ExtractRules rules) {
-	extract = rules;
-	return this;
-    }
-
-    public String getArtifactBaseDir() {
-	if (name == null) {
-	    throw new IllegalStateException("Cannot get artifact dir of empty/blank artifact");
+	public String getArtifactPath(String classifier) {
+		if (name == null) {
+			throw new IllegalStateException("Cannot get artifact path of empty/blank artifact");
+		}
+		return String.format("%s/%s", new Object[]{getArtifactBaseDir(), getArtifactFilename(classifier)});
 	}
-	String[] parts = name.split(":", 3);
-	return String.format("%s/%s/%s", new Object[]{parts[0].replaceAll("\\.", "/"), parts[1], parts[2]});
-    }
 
-    public String getArtifactPath() {
-	return getArtifactPath(null);
-    }
-
-    public String getArtifactPath(String classifier) {
-	if (name == null) {
-	    throw new IllegalStateException("Cannot get artifact path of empty/blank artifact");
+	public String getArtifactFilename(String classifier) {
+		if (name == null) {
+			throw new IllegalStateException("Cannot get artifact filename of empty/blank artifact");
+		}
+		if (classifier != null) {
+			classifier = "-" + classifier;
+		} else {
+			classifier = "";
+		}
+		String extension = "jar";
+		if (type == ModType.LITEMOD) {
+			extension = "litemod";
+		}
+		String[] parts = name.split(":", 3);
+		return String.format("%s-%s%s.%s", new Object[]{parts[1], parts[2], classifier, extension});
 	}
-	return String.format("%s/%s", new Object[]{getArtifactBaseDir(), getArtifactFilename(classifier)});
-    }
 
-    public String getArtifactFilename(String classifier) {
-	if (name == null) {
-	    throw new IllegalStateException("Cannot get artifact filename of empty/blank artifact");
+	public String toString() {
+		return "Mod{name='" + name + "'" + ", type=" + type + ", extract=" + extract + "}";
 	}
-	if (classifier != null) {
-	    classifier = "-" + classifier;
-	} else {
-	    classifier = "";
-	}
-	String[] parts = name.split(":", 3);
-	return String.format("%s-%s%s.jar", new Object[]{parts[1], parts[2], classifier});
-    }
 
-    public String toString() {
-	return "Mod{name='" + name + '\'' + ", rules=" + rules + ", natives=" + natives + ", extract=" + extract + '}';
-    }
+	public boolean hasCustomUrl() {
+		return url != null;
+	}
+
+	public String getDownloadUrl() {
+		if (url != null) {
+			return url;
+		}
+		return Constants.GS_MOD_URL;
+	}
 }

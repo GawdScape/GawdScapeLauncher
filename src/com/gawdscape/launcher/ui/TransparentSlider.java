@@ -9,12 +9,12 @@ import javax.swing.JSlider;
  */
 public class TransparentSlider extends JSlider {
 
-    public TransparentSlider() {
-	super();
-	setForeground(Color.WHITE);
-    }
+	public TransparentSlider() {
+		super();
+		setForeground(Color.WHITE);
+	}
 
-    public boolean isOpaque() {
-	return false;
-    }
+	public boolean isOpaque() {
+		return false;
+	}
 }

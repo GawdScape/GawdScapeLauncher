@@ -9,17 +9,17 @@ import javax.swing.JLabel;
  */
 public class TransparentLabel extends JLabel {
 
-    public TransparentLabel(String text, int horizontalAlignment) {
-	super(text, horizontalAlignment);
-	setForeground(Color.WHITE);
-    }
+	public TransparentLabel(String text, int horizontalAlignment) {
+		super(text, horizontalAlignment);
+		setForeground(Color.WHITE);
+	}
 
-    public TransparentLabel() {
-	super();
-	setForeground(Color.WHITE);
-    }
+	public TransparentLabel() {
+		super();
+		setForeground(Color.WHITE);
+	}
 
-    public boolean isOpaque() {
-	return false;
-    }
+	public boolean isOpaque() {
+		return false;
+	}
 }

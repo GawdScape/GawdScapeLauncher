@@ -6,31 +6,31 @@ package com.gawdscape.launcher.auth;
  */
 public class Profile {
 
-    private String id;
-    private String name;
-    private boolean legacy;
+	private String id;
+	private String name;
+	private boolean legacy;
 
-    public Profile(String id, String name) {
-	this.id = id;
-	this.name = name;
-	this.legacy = false;
-    }
+	public Profile(String id, String name) {
+		this.id = id;
+		this.name = name;
+		this.legacy = false;
+	}
 
-    public Profile(String id, String name, boolean legacy) {
-	this.id = id;
-	this.name = name;
-	this.legacy = legacy;
-    }
+	public Profile(String id, String name, boolean legacy) {
+		this.id = id;
+		this.name = name;
+		this.legacy = legacy;
+	}
 
-    public String getId() {
-	return this.id;
-    }
+	public String getId() {
+		return this.id;
+	}
 
-    public String getName() {
-	return this.name;
-    }
+	public String getName() {
+		return this.name;
+	}
 
-    public boolean isLegacy() {
-	return this.legacy;
-    }
+	public boolean isLegacy() {
+		return this.legacy;
+	}
 }

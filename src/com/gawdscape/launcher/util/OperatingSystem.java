@@ -10,90 +10,90 @@ import java.net.URI;
  */
 public enum OperatingSystem {
 
-    LINUX("linux", new String[]{"linux", "unix"}), WINDOWS("windows", new String[]{"win"}), OSX("osx", new String[]{"mac"}), UNKNOWN("unknown", new String[0]);
+	LINUX("linux", new String[]{"linux", "unix"}), WINDOWS("windows", new String[]{"win"}), OSX("osx", new String[]{"mac"}), UNKNOWN("unknown", new String[0]);
 
-    private final String name;
-    private final String[] aliases;
+	private final String name;
+	private final String[] aliases;
 
-    private OperatingSystem(String name, String... aliases) {
-	this.name = name;
-	this.aliases = (aliases == null ? new String[0] : aliases);
-    }
-
-    public String getName() {
-	return name;
-    }
-
-    public String[] getAliases() {
-	return aliases;
-    }
-
-    public boolean isSupported() {
-	return this != UNKNOWN;
-    }
-
-    public static String getArchDataModel() {
-	return System.getProperty("sun.arch.data.model");
-    }
-
-    public static String getJavaDir() {
-	String separator = System.getProperty("file.separator");
-	String path = System.getProperty("java.home") + separator + "bin" + separator;
-	if ((getCurrentPlatform() == WINDOWS)
-		&& (new File(path + "javaw.exe").isFile())) {
-	    return path + "javaw.exe";
+	private OperatingSystem(String name, String... aliases) {
+		this.name = name;
+		this.aliases = (aliases == null ? new String[0] : aliases);
 	}
-	return path + "java";
-    }
 
-    public static OperatingSystem getCurrentPlatform() {
-	String osName = System.getProperty("os.name").toLowerCase();
-	for (OperatingSystem os : values()) {
-	    for (String alias : os.getAliases()) {
-		if (osName.contains(alias)) {
-		    return os;
+	public String getName() {
+		return name;
+	}
+
+	public String[] getAliases() {
+		return aliases;
+	}
+
+	public boolean isSupported() {
+		return this != UNKNOWN;
+	}
+
+	public static String getArchDataModel() {
+		return System.getProperty("sun.arch.data.model");
+	}
+
+	public static String getJavaDir() {
+		String separator = System.getProperty("file.separator");
+		String path = System.getProperty("java.home") + separator + "bin" + separator;
+		if ((getCurrentPlatform() == WINDOWS)
+				&& (new File(path + "javaw.exe").isFile())) {
+			return path + "javaw.exe";
 		}
-	    }
+		return path + "java";
 	}
-	return UNKNOWN;
-    }
 
-    public static void openLink(URI link) {
-	try {
-	    Class<?> desktopClass = Class.forName("java.awt.Desktop");
-	    Object o = desktopClass.getMethod("getDesktop", new Class[0]).invoke(null, new Object[0]);
-	    desktopClass.getMethod("browse", new Class[]{URI.class}).invoke(o, new Object[]{link});
-	} catch (Throwable e) {
-	    Log.error("Failed to open link " + link.toString(), e);
+	public static OperatingSystem getCurrentPlatform() {
+		String osName = System.getProperty("os.name").toLowerCase();
+		for (OperatingSystem os : values()) {
+			for (String alias : os.getAliases()) {
+				if (osName.contains(alias)) {
+					return os;
+				}
+			}
+		}
+		return UNKNOWN;
 	}
-    }
 
-    public static void openFolder(File path) {
-	String absolutePath = path.getAbsolutePath();
-	OperatingSystem os = getCurrentPlatform();
-	if (os == OSX) {
-	    try {
-		Runtime.getRuntime().exec(new String[]{"/usr/bin/open", absolutePath});
+	public static void openLink(URI link) {
+		try {
+			Class<?> desktopClass = Class.forName("java.awt.Desktop");
+			Object o = desktopClass.getMethod("getDesktop", new Class[0]).invoke(null, new Object[0]);
+			desktopClass.getMethod("browse", new Class[]{URI.class}).invoke(o, new Object[]{link});
+		} catch (Throwable e) {
+			Log.error("Failed to open link " + link.toString(), e);
+		}
+	}
 
-		return;
-	    } catch (IOException e) {
-		Log.error("Couldn't open " + path + " through /usr/bin/open", e);
-	    }
-	} else if (os == WINDOWS) {
-	    String cmd = String.format("cmd.exe /C start \"Open file\" \"%s\"", new Object[]{absolutePath});
-	    try {
-		Runtime.getRuntime().exec(cmd);
-		return;
-	    } catch (IOException e) {
-		Log.error("Couldn't open " + path + " through cmd.exe", e);
-	    }
+	public static void openFolder(File path) {
+		String absolutePath = path.getAbsolutePath();
+		OperatingSystem os = getCurrentPlatform();
+		if (os == OSX) {
+			try {
+				Runtime.getRuntime().exec(new String[]{"/usr/bin/open", absolutePath});
+
+				return;
+			} catch (IOException e) {
+				Log.error("Couldn't open " + path + " through /usr/bin/open", e);
+			}
+		} else if (os == WINDOWS) {
+			String cmd = String.format("cmd.exe /C start \"Open file\" \"%s\"", new Object[]{absolutePath});
+			try {
+				Runtime.getRuntime().exec(cmd);
+				return;
+			} catch (IOException e) {
+				Log.error("Couldn't open " + path + " through cmd.exe", e);
+			}
+		}
+		try {
+			Class<?> desktopClass = Class.forName("java.awt.Desktop");
+			Object desktop = desktopClass.getMethod("getDesktop", new Class[0]).invoke(null, new Object[0]);
+			desktopClass.getMethod("browse", new Class[]{URI.class}).invoke(desktop, new Object[]{path.toURI()});
+		} catch (Throwable e) {
+			Log.error("Couldn't open " + path + " through Desktop.browse()", e);
+		}
 	}
-	try {
-	    Class<?> desktopClass = Class.forName("java.awt.Desktop");
-	    Object desktop = desktopClass.getMethod("getDesktop", new Class[0]).invoke(null, new Object[0]);
-	    desktopClass.getMethod("browse", new Class[]{URI.class}).invoke(desktop, new Object[]{path.toURI()});
-	} catch (Throwable e) {
-	    Log.error("Couldn't open " + path + " through Desktop.browse()", e);
-	}
-    }
 }
