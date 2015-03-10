@@ -69,10 +69,8 @@ public class Minecraft {
 
 	public Minecraft(Minecraft version) {
 		this(version.getId(), version.getReleaseTime(), version.getUpdatedTime(), version.getType(), version.getMainClass(), version.getMinecraftArguments());
-		minimumLauncherVersion = minimumLauncherVersion;
-		incompatibilityReason = incompatibilityReason;
-		for (Library library : version.getLibraries()) {
-			libraries.add(new Library(library));
+		for (Library lib : version.getLibraries()) {
+			libraries.add(new Library(lib));
 		}
 	}
 
@@ -134,32 +132,32 @@ public class Minecraft {
 
 	public Collection<Library> getRelevantLibraries() {
 		List<Library> result = new ArrayList();
-		for (Library library : libraries) {
-			if (library.appliesToCurrentEnvironment()) {
-				result.add(library);
+		for (Library lib : libraries) {
+			if (lib.appliesToCurrentEnvironment()) {
+				result.add(lib);
 			}
 		}
 		return result;
 	}
 
 	public Collection<File> getClassPath() {
-		Collection<Library> libraries = getRelevantLibraries();
+		Collection<Library> libs = getRelevantLibraries();
 		Collection<File> result = new ArrayList();
-		for (Library library : libraries) {
-			if (library.getNatives() == null) {
-				result.add(new File(Directories.getLibraryPath(), library.getArtifactPath()));
+		for (Library lib : libs) {
+			if (lib.getNatives() == null) {
+				result.add(new File(Directories.getLibraryPath(), lib.getArtifactPath()));
 			}
 		}
 		return result;
 	}
 
 	public Collection<String> getExtractFiles(OperatingSystem os) {
-		Collection<Library> libraries = getRelevantLibraries();
+		Collection<Library> libs = getRelevantLibraries();
 		Collection<String> result = new ArrayList();
-		for (Library library : libraries) {
-			Map<OperatingSystem, String> natives = library.getNatives();
+		for (Library lib : libs) {
+			Map<OperatingSystem, String> natives = lib.getNatives();
 			if ((natives != null) && (natives.containsKey(os))) {
-				result.add("libraries/" + library.getArtifactPath((String) natives.get(os)));
+				result.add("libraries/" + lib.getArtifactPath((String) natives.get(os)));
 			}
 		}
 		return result;
@@ -167,14 +165,14 @@ public class Minecraft {
 
 	public Set<String> getRequiredFiles(OperatingSystem os) {
 		Set<String> neededFiles = new HashSet();
-		for (Library library : getRelevantLibraries()) {
-			if (library.getNatives() != null) {
-				String natives = (String) library.getNatives().get(os);
+		for (Library lib : getRelevantLibraries()) {
+			if (lib.getNatives() != null) {
+				String natives = (String) lib.getNatives().get(os);
 				if (natives != null) {
-					neededFiles.add("libraries/" + library.getArtifactPath(natives));
+					neededFiles.add("libraries/" + lib.getArtifactPath(natives));
 				}
 			} else {
-				neededFiles.add("libraries/" + library.getArtifactPath());
+				neededFiles.add("libraries/" + lib.getArtifactPath());
 			}
 		}
 		return neededFiles;

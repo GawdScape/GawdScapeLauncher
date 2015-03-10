@@ -4,6 +4,7 @@ import com.gawdscape.launcher.auth.AuthManager;
 import com.gawdscape.launcher.auth.SessionManager;
 import com.gawdscape.launcher.auth.SessionResponse;
 import com.gawdscape.launcher.download.Updater;
+import com.gawdscape.launcher.game.PackIndex;
 import com.gawdscape.launcher.launch.MinecraftLauncher;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.JsonUtils;
@@ -25,6 +26,7 @@ public class GawdScapeLauncher {
 	public static SessionResponse session;
 	public static Updater updater;
 	public static MinecraftLauncher launcher;
+	public static PackIndex modpacks;
 
 	/**
 	 * @param args the command line arguments
@@ -56,6 +58,10 @@ public class GawdScapeLauncher {
 			logFrame = new LogFrame(config.getStyleLog());
 			logFrame.setVisible(true);
 		}
+
+		// Get list of mod packs
+		modpacks = new PackIndex();
+		modpacks.loadPacks();
 
 		SessionManager sessionManager = SessionManager.loadSessions();
 

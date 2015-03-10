@@ -8,9 +8,8 @@ import javax.swing.SwingUtilities;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
 import com.gawdscape.launcher.auth.SessionResponse;
-import com.gawdscape.launcher.download.Updater;
 import com.gawdscape.launcher.game.AssetIndex;
-import com.gawdscape.launcher.game.GawdScape;
+import com.gawdscape.launcher.game.ModPack;
 import com.gawdscape.launcher.game.Minecraft;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.FileUtils;
@@ -27,7 +26,7 @@ public class MinecraftLauncher implements MinecraftExit {
 	private Config config;
 	private SessionResponse session;
 
-	public void launchGame(Minecraft mc, GawdScape gs) throws IOException {
+	public void launchGame(Minecraft mc, ModPack pack) throws IOException {
 		Log.info("Prepare for launch...");
 		config = GawdScapeLauncher.config;
 		session = GawdScapeLauncher.session;
@@ -36,13 +35,13 @@ public class MinecraftLauncher implements MinecraftExit {
 			return;
 		}
 
-		if (gs == null) {
-			Log.severe("Aborting launch; GawdScape version is null?");
+		if (pack == null) {
+			Log.severe("Aborting launch; Mod Pack version is null?");
 			return;
 		}
 
-		File nativeDir = new File(Directories.getNativesPath());
-		File gameDirectory = config.getGameDirectory();
+		File nativeDir = new File(Directories.getNativesPath(mc.getId()));
+		File gameDirectory = config.getGameDir(pack.getId());
 		Log.info("Launching in " + gameDirectory);
 		if (!gameDirectory.exists()) {
 			if (!gameDirectory.mkdirs()) {
@@ -58,19 +57,19 @@ public class MinecraftLauncher implements MinecraftExit {
 
 		OperatingSystem os = OperatingSystem.getCurrentPlatform();
 		if (os.equals(OperatingSystem.OSX)) {
-			processLauncher.addCommands(new String[]{"-Xdock:icon=" + getAssetObject("icons/minecraft.icns").getAbsolutePath(), "-Xdock:name=Minecraft"});
+			processLauncher.addCommands(new String[]{"-Xdock:icon=" + getAssetObject(mc.getAssets(), "icons/minecraft.icns").getAbsolutePath(), "-Xdock:name=Minecraft"});
 		} else if (os.equals(OperatingSystem.WINDOWS)) {
 			processLauncher.addCommands(new String[]{"-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump"});
 		}
 		processLauncher.addCommands(new String[]{"-Djava.library.path=" + nativeDir.getAbsolutePath()});
-		processLauncher.addCommands(new String[]{"-cp", constructClassPath(mc, gs)});
+		processLauncher.addCommands(new String[]{"-cp", constructClassPath(mc, pack)});
 		String mainClass = mc.getMainClass();
-		if (gs.getMainClass() != null) {
-			mainClass = gs.getMainClass();
+		if (pack.getMainClass() != null) {
+			mainClass = pack.getMainClass();
 		}
 		processLauncher.addCommands(new String[]{mainClass});
 
-		String[] args = getMinecraftArguments(mc, gs.getMinecraftArguments(), gameDirectory);
+		String[] args = getMinecraftArguments(pack.getId(), mc, pack.getMinecraftArguments(), gameDirectory);
 		if (args == null) {
 			return;
 		}
@@ -109,11 +108,10 @@ public class MinecraftLauncher implements MinecraftExit {
 			process.safeSetExitRunnable(this);
 		} catch (IOException e) {
 			Log.error("Couldn't launch game", e);
-			return;
 		}
 	}
 
-	private String[] getMinecraftArguments(Minecraft version, String gsArgs, File gameDirectory) {
+	private String[] getMinecraftArguments(String packName, Minecraft version, String gsArgs, File gameDirectory) {
 		if (version.getMinecraftArguments() == null) {
 			Log.severe("Can't run version, missing minecraftArguments");
 			return null;
@@ -149,11 +147,11 @@ public class MinecraftLauncher implements MinecraftExit {
 			map.put("auth_uuid", new UUID(0L, 0L).toString());
 			map.put("user_type", "legacy");
 		}
-		map.put("profile_name", "GawdScape");
+		map.put("profile_name", packName);
 		map.put("version_name", version.getId());
 
-		map.put("game_directory", gameDirectory.getAbsolutePath());
-		map.put("game_assets", reconstructAssets().getAbsolutePath());
+		map.put("game_directory", config.getGameDir(packName).getAbsolutePath());
+		map.put("game_assets", reconstructAssets(version.getAssets()).getAbsolutePath());
 
 		map.put("assets_root", new File(Directories.getAssetPath()).getAbsolutePath());
 		map.put("assets_index_name", version.getAssets());
@@ -177,11 +175,10 @@ public class MinecraftLauncher implements MinecraftExit {
 		return split;
 	}
 
-	private File getAssetObject(String name) throws IOException {
+	private File getAssetObject(String assetVersion, String name) throws IOException {
 		File assetsDir = new File(Directories.getAssetPath(), "assets");
 		File indexDir = new File(assetsDir, "indexes");
 		File objectsDir = new File(assetsDir, "objects");
-		String assetVersion = Updater.minecraft.getAssets();
 		File indexFile = new File(indexDir, assetVersion + ".json");
 		AssetIndex index = JsonUtils.getGson().fromJson(JsonUtils.readJsonFromFile(indexFile), AssetIndex.class);
 
@@ -189,11 +186,10 @@ public class MinecraftLauncher implements MinecraftExit {
 		return new File(objectsDir, hash.substring(0, 2) + "/" + hash);
 	}
 
-	private File reconstructAssets() {
+	private File reconstructAssets(String assetVersion) {
 		File assetsDir = new File(Directories.getAssetPath());
 		File indexDir = new File(Directories.getAssetIndexPath());
 		File objectDir = new File(Directories.getAssetObjectPath());
-		String assetVersion = Updater.minecraft.getAssets();
 		File indexFile = new File(indexDir, assetVersion + ".json");
 		File virtualRoot = new File(new File(assetsDir, "virtual"), assetVersion);
 		if (!indexFile.isFile()) {
@@ -229,16 +225,14 @@ public class MinecraftLauncher implements MinecraftExit {
 		return virtualRoot;
 	}
 
-	private String constructClassPath(Minecraft mc, GawdScape gs) {
+	private String constructClassPath(Minecraft mc, ModPack pack) {
 		StringBuilder result = new StringBuilder();
 		// Libraries
 		Collection<File> classPath = mc.getClassPath();
-		classPath.addAll(gs.getClassPath());
-		// GawdScape
-		classPath.add(new File(Directories.getBinPath(), "gawdscape.jar"));
+		classPath.addAll(pack.getClassPath());
 		// Mods
 		try {
-			File modDir = new File(Directories.getModPath());
+			File modDir = new File(GawdScapeLauncher.config.getGameDir(pack.getId()), "bin");
 			if (!modDir.exists()) {
 				modDir.mkdir();
 			}
@@ -253,8 +247,12 @@ public class MinecraftLauncher implements MinecraftExit {
 		} catch (Exception e) {
 			Log.severe("Error loading mods");
 		}
+		if (pack.getGawdModVersion() != null) {
+			classPath.add(new File(Directories.getBinPath(),
+					"gawdmod-" + pack.getGawdModVersion() + "_" + pack.getMinecraftVersion()+ ".jar"));
+		}
 		// Minecraft
-		classPath.add(new File(Directories.getBinPath(), "minecraft.jar"));
+		classPath.add(new File(Directories.getBinPath(), "minecraft-" + mc.getId() + ".jar"));
 		String separator = System.getProperty("path.separator");
 		for (File file : classPath) {
 			if (!file.isFile()) {

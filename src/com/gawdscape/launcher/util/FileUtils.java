@@ -6,9 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,6 +53,21 @@ public class FileUtils {
 		}
 		if (!f.delete()) {
 			throw new FileNotFoundException("Failed to delete file: " + f);
+		}
+	}
+
+	public static void downloadFile(String url, File destination) {
+		try {
+			URL website = new URL(url);
+			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+			FileOutputStream fos = new FileOutputStream(destination);
+			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		} catch (FileNotFoundException ex) {
+			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (MalformedURLException ex) {
+			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 

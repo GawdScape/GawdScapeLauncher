@@ -33,6 +33,7 @@ public class Config {
 	private boolean customJava;
 	private String javaPath;
 	private String javaArgs;
+	private int defaultPack;
 
 	public Config() {
 		gameDir = Directories.getWorkingDirectory().toString();
@@ -51,6 +52,7 @@ public class Config {
 		customJava = false;
 		javaPath = OperatingSystem.getJavaDir();
 		javaArgs = "";
+		defaultPack = 0;
 	}
 
 	public Config(
@@ -69,7 +71,8 @@ public class Config {
 			String windowHeight,
 			boolean customJava,
 			String javaPath,
-			String javaArgs
+			String javaArgs,
+			int defaultPack
 	) {
 		this.gameDir = gameDir;
 		this.memory = memory;
@@ -87,6 +90,7 @@ public class Config {
 		this.customJava = customJava;
 		this.javaPath = javaPath;
 		this.javaArgs = javaArgs;
+		this.defaultPack = defaultPack;
 	}
 
 	public void setConfig(
@@ -129,16 +133,24 @@ public class Config {
 		this.javaArgs = javaArgs;
 	}
 
+	public void setDefaultPack(int defaultPack) {
+		this.defaultPack = defaultPack;
+	}
+
+	public int getDefaultPack() {
+		return defaultPack;
+	}
+
 	public String getGameDir() {
 		return gameDir;
 	}
 
-	public String getGameModDir() {
-		return gameDir + File.separator + "mods" + File.separator;
-	}
-
 	public File getGameDirectory() {
 		return new File(gameDir);
+	}
+
+	public File getGameDir(String pack) {
+		return new File(gameDir, pack);
 	}
 
 	public int getMemory() {

@@ -12,7 +12,7 @@ import java.net.URL;
  */
 public class Constants {
 
-	public static final int VERSION = 10;
+	public static final int VERSION = 11;
 
 	public static final int THIS_YEAR = 2015;
 
@@ -24,10 +24,10 @@ public class Constants {
 	public static final String MC_DOWNLOAD_URL = "https://s3.amazonaws.com/Minecraft.Download/";
 	public static final String MC_LIBRARY_URL = "https://libraries.minecraft.net/";
 	public static final String MC_ASSET_URL = "http://resources.download.minecraft.net/";
-	public static final String GS_DOWNLOAD_URL = "https://github.com/GawdScape/GawdScape/releases/download/";
-	public static final String GS_MOD_URL = "https://raw.githubusercontent.com/GawdScape/GawdPack/master/";
-	public static final String GS_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScape/master/gawdscape.json";
-	public static final String GS_VERSION_NOTES_URL = "https://github.com/GawdScape/GawdScape/releases/tag/";
+	public static final String GS_MOD_URL = "https://github.com/GawdScape/GawdMod/releases/download/";
+	public static final String GS_PACK_URL = "https://raw.githubusercontent.com/GawdScape/GawdPack/";
+	public static final String GS_PACK_FRONT_URL = "https://github.com/GawdScape/GawdPack/blob/";
+	public static final String GS_STORAGE_URL = "https://raw.githubusercontent.com/GawdScape/GawdStorage/";
 	public static final String LAUNCHER_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScapeLauncher/master/latest.version";
 	public static final URI UPDATE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/releases/latest");
 	public static final URI GS_FORUM_LINK = constantURI("http://www.gawdscape.com/");

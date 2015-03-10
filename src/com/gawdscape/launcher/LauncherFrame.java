@@ -6,9 +6,13 @@ import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
 import com.gawdscape.launcher.auth.SessionManager;
 import com.gawdscape.launcher.util.Constants;
+import com.gawdscape.launcher.util.Directories;
+import com.gawdscape.launcher.util.FileUtils;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.swing.ImageIcon;
 import javax.swing.event.HyperlinkEvent;
 
 /**
@@ -17,6 +21,7 @@ import javax.swing.event.HyperlinkEvent;
  */
 public class LauncherFrame extends javax.swing.JFrame {
 
+	public static String[] packs = new String[0];
 	public static String username = "Guest";
 
 	/**
@@ -25,8 +30,34 @@ public class LauncherFrame extends javax.swing.JFrame {
 	public LauncherFrame() {
 		Log.debug("Initializing launcher frame.");
 		initComponents();
+		loadPacks();
 		setLocationRelativeTo(null);
 		loadNews();
+	}
+
+	private void loadPacks() {
+		int id = 0;
+		int total = GawdScapeLauncher.modpacks.getIDs().size();
+		packs = new String[total];
+		for(String pack : GawdScapeLauncher.modpacks.getIDs()) {
+			File packLogo = new File(Directories.getLogoPath(pack));
+			if (!packLogo.exists()) {
+				packLogo.getParentFile().mkdirs();
+				FileUtils.downloadFile(Constants.GS_PACK_URL + pack + "/logo.png", packLogo);
+			}
+			if (packLogo.exists()) {
+				packCombo.addItem(new ImageIcon(packLogo.getPath()));
+			} else {
+				packCombo.addItem(pack);
+			}
+			packs[id] = pack;
+			id++;
+		}
+
+		int defaultPackID = GawdScapeLauncher.config.getDefaultPack();
+		if (id >= defaultPackID) {
+			packCombo.setSelectedIndex(defaultPackID);
+		}
 	}
 
 	private void loadNews() {
@@ -62,7 +93,7 @@ public class LauncherFrame extends javax.swing.JFrame {
         switchUsersLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
         logoutLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
         aboutLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
-        logoLabel = new javax.swing.JLabel();
+        packCombo = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GawdScape Launcher");
@@ -172,17 +203,14 @@ public class LauncherFrame extends javax.swing.JFrame {
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
-        logoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/gawdscape/launcher/images/gawdscape.png"))); // NOI18N
-
         javax.swing.GroupLayout bottomPanelLayout = new javax.swing.GroupLayout(bottomPanel);
         bottomPanel.setLayout(bottomPanelLayout);
         bottomPanelLayout.setHorizontalGroup(
             bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bottomPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 346, Short.MAX_VALUE)
+                .addComponent(packCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 329, Short.MAX_VALUE)
                 .addComponent(profilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -193,8 +221,8 @@ public class LauncherFrame extends javax.swing.JFrame {
                 .addComponent(profilePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(bottomPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(logoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(packCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -227,8 +255,11 @@ public class LauncherFrame extends javax.swing.JFrame {
 
     private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
 		playButton.setEnabled(false);
+		int packID = packCombo.getSelectedIndex();
+		GawdScapeLauncher.config.setDefaultPack(packID);
 		Config.saveConfig(GawdScapeLauncher.config);
 		GawdScapeLauncher.updater = new Updater();
+		GawdScapeLauncher.updater.setPack(packs[packID]);
 		GawdScapeLauncher.updater.start();
     }//GEN-LAST:event_playButtonActionPerformed
 
@@ -310,10 +341,10 @@ public class LauncherFrame extends javax.swing.JFrame {
     private com.gawdscape.launcher.ui.WhiteLinkLabel aboutLabel;
     private com.gawdscape.launcher.ui.CobblestonePanel bottomPanel;
     private com.gawdscape.launcher.ui.TransparentLabel greetingLabel;
-    private javax.swing.JLabel logoLabel;
     private com.gawdscape.launcher.ui.WhiteLinkLabel logoutLabel;
     private static javax.swing.JEditorPane newsPane;
     private com.gawdscape.launcher.ui.TransparentButton optionsButton;
+    public static javax.swing.JComboBox packCombo;
     public static com.gawdscape.launcher.ui.TransparentButton playButton;
     private com.gawdscape.launcher.ui.TransparentPanel profilePanel;
     private javax.swing.JScrollPane scrollPane;

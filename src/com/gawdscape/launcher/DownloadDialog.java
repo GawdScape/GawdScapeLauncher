@@ -40,7 +40,7 @@ public class DownloadDialog extends javax.swing.JDialog {
 	}
 
 	public void setLaunching() {
-		title.setText("Launching GawdScape...");
+		title.setText("Launching Mod Pack...");
 		source.setText("Enjoy :)");
 		progress.setText("Complete");
 		destinationLabel.setText("Launching in:");
@@ -74,7 +74,7 @@ public class DownloadDialog extends javax.swing.JDialog {
 		progressLabel.setText("");
 		progress.setText("This may take a moment...");
 		destinationLabel.setText("Mod Folder:");
-		destination.setText(Directories.getModPath());
+		destination.setText(GawdScapeLauncher.config.getGameDir());
 		totalProgress.setString("");
 	}
 
@@ -99,11 +99,11 @@ public class DownloadDialog extends javax.swing.JDialog {
         cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("GawdScape Download");
+        setTitle("Mod Pack Download");
         setIconImage(ImageUtils.getFavIcon());
 
         title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        title.setText("GawdScape Download");
+        title.setText("Mod Pack Download");
         title.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         source.setText("Preparing for download...");

@@ -32,7 +32,10 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="aboutPanel" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="aboutPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -50,6 +53,21 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="userModLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="userMods" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="packLibrariesLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="packLibraries" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="packVersionLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="packVersion" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="forumsLink" min="-2" max="-2" attributes="0"/>
@@ -76,9 +94,9 @@
                               <Component id="mcVersion" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="gsVersionLabel" min="-2" max="-2" attributes="0"/>
+                              <Component id="packLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="gsVersion" min="-2" max="-2" attributes="0"/>
+                              <Component id="pack" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="directoryLabel" min="-2" max="-2" attributes="0"/>
@@ -103,6 +121,16 @@
                           <Component id="architectureLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="architecture" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="gmLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="gmVersion" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <Component id="packModsLabel" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="packMods" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
@@ -133,15 +161,40 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="gsVersionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="gsVersion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="packLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="pack" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="packVersionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="packVersion" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="packLibrariesLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="packLibraries" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="packModsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="packMods" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="gmLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="gmVersion" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="mcVersionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="mcVersion" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="userModLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="userMods" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="gameDirLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="gameDir" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -165,7 +218,7 @@
                       <Component id="wikiLink" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="issuesLink" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="closeButton" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -197,7 +250,7 @@
         </Component>
         <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="description2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Also downloads the GawdScape client mod."/>
+            <Property name="text" type="java.lang.String" value="Also downloads GawdScape mod packs."/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="16" style="0"/>
             </Property>
@@ -245,12 +298,12 @@
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="directoryMouseClicked"/>
           </Events>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gsVersionLabel">
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="GawdScape Version:"/>
+            <Property name="text" type="java.lang.String" value="Mod Pack:"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gsVersion">
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="pack">
           <Properties>
             <Property name="text" type="java.lang.String" value="Not Installed"/>
           </Properties>
@@ -335,6 +388,56 @@
               <Connection code="System.getProperty(&quot;os.arch&quot;)" type="code"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Does this appear incorrect?&#xa;If so, you may want to install a 64-bit version of Java."/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packVersionLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Mod Pack Version:"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packLibrariesLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Mod Pack Libraries:"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packModsLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Mod Pack Mods:"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gmLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="GawdMod Version:"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="userModLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Your Mods:"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packVersion">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Not Installed"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packLibraries">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="N/A"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packMods">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="N/A"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gmVersion">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Not Installed"/>
+          </Properties>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="userMods">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="None"/>
           </Properties>
         </Component>
       </SubComponents>

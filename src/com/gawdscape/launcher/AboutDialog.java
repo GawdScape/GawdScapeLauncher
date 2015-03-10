@@ -1,13 +1,15 @@
 package com.gawdscape.launcher;
 
-import com.gawdscape.launcher.game.GawdScape;
+import com.gawdscape.launcher.game.ModPack;
 import com.gawdscape.launcher.game.Minecraft;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.ImageUtils;
 import com.gawdscape.launcher.util.JsonUtils;
+import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
 import java.io.File;
+import java.util.Arrays;
 
 /**
  *
@@ -15,33 +17,45 @@ import java.io.File;
  */
 public final class AboutDialog extends javax.swing.JDialog {
 
+	public static String packName;
+
 	/**
 	 * Creates new form AboutDialog
 	 */
 	public AboutDialog(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
+		getSelectedModPack();
 		initComponents();
 		setLocationRelativeTo(parent);
-		loadGawdScapeData();
-		loadMinecraftData();
+		loadModPackData();
 	}
 
-	public void loadGawdScapeData() {
-		File gawdscapeJsonFile = new File(Directories.getBinPath(), "gawdscape.json");
-		if (gawdscapeJsonFile.exists()) {
+	public void getSelectedModPack() {
+		packName = LauncherFrame.packs[LauncherFrame.packCombo.getSelectedIndex()];
+	}
+
+	public void loadModPackData() {
+		File jsonFile = new File(Directories.getBinPath(), packName + ".json");
+		if (jsonFile.exists()) {
 			String localJson = "";
 			try {
-				localJson = JsonUtils.readJsonFromFile(gawdscapeJsonFile);
-				GawdScape gawdscape = JsonUtils.getGson().fromJson(localJson, GawdScape.class);
-				gsVersion.setText(gawdscape.getId());
+				localJson = JsonUtils.readJsonFromFile(jsonFile);
+				ModPack modpack = JsonUtils.getGson().fromJson(localJson, ModPack.class);
+				pack.setText(packName);
+				packVersion.setText(modpack.getVersion());
+				packLibraries.setText(""+modpack.getLibraries());
+				packMods.setText(""+modpack.getMods());
+				gmVersion.setText(modpack.getGawdModVersion());
+				loadMinecraftData(modpack.getMinecraftVersion());
+				loadMods(modpack.getId());
 			} catch (Exception ex) {
-				gsVersion.setText(ex.getMessage());
+				Log.error("Error", ex);
 			}
 		}
 	}
 
-	public void loadMinecraftData() {
-		File minecraftJsonFile = new File(Directories.getBinPath(), "minecraft.json");
+	public void loadMinecraftData(String version) {
+		File minecraftJsonFile = new File(Directories.getBinPath(), "minecraft-" + version + ".json");
 		if (minecraftJsonFile.exists()) {
 			String localJson = "";
 			try {
@@ -52,6 +66,16 @@ public final class AboutDialog extends javax.swing.JDialog {
 				mcVersion.setText(ex.getMessage());
 			}
 		}
+	}
+
+	public void loadMods(String name) {
+		File modDir = new File(GawdScapeLauncher.config.getGameDir(name), "bin");
+		if (!modDir.exists()) {
+			userMods.setText("No mods directory.");
+			return;
+		}
+		String[] mods = modDir.list();
+		userMods.setText(Arrays.toString(mods));
 	}
 
 	/**
@@ -74,8 +98,8 @@ public final class AboutDialog extends javax.swing.JDialog {
         version = new com.gawdscape.launcher.ui.TransparentLabel();
         directoryLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         directory = new com.gawdscape.launcher.ui.WhiteLinkLabel();
-        gsVersionLabel = new com.gawdscape.launcher.ui.TransparentLabel();
-        gsVersion = new com.gawdscape.launcher.ui.TransparentLabel();
+        packLabel = new com.gawdscape.launcher.ui.TransparentLabel();
+        pack = new com.gawdscape.launcher.ui.TransparentLabel();
         mcVersionLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         mcVersion = new com.gawdscape.launcher.ui.TransparentLabel();
         gameDirLabel = new com.gawdscape.launcher.ui.TransparentLabel();
@@ -88,6 +112,16 @@ public final class AboutDialog extends javax.swing.JDialog {
         issuesLink = new com.gawdscape.launcher.ui.HyperLinkLabel();
         architectureLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         architecture = new com.gawdscape.launcher.ui.TransparentLabel();
+        packVersionLabel = new com.gawdscape.launcher.ui.TransparentLabel();
+        packLibrariesLabel = new com.gawdscape.launcher.ui.TransparentLabel();
+        packModsLabel = new com.gawdscape.launcher.ui.TransparentLabel();
+        gmLabel = new com.gawdscape.launcher.ui.TransparentLabel();
+        userModLabel = new com.gawdscape.launcher.ui.TransparentLabel();
+        packVersion = new com.gawdscape.launcher.ui.TransparentLabel();
+        packLibraries = new com.gawdscape.launcher.ui.TransparentLabel();
+        packMods = new com.gawdscape.launcher.ui.TransparentLabel();
+        gmVersion = new com.gawdscape.launcher.ui.TransparentLabel();
+        userMods = new com.gawdscape.launcher.ui.TransparentLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About GawdScape Launcher");
@@ -100,7 +134,7 @@ public final class AboutDialog extends javax.swing.JDialog {
         description1.setText("The better Minecraft launcher...");
         description1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        description2.setText("Also downloads the GawdScape client mod.");
+        description2.setText("Also downloads GawdScape mod packs.");
         description2.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
 
         closeButton.setText("Close");
@@ -125,9 +159,9 @@ public final class AboutDialog extends javax.swing.JDialog {
             }
         });
 
-        gsVersionLabel.setText("GawdScape Version:");
+        packLabel.setText("Mod Pack:");
 
-        gsVersion.setText("Not Installed");
+        pack.setText("Not Installed");
 
         mcVersionLabel.setText("Minecraft Version:");
 
@@ -179,6 +213,26 @@ public final class AboutDialog extends javax.swing.JDialog {
         architecture.setText(System.getProperty("os.arch"));
         architecture.setToolTipText("Does this appear incorrect?\nIf so, you may want to install a 64-bit version of Java.");
 
+        packVersionLabel.setText("Mod Pack Version:");
+
+        packLibrariesLabel.setText("Mod Pack Libraries:");
+
+        packModsLabel.setText("Mod Pack Mods:");
+
+        gmLabel.setText("GawdMod Version:");
+
+        userModLabel.setText("Your Mods:");
+
+        packVersion.setText("Not Installed");
+
+        packLibraries.setText("N/A");
+
+        packMods.setText("N/A");
+
+        gmVersion.setText("Not Installed");
+
+        userMods.setText("None");
+
         javax.swing.GroupLayout aboutPanelLayout = new javax.swing.GroupLayout(aboutPanel);
         aboutPanel.setLayout(aboutPanelLayout);
         aboutPanelLayout.setHorizontalGroup(
@@ -190,6 +244,18 @@ public final class AboutDialog extends javax.swing.JDialog {
             .addGroup(aboutPanelLayout.createSequentialGroup()
                 .addGap(0, 10, Short.MAX_VALUE)
                 .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addComponent(userModLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(userMods, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addComponent(packLibrariesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(packLibraries, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addComponent(packVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(packVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(aboutPanelLayout.createSequentialGroup()
                             .addComponent(forumsLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -212,9 +278,9 @@ public final class AboutDialog extends javax.swing.JDialog {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(mcVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(aboutPanelLayout.createSequentialGroup()
-                            .addComponent(gsVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(packLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(gsVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(pack, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(aboutPanelLayout.createSequentialGroup()
                             .addComponent(directoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -233,7 +299,15 @@ public final class AboutDialog extends javax.swing.JDialog {
                     .addGroup(aboutPanelLayout.createSequentialGroup()
                         .addComponent(architectureLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(architecture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(architecture, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addComponent(gmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(gmVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(aboutPanelLayout.createSequentialGroup()
+                        .addComponent(packModsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(packMods, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 10, Short.MAX_VALUE))
         );
         aboutPanelLayout.setVerticalGroup(
@@ -257,13 +331,33 @@ public final class AboutDialog extends javax.swing.JDialog {
                     .addComponent(directory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(gsVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(gsVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(packLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pack, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(packVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(packVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(packLibrariesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(packLibraries, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(packModsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(packMods, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(gmLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(gmVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(mcVersionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(mcVersion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(userModLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(userMods, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(aboutPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(gameDirLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(gameDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -283,7 +377,7 @@ public final class AboutDialog extends javax.swing.JDialog {
                     .addComponent(githubLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(wikiLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(issuesLink, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(closeButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -296,39 +390,41 @@ public final class AboutDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(aboutPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(aboutPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-		dispose();
-    }//GEN-LAST:event_closeButtonActionPerformed
-
-    private void directoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryMouseClicked
-		OperatingSystem.openFolder(Directories.getWorkingDirectory());
-    }//GEN-LAST:event_directoryMouseClicked
-
-    private void gameDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gameDirMouseClicked
-		OperatingSystem.openFolder(GawdScapeLauncher.config.getGameDirectory());
-    }//GEN-LAST:event_gameDirMouseClicked
-
-    private void forumsLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forumsLinkMouseClicked
-		OperatingSystem.openLink(Constants.GS_FORUM_LINK);
-    }//GEN-LAST:event_forumsLinkMouseClicked
-
-    private void githubLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_githubLinkMouseClicked
-		OperatingSystem.openLink(Constants.GS_GITHUB_LINK);
-    }//GEN-LAST:event_githubLinkMouseClicked
+    private void issuesLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_issuesLinkMouseClicked
+        OperatingSystem.openLink(Constants.LAUNCHER_ISSUE_LINK);
+    }//GEN-LAST:event_issuesLinkMouseClicked
 
     private void wikiLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wikiLinkMouseClicked
-		OperatingSystem.openLink(Constants.LAUNCHER_WIKI_LINK);
+        OperatingSystem.openLink(Constants.LAUNCHER_WIKI_LINK);
     }//GEN-LAST:event_wikiLinkMouseClicked
 
-    private void issuesLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_issuesLinkMouseClicked
-		OperatingSystem.openLink(Constants.LAUNCHER_ISSUE_LINK);
-    }//GEN-LAST:event_issuesLinkMouseClicked
+    private void githubLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_githubLinkMouseClicked
+        OperatingSystem.openLink(Constants.GS_GITHUB_LINK);
+    }//GEN-LAST:event_githubLinkMouseClicked
+
+    private void forumsLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forumsLinkMouseClicked
+        OperatingSystem.openLink(Constants.GS_FORUM_LINK);
+    }//GEN-LAST:event_forumsLinkMouseClicked
+
+    private void gameDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gameDirMouseClicked
+        OperatingSystem.openFolder(GawdScapeLauncher.config.getGameDirectory());
+    }//GEN-LAST:event_gameDirMouseClicked
+
+    private void directoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryMouseClicked
+        OperatingSystem.openFolder(Directories.getWorkingDirectory());
+    }//GEN-LAST:event_directoryMouseClicked
+
+    private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
+        dispose();
+    }//GEN-LAST:event_closeButtonActionPerformed
 
 	/**
 	 * @param args the command line arguments
@@ -387,14 +483,24 @@ public final class AboutDialog extends javax.swing.JDialog {
     private com.gawdscape.launcher.ui.TransparentLabel gameDirLabel;
     private javax.swing.JLabel gawdscapeImg;
     private com.gawdscape.launcher.ui.HyperLinkLabel githubLink;
-    private com.gawdscape.launcher.ui.TransparentLabel gsVersion;
-    private com.gawdscape.launcher.ui.TransparentLabel gsVersionLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel gmLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel gmVersion;
     private com.gawdscape.launcher.ui.HyperLinkLabel issuesLink;
     private com.gawdscape.launcher.ui.TransparentLabel javaVersion;
     private com.gawdscape.launcher.ui.TransparentLabel javaVersionLabel;
     private javax.swing.JLabel launcherImg;
     private com.gawdscape.launcher.ui.TransparentLabel mcVersion;
     private com.gawdscape.launcher.ui.TransparentLabel mcVersionLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel pack;
+    private com.gawdscape.launcher.ui.TransparentLabel packLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel packLibraries;
+    private com.gawdscape.launcher.ui.TransparentLabel packLibrariesLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel packMods;
+    private com.gawdscape.launcher.ui.TransparentLabel packModsLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel packVersion;
+    private com.gawdscape.launcher.ui.TransparentLabel packVersionLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel userModLabel;
+    private com.gawdscape.launcher.ui.TransparentLabel userMods;
     private com.gawdscape.launcher.ui.TransparentLabel version;
     private com.gawdscape.launcher.ui.TransparentLabel versionLabel;
     private com.gawdscape.launcher.ui.HyperLinkLabel wikiLink;

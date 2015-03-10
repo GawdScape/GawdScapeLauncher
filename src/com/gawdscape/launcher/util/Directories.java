@@ -60,12 +60,12 @@ public class Directories {
 		return getWorkingDirectory() + separator + "bin" + separator;
 	}
 
-	public static String getModPath() {
-		return getBinPath() + "mods" + separator;
+	public static String getNativesPath(String version) {
+		return getBinPath() + "natives" + separator + version + separator;
 	}
 
-	public static String getNativesPath() {
-		return getBinPath() + "natives" + separator;
+	public static String getLogoPath(String pack) {
+		return getAssetPath() + separator + "packlogos" + separator + pack + ".png";
 	}
 
 	public static void createGameDirs(File gameDir) {

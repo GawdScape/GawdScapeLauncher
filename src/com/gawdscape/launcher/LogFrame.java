@@ -34,7 +34,7 @@ public class LogFrame extends javax.swing.JFrame {
 
 	int searchStart = 0;
 	String find = null;
-	boolean ignoreCase = false;
+	boolean ignoreCase = true;
 
 	boolean scroll = true;
 

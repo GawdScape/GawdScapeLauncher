@@ -100,6 +100,6 @@ public class Mod {
 		if (url != null) {
 			return url;
 		}
-		return Constants.GS_MOD_URL;
+		return Constants.GS_STORAGE_URL + "Mods/";
 	}
 }

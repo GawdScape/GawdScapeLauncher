@@ -35,18 +35,18 @@ import java.util.zip.ZipFile;
 public class DownloadManager {
 
 	public static final int processorCores = Runtime.getRuntime().availableProcessors();
-	public static ExecutorService pool = Executors.newFixedThreadPool(processorCores);
+	public static ExecutorService pool = Executors.newFixedThreadPool(processorCores * 2);
 	public static int poolSize = 0;
 	public static int thisFile = 0;
 
 	public static DownloadDialog downloadDialog;
 
-	public static void createDialog() {
-		Log.info("Downloading with " + processorCores + " threads...");
+	public static void createDialog(final String name) {
+		Log.info("Downloading with " + (processorCores * 2) + " threads...");
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				downloadDialog = new DownloadDialog(GawdScapeLauncher.launcherFrame, true);
-				downloadDialog.changeTitle("Downloading GawdScape...");
+				downloadDialog.changeTitle("Downloading " + name + "...");
 				downloadDialog.setVisible(true);
 			}
 		});
@@ -78,14 +78,14 @@ public class DownloadManager {
 		}
 	}
 
-	public static void queueMinecraft(String mcVer, String gsVer) {
+	public static void queueMinecraft(String mcVer, String gmVer) {
 		addToQueue(
 				Constants.MC_DOWNLOAD_URL + "versions/" + mcVer + "/" + mcVer + ".jar",
-				Directories.getBinPath() + "minecraft.jar"
+				Directories.getBinPath() + "minecraft-" + mcVer + ".jar"
 		);
 		addToQueue(
-				Constants.GS_DOWNLOAD_URL + gsVer + "/" + gsVer + ".jar",
-				Directories.getBinPath() + "gawdscape.jar"
+				Constants.GS_MOD_URL + gmVer + "/" + mcVer + ".jar",
+				Directories.getBinPath() + "gawdmod-" + gmVer + "_" + mcVer + ".jar"
 		);
 	}
 
@@ -136,19 +136,21 @@ public class DownloadManager {
 		}
 	}
 
-	public static void queueMods(Collection<Mod> mods) {
+	public static void queueMods(String packName, Collection<Mod> mods) {
 		if (mods != null) {
 			for (Mod mod : mods) {
 				addToQueue(
 						mod.getDownloadUrl() + mod.getArtifactPath(),
-						GawdScapeLauncher.config.getGameModDir() + mod.getArtifactFilename(null)
+						GawdScapeLauncher.config.getGameDir(packName)
+								+ File.separator + "mods"
+								+ File.separator + mod.getArtifactFilename(null)
 				);
 			}
 		}
 	}
 
-	public static void extractNatives(Collection<Library> mcLibraries) {
-		File nativesDir = new File(Directories.getNativesPath());
+	public static void extractNatives(String mcVer, Collection<Library> mcLibraries) {
+		File nativesDir = new File(Directories.getNativesPath(mcVer));
 		if (nativesDir.exists()) {
 			try {
 				FileUtils.delete(nativesDir);
@@ -167,7 +169,7 @@ public class DownloadManager {
 							path = path.replace("${arch}", OperatingSystem.getArchDataModel());
 						}
 						try {
-							unZipNazives(path);
+							unZipNazives(mcVer, path);
 						} catch (IOException ex) {
 							Log.error("Error extracting " + path, ex);
 						}
@@ -177,14 +179,14 @@ public class DownloadManager {
 		}
 	}
 
-	public static void unZipNazives(String path) throws IOException {
+	public static void unZipNazives(String mcVer, String path) throws IOException {
 		File archive = new File(Directories.getLibraryPath(), path);
 		Log.info("Starting to extract " + archive.toString());
 		ZipFile zip = new JarFile(archive);
 		Enumeration entries = zip.entries();
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = (ZipEntry) entries.nextElement();
-			File target = new File(Directories.getNativesPath(), entry.getName());
+			File target = new File(Directories.getNativesPath(mcVer), entry.getName());
 			downloadDialog.setFile(target.getName(), archive.getName(), target.getParent());
 
 			if (entry.getName().contains("META-INF")) {
@@ -213,11 +215,11 @@ public class DownloadManager {
 		}
 	}
 
-	public static void removeMinecraftMetaInf() {
-		Log.info("Removing META-INF from minecraft.jar...");
+	public static void removeMinecraftMetaInf(String ver) {
+		Log.info("Removing META-INF from minecraft-" + ver + ".jar...");
 		downloadDialog.changeTitle("Removing META-INF...");
-		File inputFile = new File(Directories.getBinPath(), "minecraft.jar");
-		File outputTmpFile = new File(Directories.getBinPath(), "minecraft.jar.tmp");
+		File inputFile = new File(Directories.getBinPath(), "minecraft-" + ver + ".jar");
+		File outputTmpFile = new File(Directories.getBinPath(), "minecraft-" + ver + ".jar.tmp");
 
 		downloadDialog.setFile("/META-INF", inputFile.getName(), outputTmpFile.toString());
 
@@ -243,11 +245,11 @@ public class DownloadManager {
 			output.close();
 
 			if (!inputFile.delete()) {
-				Log.severe("Failed to delete minecraft.jar");
+				Log.severe("Failed to delete minecraft-" + ver + ".jar");
 				return;
 			}
 			if (!outputTmpFile.renameTo(inputFile)) {
-				Log.severe("Failed to rename minecraft.jar.tmp");
+				Log.severe("Failed to rename minecraft-" + ver + ".jar.tmp");
 			}
 		} catch (IOException e) {
 			Log.error("Error removing META-INF", e);
