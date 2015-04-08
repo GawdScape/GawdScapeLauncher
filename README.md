@@ -2,7 +2,7 @@ GawdScapeLauncher
 =================
 [![Download](http://i59.tinypic.com/2qwo9zb.png)](https://github.com/GawdScape/GawdScapeLauncher/releases/latest)
 
-![GawdScape Launcher and Log](http://i62.tinypic.com/21j831g.png)
+![GawdScape Launcher and Log](http://i62.tinypic.com/33z5rfm.png)
 
 Custom launcher for launching GawdScape (Minecraft)
 
