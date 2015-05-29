@@ -18,11 +18,12 @@ public class ProcessMonitorThread
 		this.process = process;
 	}
 
+	@Override
 	public void run() {
 		setName("ProcessMonitor");
 		InputStreamReader reader = new InputStreamReader(process.getRawProcess().getInputStream());
 		BufferedReader buf = new BufferedReader(reader);
-		String line = null;
+		String line;
 		try {
 			while ((line = buf.readLine()) != null) {
 				Log.println(line);

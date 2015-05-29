@@ -1,10 +1,11 @@
-package com.gawdscape.launcher.game;
+package com.gawdscape.json.modpacks;
 
+import com.gawdscape.json.game.Library;
+import com.gawdscape.json.game.Mod;
 import com.gawdscape.launcher.util.Directories;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -50,12 +51,12 @@ public class ModPack {
 
 	public ModPack(ModPack version) {
 		this(version.getId(), version.getVersion(), version.getMinecraftVersion(), version.getGawdModVersion(), version.getMainClass(), version.getMinecraftArguments());
-		for (Library lib : version.getLibraries()) {
+		version.getLibraries().stream().forEach((lib) -> {
 			libraries.add(new Library(lib));
-		}
-		for (Mod mod : version.getMods()) {
+		});
+		version.getMods().stream().forEach((mod) -> {
 			mods.add(new Mod(mod));
-		}
+		});
 	}
 
 	public String getId() {
@@ -83,11 +84,9 @@ public class ModPack {
 		if (libraries == null) {
 			return result;
 		}
-		for (Library library : libraries) {
-			if (library.appliesToCurrentEnvironment()) {
-				result.add(library);
-			}
-		}
+		libraries.stream().filter((library) -> (library.appliesToCurrentEnvironment())).forEach((library) -> {
+			result.add(library);
+		});
 		return result;
 	}
 
@@ -106,29 +105,27 @@ public class ModPack {
 	public Collection<File> getClassPath() {
 		Collection<Library> libs = getRelevantLibraries();
 		Collection<File> result = new ArrayList();
-		for (Library lib : libs) {
-			if (lib.getNatives() == null) {
-				result.add(new File(Directories.getLibraryPath(), lib.getArtifactPath()));
-			}
-		}
+		libs.stream().filter((lib) -> (lib.getNatives() == null)).forEach((lib) -> {
+			result.add(new File(Directories.getLibraryPath(), lib.getArtifactPath()));
+		});
 		return result;
 	}
 
 	public Collection<String> getExtractFiles(OperatingSystem os) {
 		Collection<Library> libs = getRelevantLibraries();
 		Collection<String> result = new ArrayList();
-		for (Library lib : libs) {
+		libs.stream().forEach((lib) -> {
 			Map<OperatingSystem, String> natives = lib.getNatives();
 			if ((natives != null) && (natives.containsKey(os))) {
 				result.add("libraries/" + lib.getArtifactPath((String) natives.get(os)));
 			}
-		}
+		});
 		return result;
 	}
 
 	public Set<String> getRequiredFiles(OperatingSystem os) {
 		Set<String> neededFiles = new HashSet();
-		for (Library lib : getRelevantLibraries()) {
+		getRelevantLibraries().stream().forEach((lib) -> {
 			if (lib.getNatives() != null) {
 				String natives = (String) lib.getNatives().get(os);
 				if (natives != null) {
@@ -137,10 +134,11 @@ public class ModPack {
 			} else {
 				neededFiles.add("libraries/" + lib.getArtifactPath());
 			}
-		}
+		});
 		return neededFiles;
 	}
 
+	@Override
 	public String toString() {
 		return "ModPack{id='" + id + "', version='" + version + "', minecraftVersion='" + minecraftVersion + "', libraries=" + libraries + ", mods=" + mods + "}";
 	}

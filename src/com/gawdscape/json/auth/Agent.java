@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.auth;
+package com.gawdscape.json.auth;
 
 /**
  *

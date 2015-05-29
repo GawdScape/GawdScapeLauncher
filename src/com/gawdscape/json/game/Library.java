@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.game;
+package com.gawdscape.json.game;
 
 import com.gawdscape.launcher.util.Constants;
 import java.util.ArrayList;
@@ -39,15 +39,15 @@ public class Library {
 		}
 		if (library.rules != null) {
 			rules = new ArrayList();
-			for (Rule rule : library.rules) {
+			library.rules.stream().forEach((rule) -> {
 				rules.add(new Rule(rule));
-			}
+			});
 		}
 		if (library.natives != null) {
 			natives = new LinkedHashMap();
-			for (Map.Entry<OperatingSystem, String> entry : library.getNatives().entrySet()) {
+			library.getNatives().entrySet().stream().forEach((entry) -> {
 				natives.put(entry.getKey(), entry.getValue());
-			}
+			});
 		}
 	}
 
@@ -132,6 +132,7 @@ public class Library {
 		return String.format("%s-%s%s.jar", new Object[]{parts[1], parts[2], classifier});
 	}
 
+	@Override
 	public String toString() {
 		return "Library{name='" + name + "'" + ", rules=" + rules + ", natives=" + natives + ", extract=" + extract + "}";
 	}

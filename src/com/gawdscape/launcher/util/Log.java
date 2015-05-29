@@ -13,16 +13,11 @@ import java.util.logging.Level;
 public class Log {
 
 	public static boolean showLog;
-	public static boolean formatLog;
 
 	public static void println(String line) {
 		System.out.println(line);
 		if (showLog) {
-			if (formatLog) {
-				GawdScapeLauncher.logFrame.formatAndPrint(line);
-			} else {
-				GawdScapeLauncher.logFrame.print(line + "\n", null);
-			}
+			GawdScapeLauncher.logFrame.formatAndPrint(line);
 		}
 	}
 
@@ -76,5 +71,10 @@ public class Log {
 
 	public static void debug(String text) {
 		log(Level.FINE, text);
+	}
+
+	public static void benchmark (String text, long start) {
+		long end = System.currentTimeMillis();
+		finest(text + (end - start) + "ms");
 	}
 }

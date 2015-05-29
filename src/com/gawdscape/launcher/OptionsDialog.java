@@ -1,11 +1,15 @@
 package com.gawdscape.launcher;
 
-import com.gawdscape.launcher.util.Directories;
+import com.gawdscape.json.modpacks.ModPack;
 import com.gawdscape.launcher.util.ImageUtils;
+import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -50,7 +54,8 @@ public class OptionsDialog extends javax.swing.JDialog {
         logSetingsPanel = new com.gawdscape.launcher.ui.TransparentPanel();
         logCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
         closeLogCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
-        styleLogCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
+        colorLogCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
+        linkLogCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
         gameSetingsPanel = new com.gawdscape.launcher.ui.TransparentPanel();
         gameDirLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         browseButton = new com.gawdscape.launcher.ui.TransparentButton();
@@ -68,7 +73,9 @@ public class OptionsDialog extends javax.swing.JDialog {
         x = new com.gawdscape.launcher.ui.TransparentLabel();
         windowHeight = new javax.swing.JTextField();
         fullscreenCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
-        javaSettings = new com.gawdscape.launcher.ui.HyperLinkLabel();
+        resourcePackCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
+        javaButton = new com.gawdscape.launcher.ui.TransparentButton();
+        addPackButton = new com.gawdscape.launcher.ui.TransparentButton();
 
         fileChooser.setCurrentDirectory(GawdScapeLauncher.config.getGameDirectory());
         fileChooser.setDialogTitle("Choose Game Directory");
@@ -83,6 +90,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         titleLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
 
         logButton.setText("Open Log");
+        logButton.setToolTipText("Open the Log Window");
         logButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logButtonActionPerformed(evt);
@@ -90,6 +98,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         });
 
         updateButton.setText("Force Update");
+        updateButton.setToolTipText("Check for updates and validate existing files.");
         updateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateButtonActionPerformed(evt);
@@ -97,6 +106,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         });
 
         cancelButton.setText("Cancel");
+        cancelButton.setToolTipText("Discard Changes");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
@@ -104,6 +114,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         });
 
         saveButton.setText("Save");
+        saveButton.setToolTipText("Save Changes");
         saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveButtonActionPerformed(evt);
@@ -114,9 +125,11 @@ public class OptionsDialog extends javax.swing.JDialog {
 
         newsCheckBox.setSelected(GawdScapeLauncher.config.getShowNews());
         newsCheckBox.setText("Show News");
+        newsCheckBox.setToolTipText("Show GawdScape news in launcher?");
 
         skipLauncherCheckBox.setSelected(GawdScapeLauncher.config.getSkipLauncher());
-        skipLauncherCheckBox.setText("Skip Launcher, Open Minecraft");
+        skipLauncherCheckBox.setText("One-click Launch");
+        skipLauncherCheckBox.setToolTipText("Open Minecraft without using the launcher?");
 
         javax.swing.GroupLayout launcherSetingsPanelLayout = new javax.swing.GroupLayout(launcherSetingsPanel);
         launcherSetingsPanel.setLayout(launcherSetingsPanelLayout);
@@ -124,9 +137,9 @@ public class OptionsDialog extends javax.swing.JDialog {
             launcherSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(launcherSetingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(newsCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addComponent(newsCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(skipLauncherCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addComponent(skipLauncherCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addContainerGap())
         );
         launcherSetingsPanelLayout.setVerticalGroup(
@@ -143,12 +156,19 @@ public class OptionsDialog extends javax.swing.JDialog {
 
         logCheckBox.setSelected(GawdScapeLauncher.config.getShowLog());
         logCheckBox.setText("Show Log");
+        logCheckBox.setToolTipText("Open the Log window when the launcher starts?");
 
         closeLogCheckBox.setSelected(GawdScapeLauncher.config.getCloseLog());
         closeLogCheckBox.setText("Close Log with Game");
+        closeLogCheckBox.setToolTipText("Close the Log window when Minecraft closes?");
 
-        styleLogCheckBox.setSelected(GawdScapeLauncher.config.getStyleLog());
-        styleLogCheckBox.setText("Parse Colors and Links");
+        colorLogCheckBox.setSelected(GawdScapeLauncher.config.getColorLog());
+        colorLogCheckBox.setText("Parse Colors");
+        colorLogCheckBox.setToolTipText("Show color coded text in color?");
+
+        linkLogCheckBox.setSelected(GawdScapeLauncher.config.getLinkLog());
+        linkLogCheckBox.setText("Parse Links");
+        linkLogCheckBox.setToolTipText("Make links clickable when shown?");
 
         javax.swing.GroupLayout logSetingsPanelLayout = new javax.swing.GroupLayout(logSetingsPanel);
         logSetingsPanel.setLayout(logSetingsPanelLayout);
@@ -156,12 +176,13 @@ public class OptionsDialog extends javax.swing.JDialog {
             logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logSetingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(colorLogCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(logCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 185, Short.MAX_VALUE))
+                .addGap(6, 6, 6)
                 .addGroup(logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(logSetingsPanelLayout.createSequentialGroup()
-                        .addComponent(logCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 180, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(closeLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 180, Short.MAX_VALUE))
-                    .addComponent(styleLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 180, Short.MAX_VALUE))
+                    .addComponent(closeLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 185, Short.MAX_VALUE)
+                    .addComponent(linkLogCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         logSetingsPanelLayout.setVerticalGroup(
@@ -172,7 +193,9 @@ public class OptionsDialog extends javax.swing.JDialog {
                     .addComponent(logCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(closeLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(styleLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(colorLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(linkLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -181,6 +204,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         gameDirLabel.setText("Game Directory:");
 
         browseButton.setText("Browse");
+        browseButton.setToolTipText("Select a new Game Directory");
         browseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 browseButtonActionPerformed(evt);
@@ -188,6 +212,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         });
 
         gameDirButton.setText("Open Game Dir");
+        gameDirButton.setToolTipText("Open your current Game Directory");
         gameDirButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gameDirButtonActionPerformed(evt);
@@ -195,6 +220,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         });
 
         gameDirField.setText(GawdScapeLauncher.config.getGameDir());
+        gameDirField.setToolTipText("The directory where your game data will be stored.");
 
         memoryLabel.setText("Memory to Allocate:");
 
@@ -206,6 +232,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         memorySlider.setMinorTickSpacing(256);
         memorySlider.setPaintTicks(true);
         memorySlider.setSnapToTicks(true);
+        memorySlider.setToolTipText("Amount of RAM to allocate to Minecraft.");
         memorySlider.setValue(GawdScapeLauncher.config.getMemory());
         memorySlider.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -220,6 +247,7 @@ public class OptionsDialog extends javax.swing.JDialog {
 
         joinServerCheckBox.setSelected(GawdScapeLauncher.config.getjoinServer());
         joinServerCheckBox.setText("Join Server on Launch");
+        joinServerCheckBox.setToolTipText("Automatically connect to a server on launch?");
         joinServerCheckBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 joinServerCheckBoxItemStateChanged(evt);
@@ -227,10 +255,12 @@ public class OptionsDialog extends javax.swing.JDialog {
         });
 
         serverIP.setText(GawdScapeLauncher.config.getServerIP());
+        serverIP.setToolTipText("IP of Server to Join");
         serverIP.setEnabled(GawdScapeLauncher.config.getjoinServer());
 
         windowSizeCheckBox.setSelected(GawdScapeLauncher.config.getWindowSize());
         windowSizeCheckBox.setText("Set Minecraft Window Size");
+        windowSizeCheckBox.setToolTipText("Start Minecraft with a specific window size?");
         windowSizeCheckBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 windowSizeCheckBoxItemStateChanged(evt);
@@ -238,22 +268,22 @@ public class OptionsDialog extends javax.swing.JDialog {
         });
 
         windowWidth.setText(GawdScapeLauncher.config.getWindowWidth());
+        windowWidth.setToolTipText("Window Width");
         windowWidth.setEnabled(GawdScapeLauncher.config.getWindowSize());
 
         x.setText("x");
 
         windowHeight.setText(GawdScapeLauncher.config.getWindowHeight());
+        windowHeight.setToolTipText("Window Height");
         windowHeight.setEnabled(GawdScapeLauncher.config.getWindowSize());
 
         fullscreenCheckBox.setSelected(GawdScapeLauncher.config.getFullscreen());
         fullscreenCheckBox.setText("Launch in Fullscreen");
+        fullscreenCheckBox.setToolTipText("Start Minecraft in Fullscreen mode?");
 
-        javaSettings.setText("Java Settings");
-        javaSettings.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                javaSettingsMouseClicked(evt);
-            }
-        });
+        resourcePackCheckBox.setSelected(GawdScapeLauncher.config.getGlobalResourcePacks());
+        resourcePackCheckBox.setText("Share Resource Packs");
+        resourcePackCheckBox.setToolTipText("Should Mod Packs share Resource Packs or have their own?");
 
         javax.swing.GroupLayout gameSetingsPanelLayout = new javax.swing.GroupLayout(gameSetingsPanel);
         gameSetingsPanel.setLayout(gameSetingsPanelLayout);
@@ -284,20 +314,16 @@ public class OptionsDialog extends javax.swing.JDialog {
                             .addComponent(joinServerCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(windowSizeCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                             .addComponent(fullscreenCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(20, 20, 20)
                         .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(gameSetingsPanelLayout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(gameSetingsPanelLayout.createSequentialGroup()
-                                        .addComponent(windowWidth, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(windowHeight, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
-                                    .addComponent(serverIP)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gameSetingsPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(javaSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(windowWidth, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(windowHeight, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
+                            .addComponent(serverIP)
+                            .addComponent(resourcePackCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         gameSetingsPanelLayout.setVerticalGroup(
@@ -333,9 +359,23 @@ public class OptionsDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fullscreenCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(javaSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(resourcePackCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        javaButton.setText("Java Settings");
+        javaButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                javaButtonActionPerformed(evt);
+            }
+        });
+
+        addPackButton.setText("Add Mod Pack");
+        addPackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPackButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout optionsPanelLayout = new javax.swing.GroupLayout(optionsPanel);
         optionsPanel.setLayout(optionsPanelLayout);
@@ -349,13 +389,20 @@ public class OptionsDialog extends javax.swing.JDialog {
                     .addComponent(logSetingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(gameSetingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, optionsPanelLayout.createSequentialGroup()
-                        .addComponent(logButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(optionsPanelLayout.createSequentialGroup()
+                                .addComponent(logButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37))
+                            .addGroup(optionsPanelLayout.createSequentialGroup()
+                                .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(54, 54, 54)
+                                .addComponent(addPackButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(saveButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(javaButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         optionsPanelLayout.setVerticalGroup(
@@ -369,12 +416,16 @@ public class OptionsDialog extends javax.swing.JDialog {
                 .addComponent(logSetingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(gameSetingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(javaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addPackButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(logButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(logButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -386,7 +437,9 @@ public class OptionsDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(optionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(optionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -403,13 +456,14 @@ public class OptionsDialog extends javax.swing.JDialog {
 				joinServerCheckBox.isSelected(),
 				windowSizeCheckBox.isSelected(),
 				fullscreenCheckBox.isSelected(),
-				styleLogCheckBox.isSelected(),
+				colorLogCheckBox.isSelected(),
+				linkLogCheckBox.isSelected(),
+				resourcePackCheckBox.isSelected(),
 				serverIP.getText(),
 				windowWidth.getText(),
 				windowHeight.getText()
 		);
 		Config.saveConfig(GawdScapeLauncher.config);
-		Directories.createGameDirs(GawdScapeLauncher.config.getGameDirectory());
 		dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
@@ -423,7 +477,7 @@ public class OptionsDialog extends javax.swing.JDialog {
 
     private void logButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logButtonActionPerformed
 		if (GawdScapeLauncher.logFrame == null) {
-			GawdScapeLauncher.logFrame = new LogFrame(styleLogCheckBox.isSelected());
+			GawdScapeLauncher.logFrame = new LogFrame(colorLogCheckBox.isSelected(), linkLogCheckBox.isSelected());
 			Log.showLog = true;
 		}
 		GawdScapeLauncher.logFrame.setVisible(true);
@@ -458,53 +512,66 @@ public class OptionsDialog extends javax.swing.JDialog {
 		windowHeight.setEnabled(windowSizeCheckBox.isSelected());
     }//GEN-LAST:event_windowSizeCheckBoxItemStateChanged
 
-    private void javaSettingsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_javaSettingsMouseClicked
+    private void javaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_javaButtonActionPerformed
 		JavaSettingsDialog dialog = new JavaSettingsDialog((javax.swing.JFrame) getParent(), true);
 		dialog.setVisible(true);
-    }//GEN-LAST:event_javaSettingsMouseClicked
+    }//GEN-LAST:event_javaButtonActionPerformed
 
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the System look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    private void addPackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPackButtonActionPerformed
+		String url = JOptionPane.showInputDialog(this, "Enter Mod Pack URL:");
+		if (url == null || url.isEmpty())
+			return;
+		if (url.endsWith("/"))
+			url = url.substring(0, url.length() - 1);
 		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LauncherFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the dialog */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				OptionsDialog dialog = new OptionsDialog(new javax.swing.JFrame(), true);
-				dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-					@Override
-					public void windowClosing(java.awt.event.WindowEvent e) {
-						System.exit(0);
-					}
-				});
-				dialog.setVisible(true);
+			String json = JsonUtils.readJsonFromUrl(url + "/pack.json");
+			ModPack pack = JsonUtils.getGson().fromJson(json, ModPack.class);
+			if (pack != null &&
+					(pack.getId() != null
+					&& pack.getVersion() != null
+					&& pack.getMinecraftVersion() != null)
+			) {
+				int accept = JOptionPane.showConfirmDialog(this,
+						"Do you want to add Mod Pack?\n" +
+						pack.getId() +
+						"\nVersion: " + pack.getVersion() +
+						"\nMinecraft: " + pack.getMinecraftVersion() +
+						"\nLibraries: " + pack.getLibraries() +
+						"\nMods: " + pack.getMods() +
+						"\nMain Class: " + pack.getMainClass() +
+						"\nArguments: " + pack.getMinecraftArguments() +
+						"\nGawdMod: " + pack.getGawdModVersion());
+				if (accept == JOptionPane.YES_OPTION) {
+					GawdScapeLauncher.modpacks.addCustomPack(pack.getId(), url);
+					JOptionPane.showMessageDialog(this,
+							"Added Mod Pack: " + pack.getId() +
+							"\nYou will need to restart the Launcher.");
+				}
 			}
-		});
-	}
+		} catch (FileNotFoundException ex) {
+			Log.severe("Invalid Mod Pack URL.");
+		} catch (IOException ex) {
+			Log.error("Error adding custom mod pack.", ex);
+		}
+    }//GEN-LAST:event_addPackButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.gawdscape.launcher.ui.TransparentButton addPackButton;
     private com.gawdscape.launcher.ui.TransparentLabel allocatedMemoryLabel;
     private com.gawdscape.launcher.ui.TransparentButton browseButton;
     private com.gawdscape.launcher.ui.TransparentButton cancelButton;
     private com.gawdscape.launcher.ui.TransparentCheckBox closeLogCheckBox;
+    private com.gawdscape.launcher.ui.TransparentCheckBox colorLogCheckBox;
     private javax.swing.JFileChooser fileChooser;
     private com.gawdscape.launcher.ui.TransparentCheckBox fullscreenCheckBox;
     private com.gawdscape.launcher.ui.TransparentButton gameDirButton;
     private javax.swing.JTextField gameDirField;
     private com.gawdscape.launcher.ui.TransparentLabel gameDirLabel;
     private com.gawdscape.launcher.ui.TransparentPanel gameSetingsPanel;
-    private com.gawdscape.launcher.ui.HyperLinkLabel javaSettings;
+    private com.gawdscape.launcher.ui.TransparentButton javaButton;
     private com.gawdscape.launcher.ui.TransparentCheckBox joinServerCheckBox;
     private com.gawdscape.launcher.ui.TransparentPanel launcherSetingsPanel;
+    private com.gawdscape.launcher.ui.TransparentCheckBox linkLogCheckBox;
     private com.gawdscape.launcher.ui.TransparentButton logButton;
     private com.gawdscape.launcher.ui.TransparentCheckBox logCheckBox;
     private com.gawdscape.launcher.ui.TransparentPanel logSetingsPanel;
@@ -514,10 +581,10 @@ public class OptionsDialog extends javax.swing.JDialog {
     private com.gawdscape.launcher.ui.TransparentLabel minMemoryLabel;
     private com.gawdscape.launcher.ui.TransparentCheckBox newsCheckBox;
     private com.gawdscape.launcher.ui.DirtPanel optionsPanel;
+    private com.gawdscape.launcher.ui.TransparentCheckBox resourcePackCheckBox;
     private com.gawdscape.launcher.ui.TransparentButton saveButton;
     private javax.swing.JTextField serverIP;
     private com.gawdscape.launcher.ui.TransparentCheckBox skipLauncherCheckBox;
-    private com.gawdscape.launcher.ui.TransparentCheckBox styleLogCheckBox;
     private com.gawdscape.launcher.ui.TransparentLabel titleLabel;
     private com.gawdscape.launcher.ui.TransparentButton updateButton;
     private javax.swing.JTextField windowHeight;

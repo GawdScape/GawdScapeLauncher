@@ -1,15 +1,21 @@
 package com.gawdscape.launcher;
 
-import com.gawdscape.launcher.game.ModPack;
-import com.gawdscape.launcher.game.Minecraft;
+import com.gawdscape.json.game.Library;
+import com.gawdscape.json.modpacks.ModPack;
+import com.gawdscape.json.game.Minecraft;
+import com.gawdscape.json.game.Mod;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.ImageUtils;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
+import com.google.gson.JsonSyntaxException;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -21,6 +27,8 @@ public final class AboutDialog extends javax.swing.JDialog {
 
 	/**
 	 * Creates new form AboutDialog
+	 * @param parent
+	 * @param modal
 	 */
 	public AboutDialog(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
@@ -35,34 +43,52 @@ public final class AboutDialog extends javax.swing.JDialog {
 	}
 
 	public void loadModPackData() {
-		File jsonFile = new File(Directories.getBinPath(), packName + ".json");
+		File jsonFile = new File(Directories.getPackDataPath(), packName + ".json");
 		if (jsonFile.exists()) {
-			String localJson = "";
 			try {
-				localJson = JsonUtils.readJsonFromFile(jsonFile);
+				String localJson = JsonUtils.readJsonFromFile(jsonFile);
 				ModPack modpack = JsonUtils.getGson().fromJson(localJson, ModPack.class);
 				pack.setText(packName);
 				packVersion.setText(modpack.getVersion());
-				packLibraries.setText(""+modpack.getLibraries());
-				packMods.setText(""+modpack.getMods());
 				gmVersion.setText(modpack.getGawdModVersion());
+				packLibraries.setText(listLibraries(modpack.getLibraries()));
+				packMods.setText(listMods(modpack.getMods()));
 				loadMinecraftData(modpack.getMinecraftVersion());
 				loadMods(modpack.getId());
-			} catch (Exception ex) {
+			} catch (IOException | JsonSyntaxException ex) {
 				Log.error("Error", ex);
 			}
 		}
 	}
 
+	public String listLibraries(List<Library> libs) {
+		if (libs == null)
+			return "[]";
+		ArrayList<String> output = new ArrayList();
+		libs.stream().forEach((lib) -> {
+			output.add(lib.getName());
+		});
+		return output.toString();
+	}
+
+	public String listMods(List<Mod> mods) {
+		if (mods == null)
+			return "[]";
+		ArrayList<String> output = new ArrayList();
+		mods.stream().forEach((mod) -> {
+			output.add(mod.getName());
+		});
+		return output.toString();
+	}
+
 	public void loadMinecraftData(String version) {
-		File minecraftJsonFile = new File(Directories.getBinPath(), "minecraft-" + version + ".json");
+		File minecraftJsonFile = new File(Directories.getMcJson(version));
 		if (minecraftJsonFile.exists()) {
-			String localJson = "";
 			try {
-				localJson = JsonUtils.readJsonFromFile(minecraftJsonFile);
+				String localJson = JsonUtils.readJsonFromFile(minecraftJsonFile);
 				Minecraft minecraft = JsonUtils.getGson().fromJson(localJson, Minecraft.class);
 				mcVersion.setText(minecraft.getId());
-			} catch (Exception ex) {
+			} catch (IOException | JsonSyntaxException ex) {
 				mcVersion.setText(ex.getMessage());
 			}
 		}
@@ -425,48 +451,6 @@ public final class AboutDialog extends javax.swing.JDialog {
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
-
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(AboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(AboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(AboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(AboutDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the dialog */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				AboutDialog dialog = new AboutDialog(new javax.swing.JFrame(), true);
-				dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-					@Override
-					public void windowClosing(java.awt.event.WindowEvent e) {
-						System.exit(0);
-					}
-				});
-				dialog.setVisible(true);
-			}
-		});
-	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.gawdscape.launcher.ui.DirtPanel aboutPanel;

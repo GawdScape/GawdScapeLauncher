@@ -12,6 +12,7 @@ public class TransparentButton extends JButton {
 		super();
 	}
 
+	@Override
 	public boolean isOpaque() {
 		return false;
 	}

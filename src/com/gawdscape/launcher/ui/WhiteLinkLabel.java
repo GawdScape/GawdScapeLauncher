@@ -16,6 +16,7 @@ public class WhiteLinkLabel extends JLabel {
 		setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
 
+	@Override
 	public boolean isOpaque() {
 		return false;
 	}

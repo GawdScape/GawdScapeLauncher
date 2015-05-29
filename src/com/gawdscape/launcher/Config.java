@@ -26,7 +26,9 @@ public class Config {
 	private boolean joinServer;
 	private boolean windowSize;
 	private boolean fullscreen;
-	private boolean styleLog;
+	private boolean colorLog;
+	private boolean linkLog;
+	private boolean globalResourcePacks;
 	private String serverIP;
 	private String windowWidth;
 	private String windowHeight;
@@ -45,7 +47,9 @@ public class Config {
 		joinServer = false;
 		windowSize = false;
 		fullscreen = false;
-		styleLog = true;
+		colorLog = true;
+		linkLog = true;
+		globalResourcePacks = false;
 		serverIP = Constants.GS_SERVER_IP;
 		windowWidth = "854";
 		windowHeight = "480";
@@ -65,7 +69,9 @@ public class Config {
 			boolean joinServer,
 			boolean windowSize,
 			boolean fullscreen,
-			boolean styleLog,
+			boolean colorLog,
+			boolean linkLog,
+			boolean globalResourcePacks,
 			String serverIP,
 			String windowWidth,
 			String windowHeight,
@@ -83,7 +89,9 @@ public class Config {
 		this.joinServer = joinServer;
 		this.windowSize = windowSize;
 		this.fullscreen = fullscreen;
-		this.styleLog = styleLog;
+		this.colorLog = colorLog;
+		this.linkLog = linkLog;
+		this.globalResourcePacks = globalResourcePacks;
 		this.serverIP = serverIP;
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
@@ -103,7 +111,9 @@ public class Config {
 			boolean joinServer,
 			boolean windowSize,
 			boolean fullscreen,
-			boolean styleLog,
+			boolean colorLog,
+			boolean linkLog,
+			boolean globalResourcePacks,
 			String serverIP,
 			String windowWidth,
 			String windowHeight
@@ -117,7 +127,9 @@ public class Config {
 		this.joinServer = joinServer;
 		this.windowSize = windowSize;
 		this.fullscreen = fullscreen;
-		this.styleLog = styleLog;
+		this.colorLog = colorLog;
+		this.linkLog = linkLog;
+		this.globalResourcePacks = globalResourcePacks;
 		this.serverIP = serverIP;
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
@@ -185,8 +197,16 @@ public class Config {
 		return fullscreen;
 	}
 
-	public boolean getStyleLog() {
-		return styleLog;
+	public boolean getColorLog() {
+		return colorLog;
+	}
+
+	public boolean getLinkLog() {
+		return linkLog;
+	}
+
+	public boolean getGlobalResourcePacks() {
+		return globalResourcePacks;
 	}
 
 	public String getServerIP() {

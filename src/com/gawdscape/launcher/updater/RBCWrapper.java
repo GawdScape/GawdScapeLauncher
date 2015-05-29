@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.download;
+package com.gawdscape.launcher.updater;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,12 +10,12 @@ import java.nio.channels.ReadableByteChannel;
  */
 public class RBCWrapper implements ReadableByteChannel {
 
-	private RBCWrapperDelegate delegate;
-	private long expectedSize;
-	private ReadableByteChannel rbc;
+	private final ProgressDelegate delegate;
+	private final long expectedSize;
+	private final ReadableByteChannel rbc;
 	private long readSoFar;
 
-	RBCWrapper(ReadableByteChannel rbc, long expectedSize, RBCWrapperDelegate delegate) {
+	RBCWrapper(ReadableByteChannel rbc, long expectedSize, ProgressDelegate delegate) {
 		this.delegate = delegate;
 		this.expectedSize = expectedSize;
 		this.rbc = rbc;
@@ -47,7 +47,7 @@ public class RBCWrapper implements ReadableByteChannel {
 		if ((n = rbc.read(bb)) > 0) {
 			readSoFar += n;
 			progress = expectedSize > 0 ? (double) readSoFar / (double) expectedSize * 100.0 : -1.0;
-			delegate.rbcProgressCallback(this, progress);
+			delegate.progressCallback(this, progress);
 		}
 
 		return n;

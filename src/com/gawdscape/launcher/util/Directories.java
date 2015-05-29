@@ -52,20 +52,44 @@ public class Directories {
 		return getAssetPath() + "objects" + separator;
 	}
 
-	public static String getLibraryPath() {
-		return getWorkingDirectory() + separator + "libraries" + separator;
+	public static String getPackDataPath() {
+		return getWorkingDirectory() + separator + "packdata" + separator;
+	}
+
+	public static String getLogoPath(String pack) {
+		return getPackDataPath() + "logos" + separator + pack + ".png";
 	}
 
 	public static String getBinPath() {
 		return getWorkingDirectory() + separator + "bin" + separator;
 	}
 
-	public static String getNativesPath(String version) {
-		return getBinPath() + "natives" + separator + version + separator;
+	public static String getGawdModPath() {
+		return getBinPath() + "gawdmod" + separator;
 	}
 
-	public static String getLogoPath(String pack) {
-		return getAssetPath() + separator + "packlogos" + separator + pack + ".png";
+	public static String getGawdModJar(String gmVer, String mcVer) {
+		return getGawdModPath() + gmVer + "_" + mcVer + ".jar";
+	}
+
+	public static String getMcPath(String version) {
+		return getBinPath() + version + separator;
+	}
+
+	public static String getMcJar(String version) {
+		return getMcPath(version) + version + ".jar";
+	}
+
+	public static String getMcJson(String version) {
+		return getMcPath(version) + version + ".json";
+	}
+
+	public static String getNativesPath(String version) {
+		return getMcPath(version) + "natives" + separator;
+	}
+
+	public static String getLibraryPath() {
+		return getWorkingDirectory() + separator + "libraries" + separator;
 	}
 
 	public static void createGameDirs(File gameDir) {

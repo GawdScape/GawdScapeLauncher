@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.auth;
+package com.gawdscape.json.auth;
 
 /**
  *
@@ -6,9 +6,9 @@ package com.gawdscape.launcher.auth;
  */
 public class ErrorResponse {
 
-	private String error = "";
-	private String errorMessage = "";
-	private String cause = "";
+	private final String error = "";
+	private final String errorMessage = "";
+	private final String cause = "";
 
 	public String getError() {
 		return this.error;

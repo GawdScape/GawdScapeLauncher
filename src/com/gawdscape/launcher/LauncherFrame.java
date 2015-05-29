@@ -1,6 +1,6 @@
 package com.gawdscape.launcher;
 
-import com.gawdscape.launcher.download.Updater;
+import com.gawdscape.launcher.updater.Updater;
 import com.gawdscape.launcher.util.ImageUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
@@ -37,13 +37,13 @@ public class LauncherFrame extends javax.swing.JFrame {
 
 	private void loadPacks() {
 		int id = 0;
-		int total = GawdScapeLauncher.modpacks.getIDs().size();
+		int total = GawdScapeLauncher.modpacks.getPackCount();
 		packs = new String[total];
-		for(String pack : GawdScapeLauncher.modpacks.getIDs()) {
+		for (String pack : GawdScapeLauncher.modpacks.getPacks()) {
 			File packLogo = new File(Directories.getLogoPath(pack));
 			if (!packLogo.exists()) {
 				packLogo.getParentFile().mkdirs();
-				FileUtils.downloadFile(Constants.GS_PACK_URL + pack + "/logo.png", packLogo);
+				FileUtils.downloadFile(GawdScapeLauncher.modpacks.getPackUrl(pack) + "/logo.png", packLogo);
 			}
 			if (packLogo.exists()) {
 				packCombo.addItem(new ImageIcon(packLogo.getPath()));
@@ -298,6 +298,10 @@ public class LauncherFrame extends javax.swing.JFrame {
 		GawdScapeLauncher.loginDialog.setVisible(true);
     }//GEN-LAST:event_switchUsersLabelMouseClicked
 
+	public void setPlayEnabled(boolean b) {
+		playButton.setEnabled(b);
+	}
+
 	public void setUsername(String name) {
 		username = name;
 		greetingLabel.setText("Welcome back");
@@ -314,27 +318,6 @@ public class LauncherFrame extends javax.swing.JFrame {
 		greetingLabel.setText("Login Error:");
 		usernameLabel.setText(error);
 		logoutLabel.setText("Retry");
-	}
-
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the System look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LauncherFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new LauncherFrame().setVisible(true);
-			}
-		});
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

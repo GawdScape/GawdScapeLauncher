@@ -1,5 +1,6 @@
-package com.gawdscape.launcher.game;
+package com.gawdscape.json.game;
 
+import com.gawdscape.json.modpacks.ModType;
 import com.gawdscape.launcher.util.Constants;
 
 /**
@@ -88,6 +89,7 @@ public class Mod {
 		return String.format("%s-%s%s.%s", new Object[]{parts[1], parts[2], classifier, extension});
 	}
 
+	@Override
 	public String toString() {
 		return "Mod{name='" + name + "'" + ", type=" + type + ", extract=" + extract + "}";
 	}

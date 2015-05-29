@@ -14,6 +14,7 @@ public class TransparentCheckBox extends JCheckBox {
 		setForeground(Color.WHITE);
 	}
 
+	@Override
 	public boolean isOpaque() {
 		return false;
 	}

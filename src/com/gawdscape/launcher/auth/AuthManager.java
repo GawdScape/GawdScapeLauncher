@@ -1,5 +1,8 @@
 package com.gawdscape.launcher.auth;
 
+import com.gawdscape.json.auth.RefreshRequest;
+import com.gawdscape.json.auth.AuthRequest;
+import com.gawdscape.json.auth.SessionResponse;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
@@ -9,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 
 /**
@@ -29,8 +33,7 @@ public class AuthManager {
 	}
 
 	// Login with UUID and ClientToken
-	public static SessionResponse refresh(SessionToken token) {
-		RefreshRequest request = new RefreshRequest(token.getAccessToken(), token.getClientToken());
+	public static SessionResponse refresh(RefreshRequest request) {
 		String result = postJson(Constants.MC_REFRESH, gson.toJson(request));
 		Log.fine("Refresh: " + result);
 		SessionResponse response = gson.fromJson(result, SessionResponse.class);
@@ -46,15 +49,15 @@ public class AuthManager {
 			conn.setReadTimeout(15000);
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-			conn.setRequestProperty("Content-Length", "" + payloadAsBytes.length);
+			conn.setRequestProperty("Content-Length", String.valueOf(payloadAsBytes.length));
 			conn.setUseCaches(false);
 			conn.setDoInput(true);
 			conn.setDoOutput(true);
 
-			DataOutputStream outStream = new DataOutputStream(conn.getOutputStream());
-			outStream.write(payloadAsBytes);
-			outStream.flush();
-			outStream.close();
+			try (DataOutputStream outStream = new DataOutputStream(conn.getOutputStream())) {
+				outStream.write(payloadAsBytes);
+				outStream.flush();
+			}
 
 			InputStream inStream;
 			try {
@@ -70,7 +73,8 @@ public class AuthManager {
 				response.append(new String(buffer, "UTF-8").substring(0, bytesRead));
 			}
 			return response.toString();
-
+		} catch (UnknownHostException e) {
+			Log.severe("Error connecting to authentication server.");
 		} catch (IOException e) {
 			Log.error("Authentication Error: ", e);
 		}

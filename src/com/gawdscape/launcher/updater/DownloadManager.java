@@ -1,10 +1,10 @@
-package com.gawdscape.launcher.download;
+package com.gawdscape.launcher.updater;
 
 import com.gawdscape.launcher.DownloadDialog;
 import com.gawdscape.launcher.GawdScapeLauncher;
-import com.gawdscape.launcher.game.AssetIndex;
-import com.gawdscape.launcher.game.Library;
-import com.gawdscape.launcher.game.Mod;
+import com.gawdscape.json.game.AssetIndex;
+import com.gawdscape.json.game.Library;
+import com.gawdscape.json.game.Mod;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.FileUtils;
@@ -43,12 +43,10 @@ public class DownloadManager {
 
 	public static void createDialog(final String name) {
 		Log.info("Downloading with " + (processorCores * 2) + " threads...");
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				downloadDialog = new DownloadDialog(GawdScapeLauncher.launcherFrame, true);
-				downloadDialog.changeTitle("Downloading " + name + "...");
-				downloadDialog.setVisible(true);
-			}
+		java.awt.EventQueue.invokeLater(() -> {
+			downloadDialog = new DownloadDialog(GawdScapeLauncher.launcherFrame, true);
+			downloadDialog.changeTitle("Downloading " + name + "...");
+			downloadDialog.setVisible(true);
 		});
 	}
 
@@ -69,84 +67,68 @@ public class DownloadManager {
 	}
 
 	public static void queueAssets(AssetIndex index) {
-		for (AssetIndex.AssetObject object : index.getUniqueObjects()) {
-			String filename = object.getHash().substring(0, 2) + "/" + object.getHash();
+		index.getUniqueObjects().stream().map((object) -> 
+				object.getHash().substring(0, 2) + "/" + object.getHash())
+				.forEach((filename) -> {
 			addToQueue(
 					Constants.MC_ASSET_URL + filename,
 					Directories.getAssetObjectPath() + filename
 			);
-		}
+		});
 	}
 
-	public static void queueMinecraft(String mcVer, String gmVer) {
+	public static void queueMinecraft(String version) {
 		addToQueue(
-				Constants.MC_DOWNLOAD_URL + "versions/" + mcVer + "/" + mcVer + ".jar",
-				Directories.getBinPath() + "minecraft-" + mcVer + ".jar"
+				Constants.getMcJar(version),
+				Directories.getMcJar(version)
 		);
+	}
+
+	public static void queueGawdMod(String mcVer, String gmVer) {
 		addToQueue(
 				Constants.GS_MOD_URL + gmVer + "/" + mcVer + ".jar",
-				Directories.getBinPath() + "gawdmod-" + gmVer + "_" + mcVer + ".jar"
+				Directories.getGawdModJar(gmVer, mcVer)
 		);
 	}
 
-	public static void queueLibraries(Collection<Library> mcLibraries, Collection<Library> gsLibraries) {
-		if (mcLibraries != null) {
-			for (Library library : mcLibraries) {
-				if (library.getNatives() != null) {
-					String natives = library.getNatives().get(OperatingSystem.getCurrentPlatform());
-					if (natives != null) {
-						String path = library.getArtifactPath(natives);
-						if (path.contains("${arch}")) {
-							path = path.replace("${arch}", OperatingSystem.getArchDataModel());
-						}
-						addToQueue(
-								library.getDownloadUrl() + path,
-								Directories.getLibraryPath() + path
-						);
+	public static void queueLibraries(Collection<Library> libraries) {
+		if (libraries == null) {
+			return;
+		}
+		libraries.stream().forEach((library) -> {
+			if (library.getNatives() != null) {
+				String natives = library.getNatives().get(OperatingSystem.getCurrentPlatform());
+				if (natives != null) {
+					String path = library.getArtifactPath(natives);
+					if (path.contains("${arch}")) {
+						path = path.replace("${arch}", OperatingSystem.getArchDataModel());
 					}
-				} else {
 					addToQueue(
-							library.getDownloadUrl() + library.getArtifactPath(),
-							Directories.getLibraryPath() + library.getArtifactPath()
+							library.getDownloadUrl() + path,
+							Directories.getLibraryPath() + path
 					);
 				}
+			} else {
+				addToQueue(
+						library.getDownloadUrl() + library.getArtifactPath(),
+						Directories.getLibraryPath() + library.getArtifactPath()
+				);
 			}
-		}
-		if (gsLibraries != null) {
-			for (Library library : gsLibraries) {
-				if (library.getNatives() != null) {
-					String natives = (String) library.getNatives().get(OperatingSystem.getCurrentPlatform());
-					if (natives != null) {
-						String path = library.getArtifactPath(natives);
-						if (path.contains("${arch}")) {
-							path = path.replace("${arch}", OperatingSystem.getArchDataModel());
-						}
-						addToQueue(
-								library.getDownloadUrl() + path,
-								Directories.getLibraryPath() + path
-						);
-					}
-				} else {
-					addToQueue(
-							library.getDownloadUrl() + library.getArtifactPath(),
-							Directories.getLibraryPath() + library.getArtifactPath()
-					);
-				}
-			}
-		}
+		});
 	}
 
 	public static void queueMods(String packName, Collection<Mod> mods) {
-		if (mods != null) {
-			for (Mod mod : mods) {
-				addToQueue(
-						mod.getDownloadUrl() + mod.getArtifactPath(),
-						GawdScapeLauncher.config.getGameDir(packName)
-								+ File.separator + "mods"
-								+ File.separator + mod.getArtifactFilename(null)
-				);
-			}
+		if (mods == null) {
+			return;
 		}
+		mods.stream().forEach((mod) -> {
+			addToQueue(
+					mod.getDownloadUrl() + mod.getArtifactPath(),
+					GawdScapeLauncher.config.getGameDir(packName)
+							+ File.separator + "mods"
+							+ File.separator + mod.getArtifactFilename(null)
+			);
+		});
 	}
 
 	public static void extractNatives(String mcVer, Collection<Library> mcLibraries) {
@@ -160,22 +142,20 @@ public class DownloadManager {
 		}
 		downloadDialog.setExtracting();
 		if (mcLibraries != null) {
-			for (Library library : mcLibraries) {
-				if (library.getNatives() != null) {
-					String natives = library.getNatives().get(OperatingSystem.getCurrentPlatform());
-					if (natives != null) {
-						String path = library.getArtifactPath(natives);
-						if (path.contains("${arch}")) {
-							path = path.replace("${arch}", OperatingSystem.getArchDataModel());
-						}
-						try {
-							unZipNazives(mcVer, path);
-						} catch (IOException ex) {
-							Log.error("Error extracting " + path, ex);
-						}
+			mcLibraries.stream().filter((library) -> (library.getNatives() != null)).forEach((library) -> {
+				String natives = library.getNatives().get(OperatingSystem.getCurrentPlatform());
+				if (natives != null) {
+					String path = library.getArtifactPath(natives);
+					if (path.contains("${arch}")) {
+						path = path.replace("${arch}", OperatingSystem.getArchDataModel());
+					}
+					try {
+						unZipNazives(mcVer, path);
+					} catch (IOException ex) {
+						Log.error("Error extracting " + path, ex);
 					}
 				}
-			}
+			});
 		}
 	}
 
@@ -200,14 +180,12 @@ public class DownloadManager {
 
 				byte[] buffer = new byte[2048];
 				FileOutputStream outputStream = new FileOutputStream(target);
-				BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-				try {
+				try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream)) {
 					int length;
 					while ((length = inputStream.read(buffer, 0, buffer.length)) != -1) {
 						bufferedOutputStream.write(buffer, 0, length);
 					}
 				} finally {
-					bufferedOutputStream.close();
 					outputStream.close();
 					inputStream.close();
 				}
@@ -218,16 +196,16 @@ public class DownloadManager {
 	public static void removeMinecraftMetaInf(String ver) {
 		Log.info("Removing META-INF from minecraft-" + ver + ".jar...");
 		downloadDialog.changeTitle("Removing META-INF...");
-		File inputFile = new File(Directories.getBinPath(), "minecraft-" + ver + ".jar");
-		File outputTmpFile = new File(Directories.getBinPath(), "minecraft-" + ver + ".jar.tmp");
+		File inputFile = new File(Directories.getMcJar(ver));
+		File outputTmpFile = new File(Directories.getMcJar(ver) + ".tmp");
 
 		downloadDialog.setFile("/META-INF", inputFile.getName(), outputTmpFile.toString());
 
-		try {
-			JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
-			JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile));
+		try (
+				JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
+				JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile))
+		) {
 			JarEntry entry;
-
 			while ((entry = input.getNextJarEntry()) != null) {
 				if (entry.getName().contains("META-INF")) {
 					continue;
@@ -240,13 +218,11 @@ public class DownloadManager {
 				}
 				output.closeEntry();
 			}
-
-			input.close();
 			output.close();
+			input.close();
 
 			if (!inputFile.delete()) {
 				Log.severe("Failed to delete minecraft-" + ver + ".jar");
-				return;
 			}
 			if (!outputTmpFile.renameTo(inputFile)) {
 				Log.severe("Failed to rename minecraft-" + ver + ".jar.tmp");

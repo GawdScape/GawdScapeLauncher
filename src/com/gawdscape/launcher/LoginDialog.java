@@ -1,9 +1,9 @@
 package com.gawdscape.launcher;
 
+import com.gawdscape.json.auth.RefreshRequest;
 import com.gawdscape.launcher.auth.AuthManager;
 import com.gawdscape.launcher.auth.SessionManager;
-import com.gawdscape.launcher.auth.SessionResponse;
-import com.gawdscape.launcher.auth.SessionToken;
+import com.gawdscape.json.auth.SessionResponse;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.ImageUtils;
 import com.gawdscape.launcher.util.Log;
@@ -17,10 +17,13 @@ import java.util.Iterator;
  */
 public final class LoginDialog extends javax.swing.JDialog {
 
-	private SessionManager sessionManager;
+	private final SessionManager sessionManager;
 
 	/**
 	 * Creates new form LoginDialog
+	 * @param parent
+	 * @param modal
+	 * @param manager
 	 */
 	public LoginDialog(java.awt.Frame parent, boolean modal, SessionManager manager) {
 		super(parent, modal);
@@ -226,13 +229,18 @@ public final class LoginDialog extends javax.swing.JDialog {
 		Log.severe(text);
 	}
 
-	public void doLogin(String username, String password, SessionToken token) {
+	public void doLogin(String username, String password, RefreshRequest token) {
 		SessionResponse response;
 		if (token != null) {
 			response = AuthManager.refresh(token);
 		} else {
 			response = AuthManager.authenticate(username, password, null);
 		}
+		if (response == null) {
+			setError("No response.");
+			return;
+		}
+
 		GawdScapeLauncher.session = response;
 
 		if (response.getAccessToken() != null) {
@@ -258,28 +266,6 @@ public final class LoginDialog extends javax.swing.JDialog {
 		} else {
 			setError(response.getErrorMessage());
 		}
-	}
-
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the System look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LauncherFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the dialog */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				LoginDialog dialog = new LoginDialog(new javax.swing.JFrame(), true, SessionManager.loadSessions());
-				dialog.setVisible(true);
-			}
-		});
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

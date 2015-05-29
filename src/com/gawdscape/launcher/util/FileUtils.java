@@ -85,7 +85,7 @@ public class FileUtils {
 			byte[] hash = md.digest();
 			checksum = new BigInteger(1, hash).toString(16); //don't use this, truncates leading zero
 		} catch (IOException ex) {
-			Log.error("Error calculating MD5", ex);
+			Log.error("Error hashing file", ex);
 		} catch (NoSuchAlgorithmException ex) {
 			Log.error("Error calculating MD5", ex);
 		}

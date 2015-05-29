@@ -2,6 +2,7 @@ package com.gawdscape.launcher.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 
 /**
@@ -63,7 +64,7 @@ public enum OperatingSystem {
 			Class<?> desktopClass = Class.forName("java.awt.Desktop");
 			Object o = desktopClass.getMethod("getDesktop", new Class[0]).invoke(null, new Object[0]);
 			desktopClass.getMethod("browse", new Class[]{URI.class}).invoke(o, new Object[]{link});
-		} catch (Throwable e) {
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			Log.error("Failed to open link " + link.toString(), e);
 		}
 	}
@@ -92,7 +93,7 @@ public enum OperatingSystem {
 			Class<?> desktopClass = Class.forName("java.awt.Desktop");
 			Object desktop = desktopClass.getMethod("getDesktop", new Class[0]).invoke(null, new Object[0]);
 			desktopClass.getMethod("browse", new Class[]{URI.class}).invoke(desktop, new Object[]{path.toURI()});
-		} catch (Throwable e) {
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			Log.error("Couldn't open " + path + " through Desktop.browse()", e);
 		}
 	}

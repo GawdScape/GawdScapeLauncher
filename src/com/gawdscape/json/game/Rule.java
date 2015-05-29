@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.game;
+package com.gawdscape.json.game;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,8 +38,8 @@ public class Rule {
 		}
 
 		public OSRestriction(OSRestriction osRestriction) {
-			name = name;
-			version = version;
+			name = osRestriction.getName();
+			version = osRestriction.getVersion();
 		}
 
 		public boolean isCurrentOperatingSystem() {
@@ -59,6 +59,7 @@ public class Rule {
 			return true;
 		}
 
+		@Override
 		public String toString() {
 			return "OSRestriction{name=" + name + ", version='" + version + '\'' + '}';
 		}
@@ -68,7 +69,7 @@ public class Rule {
 	private OSRestriction os;
 
 	public Rule(Rule rule) {
-		action = action;
+		action = rule.getAction();
 		if (os != null) {
 			os = new OSRestriction(os);
 		}
@@ -89,6 +90,7 @@ public class Rule {
 		return os;
 	}
 
+	@Override
 	public String toString() {
 		return "Rule{action=" + action + ", os=" + os + '}';
 	}

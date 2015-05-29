@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.game;
+package com.gawdscape.json.game;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class AssetIndex {
 
-	private Map<String, AssetObject> objects;
+	private final Map<String, AssetObject> objects;
 	private boolean virtual;
 
 	public AssetIndex() {

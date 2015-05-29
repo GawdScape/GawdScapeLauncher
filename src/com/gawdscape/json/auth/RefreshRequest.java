@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.auth;
+package com.gawdscape.json.auth;
 
 /**
  *
@@ -6,13 +6,18 @@ package com.gawdscape.launcher.auth;
  */
 public class RefreshRequest {
 
-	private String accessToken;
-	private String clientToken;
-	private boolean requestUser = true;
+	private final String accessToken;
+	private final String clientToken;
+	private final boolean requestUser = true;
 
 	public RefreshRequest(String access, String client) {
 		this.accessToken = access;
 		this.clientToken = client;
+	}
+
+	public RefreshRequest(SessionResponse response) {
+		this.accessToken = response.getAccessToken();
+		this.clientToken = response.getClientToken();
 	}
 
 	public String getAccessToken() {

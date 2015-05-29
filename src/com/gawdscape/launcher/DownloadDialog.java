@@ -1,10 +1,8 @@
 package com.gawdscape.launcher;
 
-import com.gawdscape.launcher.download.DownloadManager;
-import com.gawdscape.launcher.download.Updater;
+import com.gawdscape.launcher.updater.DownloadManager;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.ImageUtils;
-import com.gawdscape.launcher.util.Log;
 
 /**
  *
@@ -195,41 +193,11 @@ public class DownloadDialog extends javax.swing.JDialog {
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
 		cancel.setEnabled(false);
+		GawdScapeLauncher.updater.interrupt();
 		DownloadManager.pool.shutdownNow();
-		try {
-			Updater.sleep(Long.MAX_VALUE);
-		} catch (InterruptedException ex) {
-			Log.error("Error stopping update thread.", ex);
-		}
+		dispose();
+		GawdScapeLauncher.launcherFrame.setPlayEnabled(true);
     }//GEN-LAST:event_cancelActionPerformed
-
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the System look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LauncherFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the dialog */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				DownloadDialog dialog = new DownloadDialog(new javax.swing.JFrame(), true);
-				dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-					@Override
-					public void windowClosing(java.awt.event.WindowEvent e) {
-						System.exit(0);
-					}
-				});
-				dialog.setVisible(true);
-			}
-		});
-	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;

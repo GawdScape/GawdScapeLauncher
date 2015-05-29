@@ -8,12 +8,13 @@ import java.util.List;
  */
 public class MinecraftProcess {
 
+	private final ProcessMonitorThread monitor;
 	private final List<String> commands;
 	private final Process process;
 	private MinecraftExit onExit;
-	private ProcessMonitorThread monitor = new ProcessMonitorThread(this);
 
 	public MinecraftProcess(List<String> commands, Process process) {
+		this.monitor = new ProcessMonitorThread(this);
 		this.commands = commands;
 		this.process = process;
 
@@ -66,6 +67,7 @@ public class MinecraftProcess {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return "MinecraftProcess[commands=" + commands + ", isRunning=" + isRunning() + "]";
 	}

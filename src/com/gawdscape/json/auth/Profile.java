@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.auth;
+package com.gawdscape.json.auth;
 
 /**
  *
@@ -6,9 +6,9 @@ package com.gawdscape.launcher.auth;
  */
 public class Profile {
 
-	private String id;
-	private String name;
-	private boolean legacy;
+	private final String id;
+	private final String name;
+	private final boolean legacy;
 
 	public Profile(String id, String name) {
 		this.id = id;

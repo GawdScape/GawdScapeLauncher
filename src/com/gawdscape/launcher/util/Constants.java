@@ -1,6 +1,6 @@
 package com.gawdscape.launcher.util;
 
-import com.gawdscape.launcher.auth.Agent;
+import com.gawdscape.json.auth.Agent;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,7 +26,6 @@ public class Constants {
 	public static final String MC_ASSET_URL = "http://resources.download.minecraft.net/";
 	public static final String GS_MOD_URL = "https://github.com/GawdScape/GawdMod/releases/download/";
 	public static final String GS_PACK_URL = "https://raw.githubusercontent.com/GawdScape/GawdPack/";
-	public static final String GS_PACK_FRONT_URL = "https://github.com/GawdScape/GawdPack/blob/";
 	public static final String GS_STORAGE_URL = "https://raw.githubusercontent.com/GawdScape/GawdStorage/";
 	public static final String LAUNCHER_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScapeLauncher/master/latest.version";
 	public static final URI UPDATE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/releases/latest");
@@ -54,5 +53,13 @@ public class Constants {
 			Log.error("URL Error", e);
 			return null;
 		}
+	}
+
+	public static String getMcJar(String version) {
+		return MC_DOWNLOAD_URL + "versions/" + version + "/" + version + ".jar";
+	}
+
+	public static String getMcJson(String version) {
+		return MC_DOWNLOAD_URL + "versions/" + version + "/" + version + ".json";
 	}
 }

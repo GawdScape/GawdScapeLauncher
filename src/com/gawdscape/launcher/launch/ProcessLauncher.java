@@ -72,6 +72,7 @@ public final class ProcessLauncher {
 		return jvmPath;
 	}
 
+	@Override
 	public String toString() {
 		return "ProcessLauncher[commands=" + commands + ", java=" + jvmPath + "]";
 	}

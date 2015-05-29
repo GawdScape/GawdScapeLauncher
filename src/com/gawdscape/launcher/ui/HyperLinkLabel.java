@@ -23,6 +23,7 @@ public class HyperLinkLabel extends JLabel {
 		setFont(font.deriveFont(attributes));
 	}
 
+	@Override
 	public boolean isOpaque() {
 		return false;
 	}

@@ -44,6 +44,7 @@ public class JavaSettingsDialog extends javax.swing.JDialog {
 
         executableCheckBox.setSelected(GawdScapeLauncher.config.getCustomJava());
         executableCheckBox.setText("Executable:");
+        executableCheckBox.setToolTipText("Use custom Java executable?");
         executableCheckBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executableCheckBoxActionPerformed(evt);
@@ -51,13 +52,16 @@ public class JavaSettingsDialog extends javax.swing.JDialog {
         });
 
         executableTextField.setText(GawdScapeLauncher.config.getJavaPath());
+        executableTextField.setToolTipText("Java Executable File");
         executableTextField.setEnabled(GawdScapeLauncher.config.getCustomJava());
 
         argumentsLabel.setText("Arguments:");
 
         argumentsTextField.setText(GawdScapeLauncher.config.getJavaArgs());
+        argumentsTextField.setToolTipText("Java VM Arguments");
 
         closeButton.setText("Close");
+        closeButton.setToolTipText("Changes are saved with other settings.");
         closeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 closeButtonActionPerformed(evt);
@@ -125,42 +129,6 @@ public class JavaSettingsDialog extends javax.swing.JDialog {
     private void executableCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executableCheckBoxActionPerformed
 		executableTextField.setEnabled(executableCheckBox.isSelected());
     }//GEN-LAST:event_executableCheckBoxActionPerformed
-
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(JavaSettingsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(JavaSettingsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(JavaSettingsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(JavaSettingsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the dialog */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				JavaSettingsDialog dialog = new JavaSettingsDialog(new javax.swing.JFrame(), true);
-				dialog.setVisible(true);
-			}
-		});
-	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.gawdscape.launcher.ui.TransparentLabel argumentsLabel;

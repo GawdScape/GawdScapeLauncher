@@ -7,10 +7,10 @@ import java.util.*;
 import javax.swing.SwingUtilities;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
-import com.gawdscape.launcher.auth.SessionResponse;
-import com.gawdscape.launcher.game.AssetIndex;
-import com.gawdscape.launcher.game.ModPack;
-import com.gawdscape.launcher.game.Minecraft;
+import com.gawdscape.json.auth.SessionResponse;
+import com.gawdscape.json.game.AssetIndex;
+import com.gawdscape.json.modpacks.ModPack;
+import com.gawdscape.json.game.Minecraft;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.FileUtils;
 import com.gawdscape.launcher.util.JsonUtils;
@@ -57,17 +57,17 @@ public class MinecraftLauncher implements MinecraftExit {
 
 		OperatingSystem os = OperatingSystem.getCurrentPlatform();
 		if (os.equals(OperatingSystem.OSX)) {
-			processLauncher.addCommands(new String[]{"-Xdock:icon=" + getAssetObject(mc.getAssets(), "icons/minecraft.icns").getAbsolutePath(), "-Xdock:name=Minecraft"});
+			processLauncher.addCommands("-Xdock:icon=" + getAssetObject(mc.getAssets(), "icons/minecraft.icns").getAbsolutePath(), "-Xdock:name=Minecraft");
 		} else if (os.equals(OperatingSystem.WINDOWS)) {
-			processLauncher.addCommands(new String[]{"-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump"});
+			processLauncher.addCommands("-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump");
 		}
-		processLauncher.addCommands(new String[]{"-Djava.library.path=" + nativeDir.getAbsolutePath()});
-		processLauncher.addCommands(new String[]{"-cp", constructClassPath(mc, pack)});
+		processLauncher.addCommands("-Djava.library.path=" + nativeDir.getAbsolutePath());
+		processLauncher.addCommands("-cp", constructClassPath(mc, pack));
 		String mainClass = mc.getMainClass();
 		if (pack.getMainClass() != null) {
 			mainClass = pack.getMainClass();
 		}
-		processLauncher.addCommands(new String[]{mainClass});
+		processLauncher.addCommands(mainClass);
 
 		String[] args = getMinecraftArguments(pack.getId(), mc, pack.getMinecraftArguments(), gameDirectory);
 		if (args == null) {
@@ -76,27 +76,32 @@ public class MinecraftLauncher implements MinecraftExit {
 		processLauncher.addCommands(args);
 
 		if ((session == null) || (session.getSelectedProfile() == null)) {
-			processLauncher.addCommands(new String[]{"--demo"});
+			processLauncher.addCommands("--demo");
+		}
+
+		if (config.getGlobalResourcePacks()) {
+			processLauncher.addCommands("--resourcePackDir",
+					new File(config.getGameDir(), "resourcepacks").getAbsolutePath());
 		}
 
 		if (config.getFullscreen()) {
-			processLauncher.addCommands(new String[]{"--fullscreen"});
+			processLauncher.addCommands("--fullscreen");
 		}
 
 		if (config.getjoinServer()) {
 			String ip = config.getServerIP();
 			if (ip.contains(":")) {
 				String[] socket = ip.split(":");
-				processLauncher.addCommands(new String[]{"--server", String.valueOf(socket[0])});
-				processLauncher.addCommands(new String[]{"--port", String.valueOf(socket[1])});
+				processLauncher.addCommands("--server", socket[0]);
+				processLauncher.addCommands("--port", socket[1]);
 			} else {
-				processLauncher.addCommands(new String[]{"--server", String.valueOf(ip)});
+				processLauncher.addCommands("--server", ip);
 			}
 		}
 
 		if (config.getWindowSize()) {
-			processLauncher.addCommands(new String[]{"--width", config.getWindowWidth()});
-			processLauncher.addCommands(new String[]{"--height", config.getWindowHeight()});
+			processLauncher.addCommands("--width", config.getWindowWidth());
+			processLauncher.addCommands("--height", config.getWindowHeight());
 		}
 		try {
 			MinecraftProcess process = processLauncher.start();
@@ -117,9 +122,10 @@ public class MinecraftLauncher implements MinecraftExit {
 			return null;
 		}
 
+		// TODO: Properly serialize properties. Priority: Low
 		// There's probably a better way to do this... But fuck it.
 		String userProperties = "";
-		if (session.getUser().getProperties() != null) {
+		if (session.getUser() != null && session.getUser().getProperties() != null) {
 			userProperties = session.getUser().getProperties().toString();
 		}
 
@@ -150,7 +156,7 @@ public class MinecraftLauncher implements MinecraftExit {
 		map.put("profile_name", packName);
 		map.put("version_name", version.getId());
 
-		map.put("game_directory", config.getGameDir(packName).getAbsolutePath());
+		map.put("game_directory", gameDirectory.getAbsolutePath());
 		map.put("game_assets", reconstructAssets(version.getAssets()).getAbsolutePath());
 
 		map.put("assets_root", new File(Directories.getAssetPath()).getAbsolutePath());
@@ -196,15 +202,16 @@ public class MinecraftLauncher implements MinecraftExit {
 			Log.warning("No assets index file " + virtualRoot + "; can't reconstruct assets");
 			return virtualRoot;
 		}
-		AssetIndex index = null;
+		AssetIndex index;
 		try {
 			index = JsonUtils.getGson().fromJson(JsonUtils.readJsonFromFile(indexFile), AssetIndex.class);
 		} catch (IOException ex) {
 			Log.error("Error loading asset index", ex);
+			return virtualRoot;
 		}
 		if (index.isVirtual()) {
 			Log.info("Reconstructing virtual assets folder at " + virtualRoot);
-			for (Map.Entry<String, AssetIndex.AssetObject> entry : index.getFileMap().entrySet()) {
+			index.getFileMap().entrySet().stream().forEach((entry) -> {
 				File target = new File(virtualRoot, entry.getKey());
 				File original = new File(new File(objectDir, (entry.getValue()).getHash().substring(0, 2)), (entry.getValue()).getHash());
 				if (!target.isFile()) {
@@ -214,7 +221,7 @@ public class MinecraftLauncher implements MinecraftExit {
 						Log.error("Error coping assets", ex);
 					}
 				}
-			}
+			});
 
 			try {
 				JsonUtils.writeJsonToFile(new Date().toString(), new File(virtualRoot, ".lastused"));
@@ -248,11 +255,11 @@ public class MinecraftLauncher implements MinecraftExit {
 			Log.severe("Error loading mods");
 		}
 		if (pack.getGawdModVersion() != null) {
-			classPath.add(new File(Directories.getBinPath(),
-					"gawdmod-" + pack.getGawdModVersion() + "_" + pack.getMinecraftVersion()+ ".jar"));
+			classPath.add(new File(Directories.getGawdModJar(
+					pack.getGawdModVersion(), pack.getMinecraftVersion())));
 		}
 		// Minecraft
-		classPath.add(new File(Directories.getBinPath(), "minecraft-" + mc.getId() + ".jar"));
+		classPath.add(new File(Directories.getMcJar(mc.getId())));
 		String separator = System.getProperty("path.separator");
 		for (File file : classPath) {
 			if (!file.isFile()) {
@@ -276,11 +283,9 @@ public class MinecraftLauncher implements MinecraftExit {
 			}
 		} else if (GawdScapeLauncher.logFrame != null) {
 			Log.severe("Game ended with bad state (exit code " + exitCode + ")");
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					Log.info("Ignoring visibility rule and showing log due to a game crash");
-					GawdScapeLauncher.logFrame.setVisible(true);
-				}
+			SwingUtilities.invokeLater(() -> {
+				Log.info("Ignoring visibility rule and showing log due to a game crash");
+				GawdScapeLauncher.logFrame.setVisible(true);
 			});
 		}
 		// You close log, what you know??

@@ -14,6 +14,7 @@ public class TransparentSlider extends JSlider {
 		setForeground(Color.WHITE);
 	}
 
+	@Override
 	public boolean isOpaque() {
 		return false;
 	}

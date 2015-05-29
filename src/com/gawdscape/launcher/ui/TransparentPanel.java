@@ -19,6 +19,7 @@ public class TransparentPanel extends JPanel {
 		setLayout(mgr);
 	}
 
+	@Override
 	public boolean isOpaque() {
 		return false;
 	}
@@ -27,6 +28,7 @@ public class TransparentPanel extends JPanel {
 		insets = new Insets(top, left, bottom, right);
 	}
 
+	@Override
 	public Insets getInsets() {
 		if (insets == null) {
 			return super.getInsets();

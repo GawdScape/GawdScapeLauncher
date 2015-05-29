@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.download;
+package com.gawdscape.launcher.updater;
 
 import com.gawdscape.launcher.util.FileUtils;
 import com.gawdscape.launcher.util.Log;
@@ -18,7 +18,7 @@ import java.util.concurrent.Callable;
  *
  * @author Vinnie
  */
-public class DownloadTask implements Callable, RBCWrapperDelegate {
+public class DownloadTask implements Callable, ProgressDelegate {
 
 	URL url;
 	File file;
@@ -40,18 +40,18 @@ public class DownloadTask implements Callable, RBCWrapperDelegate {
 		HttpURLConnection connection = createConnection(url);
 
 		expectedMD5 = connection.getHeaderField("ETag");
-		if (expectedMD5.length() != 34) {
-			expectedMD5 = "0";
-		} else {
+		if (expectedMD5.length() == 34) {
 			expectedMD5 = expectedMD5.substring(1, 33);
+		} else {
+			expectedMD5 = "0";
 		}
-		Log.finest("Expected MD5: " + expectedMD5 + " - " + file.getName());
+		Log.fine("Expected MD5: " + expectedMD5 + " - " + file.getName());
 
 		currentMD5 = "-1";
 		if (file.exists()) {
 			try {
 				currentMD5 = FileUtils.checkSum(new FileInputStream(file));
-				Log.finest("Current MD5: " + currentMD5 + " - " + file.getName());
+				Log.fine("Current MD5: " + currentMD5 + " - " + file.getName());
 			} catch (FileNotFoundException ex) {
 				currentMD5 = "-2";
 			}
@@ -77,7 +77,7 @@ public class DownloadTask implements Callable, RBCWrapperDelegate {
 	}
 
 	@Override
-	public void rbcProgressCallback(RBCWrapper rbc, double progress) {
+	public void progressCallback(RBCWrapper rbc, double progress) {
 		this.progress = progress;
 		DownloadManager.downloadDialog.setFile(file.getName(), url.getHost(), file.getParentFile().getPath());
 		DownloadManager.downloadDialog.setProgress((int) progress, (int) rbc.getReadSoFar(), (int) rbc.getExpectedSize());

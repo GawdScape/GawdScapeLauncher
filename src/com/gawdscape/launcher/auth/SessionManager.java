@@ -1,5 +1,7 @@
 package com.gawdscape.launcher.auth;
 
+import com.gawdscape.json.auth.RefreshRequest;
+import com.gawdscape.json.auth.SessionResponse;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
@@ -17,22 +19,24 @@ public class SessionManager {
 
 	private static final File userFile = new File(Directories.getWorkingDirectory(), "sessions.json");
 
-	private final HashMap<String, SessionToken> sessions = new HashMap();
+	private final HashMap<String, RefreshRequest> sessions;
 	private String lastUser;
 	private String autoLoginUser;
 
 	public SessionManager() {
+		sessions = new HashMap();
 	}
 
-	public SessionToken addSession(SessionResponse response) {
-		return sessions.put(response.getSelectedProfile().getName(), new SessionToken(response));
+	public RefreshRequest addSession(SessionResponse response) {
+		return sessions.put(response.getSelectedProfile().getName(),
+				new RefreshRequest(response));
 	}
 
-	public SessionToken getToken(String username) {
+	public RefreshRequest getToken(String username) {
 		return sessions.get(username);
 	}
 
-	public SessionToken removeSession(String username) {
+	public RefreshRequest removeSession(String username) {
 		return sessions.remove(username);
 	}
 
@@ -60,7 +64,7 @@ public class SessionManager {
 		return autoLoginUser;
 	}
 
-	public SessionToken getAutoLoginToken() {
+	public RefreshRequest getAutoLoginToken() {
 		return sessions.get(autoLoginUser);
 	}
 

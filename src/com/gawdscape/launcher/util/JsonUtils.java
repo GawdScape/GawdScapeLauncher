@@ -46,12 +46,9 @@ public class JsonUtils {
 	}
 
 	public static String readJsonFromUrl(String url) throws IOException {
-		InputStream is = new URL(url).openStream();
-		try {
+		try (InputStream is = new URL(url).openStream()) {
 			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 			return readAll(rd);
-		} finally {
-			is.close();
 		}
 	}
 
@@ -64,9 +61,9 @@ public class JsonUtils {
 		if (!filePath.exists()) {
 			filePath.getParentFile().mkdirs();
 		}
-		FileWriter file = new FileWriter(filePath);
-		file.write(jsonText);
-		file.flush();
-		file.close();
+		try (FileWriter file = new FileWriter(filePath)) {
+			file.write(jsonText);
+			file.flush();
+		}
 	}
 }

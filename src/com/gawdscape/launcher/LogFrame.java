@@ -25,38 +25,44 @@ import javax.swing.text.StyledDocument;
  */
 public class LogFrame extends javax.swing.JFrame {
 
-	public static final String selectionSymbol = "\u00A7";
-	private final static String LINK_ATTRIBUTE = "linkact";
+	private static final String selectionSymbol = "\u00A7";
+	private static final String LINK_ATTRIBUTE = "linkact";
 
-	public StyledDocument log;
-	Style style;
-	Style hyperlink;
+	private final StyledDocument log;
+	private Style style;
+	private Style hyperlink;
 
 	int searchStart = 0;
 	String find = null;
 	boolean ignoreCase = true;
 
 	boolean scroll = true;
+	boolean doColor;
+	boolean doLink;
 
 	/**
 	 * Creates new form Console
 	 *
-	 * @param doStyle
+	 * @param color
+	 * @param link
 	 */
-	public LogFrame(boolean doStyle) {
+	public LogFrame(boolean color, boolean link) {
 		initComponents();
 		log = logPane.getStyledDocument();
 
-		if (doStyle) {
+		if (color) {
 			style = log.addStyle("ColoredText", null);
-
+			doColor = true;
+		}
+		if (link) {
 			hyperlink = log.addStyle("HyperLink", null);
 			StyleConstants.setForeground(hyperlink, ColorCodes.Blue);
 			StyleConstants.setUnderline(hyperlink, true);
+			doLink = true;
 		}
 
 		setLocation(20, 20);
-		print("GawdScape Launcher [Version " + Constants.VERSION + "]\n(c) " + Constants.THIS_YEAR + " GawdScape Networks.\n\n", null);
+		initText();
 	}
 
 	/**
@@ -233,6 +239,11 @@ public class LogFrame extends javax.swing.JFrame {
 	}
 
 	public void formatAndPrint(String text) {
+		if (!doColor) {
+			parseLinksAndPrint(text, null);
+			print("\n", null);
+			return;
+		}
 		String[] selection = text.split(selectionSymbol);
 		for (int i = 0; i < selection.length; i++) {
 			if (i == 0) {
@@ -274,7 +285,14 @@ public class LogFrame extends javax.swing.JFrame {
 	}
 
 	public void parseLinksAndPrint(String text, Style style) {
-		if (text.contains("http://") || text.contains("https://") || text.contains("www.")) {
+		if (!doLink) {
+			print(text, style);
+			return;
+		}
+		if (text.contains("http://")
+			|| text.contains("https://")
+			|| text.contains("www.")
+		) {
 			int start = text.indexOf("http://");
 			if (start < 0) {
 				start = text.indexOf("https://");
@@ -294,6 +312,7 @@ public class LogFrame extends javax.swing.JFrame {
 			try {
 				url = new URI(url).toString();
 			} catch (URISyntaxException ex) {
+				print("Error: " + ex.getMessage(), null);
 				print(text, style);
 				return;
 			}
@@ -341,25 +360,9 @@ public class LogFrame extends javax.swing.JFrame {
 		}
 	}
 
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the System look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		try {
-			javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LauncherFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new LogFrame(true).setVisible(true);
-			}
-		});
+	private void initText() {
+		print("GawdScape Launcher [Version " + Constants.VERSION + "]\n" +
+				"(c) " + Constants.THIS_YEAR + " GawdScape Networks.\n\n", null);
 	}
 
 	private class URLLinkAction extends AbstractAction {

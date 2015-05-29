@@ -19,6 +19,7 @@ public class TransparentLabel extends JLabel {
 		setForeground(Color.WHITE);
 	}
 
+	@Override
 	public boolean isOpaque() {
 		return false;
 	}

@@ -43,7 +43,10 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="optionsPanel" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="optionsPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -61,13 +64,24 @@
                       <Component id="logSetingsPanel" alignment="0" max="32767" attributes="0"/>
                       <Component id="gameSetingsPanel" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="logButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="updateButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="saveButton" min="-2" pref="70" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="logButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="updateButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                                  <Component id="addPackButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="saveButton" alignment="1" min="-2" pref="70" max="-2" attributes="0"/>
+                              <Component id="javaButton" alignment="1" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -85,12 +99,17 @@
                   <Component id="logSetingsPanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="gameSetingsPanel" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="javaButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="updateButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="addPackButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="separate" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="saveButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="logButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="updateButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -110,6 +129,7 @@
         <Component class="com.gawdscape.launcher.ui.TransparentButton" name="logButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Open Log"/>
+            <Property name="toolTipText" type="java.lang.String" value="Open the Log Window"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="logButtonActionPerformed"/>
@@ -118,6 +138,7 @@
         <Component class="com.gawdscape.launcher.ui.TransparentButton" name="updateButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Force Update"/>
+            <Property name="toolTipText" type="java.lang.String" value="Check for updates and validate existing files."/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateButtonActionPerformed"/>
@@ -126,6 +147,7 @@
         <Component class="com.gawdscape.launcher.ui.TransparentButton" name="cancelButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancel"/>
+            <Property name="toolTipText" type="java.lang.String" value="Discard Changes"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cancelButtonActionPerformed"/>
@@ -134,6 +156,7 @@
         <Component class="com.gawdscape.launcher.ui.TransparentButton" name="saveButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Save"/>
+            <Property name="toolTipText" type="java.lang.String" value="Save Changes"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButtonActionPerformed"/>
@@ -155,9 +178,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="newsCheckBox" pref="180" max="32767" attributes="0"/>
+                      <Component id="newsCheckBox" pref="187" max="32767" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="skipLauncherCheckBox" pref="180" max="32767" attributes="0"/>
+                      <Component id="skipLauncherCheckBox" pref="187" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -182,6 +205,7 @@
                   <Connection code="GawdScapeLauncher.config.getShowNews()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Show News"/>
+                <Property name="toolTipText" type="java.lang.String" value="Show GawdScape news in launcher?"/>
               </Properties>
             </Component>
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="skipLauncherCheckBox">
@@ -189,7 +213,8 @@
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getSkipLauncher()" type="code"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Skip Launcher, Open Minecraft"/>
+                <Property name="text" type="java.lang.String" value="One-click Launch"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open Minecraft without using the launcher?"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -210,13 +235,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="colorLogCheckBox" max="32767" attributes="0"/>
+                          <Component id="logCheckBox" min="-2" pref="185" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="logCheckBox" min="-2" pref="180" max="32767" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="closeLogCheckBox" min="-2" pref="180" max="32767" attributes="0"/>
-                          </Group>
-                          <Component id="styleLogCheckBox" min="-2" pref="180" max="32767" attributes="0"/>
+                          <Component id="closeLogCheckBox" min="-2" pref="185" max="32767" attributes="0"/>
+                          <Component id="linkLogCheckBox" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -231,7 +257,10 @@
                           <Component id="closeLogCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="styleLogCheckBox" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="colorLogCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="linkLogCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -244,6 +273,7 @@
                   <Connection code="GawdScapeLauncher.config.getShowLog()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Show Log"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open the Log window when the launcher starts?"/>
               </Properties>
             </Component>
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="closeLogCheckBox">
@@ -252,14 +282,25 @@
                   <Connection code="GawdScapeLauncher.config.getCloseLog()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Close Log with Game"/>
+                <Property name="toolTipText" type="java.lang.String" value="Close the Log window when Minecraft closes?"/>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="styleLogCheckBox">
+            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="colorLogCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="GawdScapeLauncher.config.getStyleLog()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getColorLog()" type="code"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Parse Colors and Links"/>
+                <Property name="text" type="java.lang.String" value="Parse Colors"/>
+                <Property name="toolTipText" type="java.lang.String" value="Show color coded text in color?"/>
+              </Properties>
+            </Component>
+            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="linkLogCheckBox">
+              <Properties>
+                <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="GawdScapeLauncher.config.getLinkLog()" type="code"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Parse Links"/>
+                <Property name="toolTipText" type="java.lang.String" value="Make links clickable when shown?"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -307,24 +348,17 @@
                                   <Component id="windowSizeCheckBox" pref="175" max="32767" attributes="0"/>
                                   <Component id="fullscreenCheckBox" max="32767" attributes="0"/>
                               </Group>
+                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Component id="windowWidth" pref="66" max="32767" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="x" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="windowHeight" pref="65" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Component id="serverIP" max="32767" attributes="0"/>
-                                      </Group>
+                                      <Component id="windowWidth" pref="66" max="32767" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="x" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="windowHeight" pref="65" max="32767" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="javaSettings" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="serverIP" max="32767" attributes="0"/>
+                                  <Component id="resourcePackCheckBox" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -370,7 +404,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="fullscreenCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="javaSettings" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="resourcePackCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -386,6 +420,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentButton" name="browseButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Browse"/>
+                <Property name="toolTipText" type="java.lang.String" value="Select a new Game Directory"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="browseButtonActionPerformed"/>
@@ -394,6 +429,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentButton" name="gameDirButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Open Game Dir"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open your current Game Directory"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="gameDirButtonActionPerformed"/>
@@ -404,6 +440,7 @@
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getGameDir()" type="code"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="The directory where your game data will be stored."/>
               </Properties>
             </Component>
             <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="memoryLabel">
@@ -428,6 +465,7 @@
                 <Property name="minorTickSpacing" type="int" value="256"/>
                 <Property name="paintTicks" type="boolean" value="true"/>
                 <Property name="snapToTicks" type="boolean" value="true"/>
+                <Property name="toolTipText" type="java.lang.String" value="Amount of RAM to allocate to Minecraft."/>
                 <Property name="value" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getMemory()" type="code"/>
                 </Property>
@@ -455,6 +493,7 @@
                   <Connection code="GawdScapeLauncher.config.getjoinServer()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Join Server on Launch"/>
+                <Property name="toolTipText" type="java.lang.String" value="Automatically connect to a server on launch?"/>
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="joinServerCheckBoxItemStateChanged"/>
@@ -465,6 +504,7 @@
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getServerIP()" type="code"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="IP of Server to Join"/>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getjoinServer()" type="code"/>
                 </Property>
@@ -476,6 +516,7 @@
                   <Connection code="GawdScapeLauncher.config.getWindowSize()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Set Minecraft Window Size"/>
+                <Property name="toolTipText" type="java.lang.String" value="Start Minecraft with a specific window size?"/>
               </Properties>
               <Events>
                 <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="windowSizeCheckBoxItemStateChanged"/>
@@ -486,6 +527,7 @@
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getWindowWidth()" type="code"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Window Width"/>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getWindowSize()" type="code"/>
                 </Property>
@@ -501,6 +543,7 @@
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getWindowHeight()" type="code"/>
                 </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Window Height"/>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getWindowSize()" type="code"/>
                 </Property>
@@ -512,18 +555,36 @@
                   <Connection code="GawdScapeLauncher.config.getFullscreen()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Launch in Fullscreen"/>
+                <Property name="toolTipText" type="java.lang.String" value="Start Minecraft in Fullscreen mode?"/>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="javaSettings">
+            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="resourcePackCheckBox">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Java Settings"/>
+                <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="GawdScapeLauncher.config.getGlobalResourcePacks()" type="code"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Share Resource Packs"/>
+                <Property name="toolTipText" type="java.lang.String" value="Should Mod Packs share Resource Packs or have their own?"/>
               </Properties>
-              <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="javaSettingsMouseClicked"/>
-              </Events>
             </Component>
           </SubComponents>
         </Container>
+        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="javaButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Java Settings"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="javaButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="addPackButton">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Add Mod Pack"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addPackButtonActionPerformed"/>
+          </Events>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

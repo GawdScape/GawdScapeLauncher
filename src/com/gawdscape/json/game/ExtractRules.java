@@ -1,4 +1,4 @@
-package com.gawdscape.launcher.game;
+package com.gawdscape.json.game;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,21 +10,24 @@ import java.util.List;
  */
 public class ExtractRules {
 
-	private List<String> exclude = new ArrayList();
+	private final List<String> exclude;
 
 	public ExtractRules() {
+		this.exclude = new ArrayList();
 	}
 
 	public ExtractRules(String... exclude) {
+		this.exclude = new ArrayList();
 		if (exclude != null) {
 			Collections.addAll(this.exclude, exclude);
 		}
 	}
 
 	public ExtractRules(ExtractRules rules) {
-		for (String exclud : exclude) {
+		this.exclude = new ArrayList();
+		exclude.stream().forEach((exclud) -> {
 			exclude.add(exclud);
-		}
+		});
 	}
 
 	public List<String> getExcludes() {
@@ -32,13 +35,9 @@ public class ExtractRules {
 	}
 
 	public boolean shouldExtract(String path) {
-		if (exclude != null) {
-			for (String rule : exclude) {
-				if (path.startsWith(rule)) {
-					return false;
-				}
-			}
+		if (exclude == null) {
+			return true;
 		}
-		return true;
+		return exclude.stream().noneMatch((rule) -> (path.startsWith(rule)));
 	}
 }

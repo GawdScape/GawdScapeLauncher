@@ -2,15 +2,15 @@ package com.gawdscape.launcher;
 
 import com.gawdscape.launcher.auth.AuthManager;
 import com.gawdscape.launcher.auth.SessionManager;
-import com.gawdscape.launcher.auth.SessionResponse;
-import com.gawdscape.launcher.download.Updater;
-import com.gawdscape.launcher.game.PackIndex;
+import com.gawdscape.json.auth.SessionResponse;
+import com.gawdscape.launcher.updater.Updater;
 import com.gawdscape.launcher.launch.MinecraftLauncher;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,7 +26,8 @@ public class GawdScapeLauncher {
 	public static SessionResponse session;
 	public static Updater updater;
 	public static MinecraftLauncher launcher;
-	public static PackIndex modpacks;
+	public static ModPackManager modpacks;
+	public static boolean offlineMode;
 
 	/**
 	 * @param args the command line arguments
@@ -44,81 +45,118 @@ public class GawdScapeLauncher {
 	//</editor-fold>
 
 		// Load config
+		long startTime2 = System.currentTimeMillis();
 		Log.info("Loading config...");
 		config = Config.loadConfig();
 		if (config == null) {
 			config = new Config();
 		}
+		Log.benchmark("Config took ", startTime2);
 
 		/* Create and display the form */
+		startTime2 = System.currentTimeMillis();
 		if (config.getShowLog()) {
 			Log.info("Initializing Log.");
 			Log.showLog = config.getShowLog();
-			Log.formatLog = config.getStyleLog();
-			logFrame = new LogFrame(config.getStyleLog());
+			logFrame = new LogFrame(config.getColorLog(), config.getLinkLog());
 			logFrame.setVisible(true);
 		}
+		Log.benchmark("Log took ", startTime2);
 
 		// Get list of mod packs
-		modpacks = new PackIndex();
-		modpacks.loadPacks();
+		startTime2 = System.currentTimeMillis();
+		modpacks = new ModPackManager();
+
+		try {
+			modpacks.downloadPacks();
+		} catch (UnknownHostException e) {
+			offlineMode = true;
+			Log.severe("Error connecting to mod pack server.");
+		} catch (IOException ex) {
+			Log.error("Error downloading mod pack index.", ex);
+		}
+
+		try {
+			modpacks.loadCustomPacks();
+		} catch (IOException ex) {
+			Log.error("Error loading custom mod pack index.", ex);
+		}
+		Log.benchmark("Mod Packs took ", startTime2);
+
+		if (offlineMode) {
+			try {
+				modpacks.loadLocalPacks();
+				launcherFrame = new LauncherFrame();
+				launcherFrame.setVisible(true);
+				Log.benchmark("Opened GawdScape Launcher in ", startTime);
+			} catch (IOException ex) {
+				Log.error("Error loading local mod pack index.", ex);
+			}
+			return;
+		}
+		
 
 		SessionManager sessionManager = SessionManager.loadSessions();
 
 		// Load and refresh last saved session
 		Log.info("Checking for saved session...");
 		if (sessionManager.shouldAutoLogin()) {
+			startTime2 = System.currentTimeMillis();
 			Log.info("Session found. Refreshing session for " + sessionManager.getAutoLoginUser());
 			session = AuthManager.refresh(sessionManager.getAutoLoginToken());
 			sessionManager.addSession(session);
 			SessionManager.saveSessions(sessionManager);
+			Log.benchmark("Auto Login took ", startTime2);
 		}
 
-		// Should we skip the launcher and just launch Minecraft?
-		if (config.getSkipLauncher() && (session != null && session.getAccessToken() != null)) {
-			Log.info("Refreshed session for " + session.getSelectedProfile().getName());
-			updater = new Updater();
-			updater.start();
-		} else {
-			// Initalize launcher frame
-			launcherFrame = new LauncherFrame();
 
-			// Valid session, open launcher
-			if (session != null && session.getAccessToken() != null) {
-				Log.info("Refreshed session for " + session.getSelectedProfile().getName());
+		startTime2 = System.currentTimeMillis();
+		// Are we logged in?
+		if (session != null && session.getAccessToken() != null) {
+			// Valid session, continue
+			Log.info("Refreshed session for " + session.getSelectedProfile().getName());
+			// Should we skip the launcher and just launch Minecraft?
+			if (config.getSkipLauncher()) {
+				updater = new Updater();
+				updater.setPack(modpacks.getPackById(config.getDefaultPack()));
+				updater.start();
+			} else {
+				// Initalize launcher frame
+				launcherFrame = new LauncherFrame();
 				launcherFrame.setUsername(session.getSelectedProfile().getName());
 				launcherFrame.setVisible(true);
-				// Login, open login form
-			} else {
-				loginDialog = new LoginDialog(launcherFrame, true, sessionManager);
-				if (session != null && session.getError() != null) {
-					loginDialog.setError(session.getErrorMessage());
-					Log.severe("Error refreshing session:");
-					Log.severe(session.getErrorMessage());
-				}
-				loginDialog.setVisible(true);
 			}
+		} else {
+			// Nope, Login
+			launcherFrame = new LauncherFrame();
+			loginDialog = new LoginDialog(launcherFrame, true, sessionManager);
+			if (session != null && session.getError() != null) {
+				loginDialog.setError(session.getErrorMessage());
+				Log.severe("Error refreshing session:");
+				Log.severe(session.getErrorMessage());
+			}
+			loginDialog.setVisible(true);
 		}
+		Log.benchmark("Login Check took ", startTime2);
 
 		checkLauncherUpdate();
 
-		long endTime = System.currentTimeMillis();
-		Log.finest("Opened GawdScape Launcher in " + (endTime - startTime) + "ms");
+		Log.benchmark("Opened GawdScape Launcher in ", startTime);
 	}
 
 	public static void checkLauncherUpdate() {
 		Log.info("Checking for launcher update...");
-		int version = 0;
 		try {
-			version = new Integer(JsonUtils.readJsonFromUrl(Constants.LAUNCHER_VERSION_URL));
+			int version = new Integer(
+					JsonUtils.readJsonFromUrl(Constants.LAUNCHER_VERSION_URL));
+			if (version > Constants.VERSION) {
+				Log.warning("Launcher version " + version + " has been released.");
+				promptUpdate(version);
+			} else {
+				Log.info("No launcher update found.");
+			}
 		} catch (IOException ex) {
 			Log.error("Error checking for launcher update.", ex);
-		}
-		if (version > Constants.VERSION) {
-			Log.warning("Launcher version " + version + " has been released.");
-			promptUpdate(version);
-		} else {
-			Log.fine("No update found.");
 		}
 	}
 
