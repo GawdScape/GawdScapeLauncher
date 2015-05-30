@@ -16,18 +16,18 @@
 	<jre>
 		<path></path>
 		<bundledJre64Bit>false</bundledJre64Bit>
-		<minVersion>1.7.0_00</minVersion>
+		<minVersion>1.8.0_00</minVersion>
 		<maxVersion></maxVersion>
 		<jdkPreference>preferJre</jdkPreference>
 		<runtimeBits>64/32</runtimeBits>
 	</jre>
 	<versionInfo>
-		<fileVersion>0.0.1.1</fileVersion>
-		<txtFileVersion>11</txtFileVersion>
+		<fileVersion>0.0.1.2</fileVersion>
+		<txtFileVersion>12</txtFileVersion>
 		<fileDescription>GawdScape Launcher</fileDescription>
 		<copyright>(c) 2015 GawdScape</copyright>
-		<productVersion>0.0.1.1</productVersion>
-		<txtProductVersion>11</txtProductVersion>
+		<productVersion>0.0.1.2</productVersion>
+		<txtProductVersion>12</txtProductVersion>
 		<productName>GawdScape Launcher</productName>
 		<companyName>GawdScape</companyName>
 		<internalName>GawdScape</internalName>
