@@ -12,7 +12,7 @@ import java.net.URL;
  */
 public class Constants {
 
-	public static final int VERSION = 11;
+	public static final int VERSION = 12;
 
 	public static final int THIS_YEAR = 2015;
 
@@ -61,5 +61,9 @@ public class Constants {
 
 	public static String getMcJson(String version) {
 		return MC_DOWNLOAD_URL + "versions/" + version + "/" + version + ".json";
+	}
+
+	public static String getGawdModJar(String version, String mcVersion) {
+		return GS_MOD_URL + version + "/" + mcVersion + ".jar";
 	}
 }

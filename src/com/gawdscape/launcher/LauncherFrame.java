@@ -23,11 +23,15 @@ public class LauncherFrame extends javax.swing.JFrame {
 
 	public static String[] packs = new String[0];
 	public static String username = "Guest";
+	private final boolean news;
 
 	/**
 	 * Creates new form LauncherFrame
+	 *
+	 * @param news
 	 */
-	public LauncherFrame() {
+	public LauncherFrame(boolean news) {
+		this.news = news;
 		Log.debug("Initializing launcher frame.");
 		initComponents();
 		loadPacks();
@@ -61,7 +65,7 @@ public class LauncherFrame extends javax.swing.JFrame {
 	}
 
 	private void loadNews() {
-		if (GawdScapeLauncher.config.getShowNews()) {
+		if (news) {
 			try {
 				newsPane.setPage(Constants.LAUNCHER_NEWS);
 			} catch (IOException ex) {
@@ -258,8 +262,7 @@ public class LauncherFrame extends javax.swing.JFrame {
 		int packID = packCombo.getSelectedIndex();
 		GawdScapeLauncher.config.setDefaultPack(packID);
 		Config.saveConfig(GawdScapeLauncher.config);
-		GawdScapeLauncher.updater = new Updater();
-		GawdScapeLauncher.updater.setPack(packs[packID]);
+		GawdScapeLauncher.updater = new Updater(packs[packID]);
 		GawdScapeLauncher.updater.start();
     }//GEN-LAST:event_playButtonActionPerformed
 
@@ -298,8 +301,8 @@ public class LauncherFrame extends javax.swing.JFrame {
 		GawdScapeLauncher.loginDialog.setVisible(true);
     }//GEN-LAST:event_switchUsersLabelMouseClicked
 
-	public void setPlayEnabled(boolean b) {
-		playButton.setEnabled(b);
+	public void setPlayEnabled(boolean on) {
+		playButton.setEnabled(on);
 	}
 
 	public void setUsername(String name) {
@@ -308,16 +311,8 @@ public class LauncherFrame extends javax.swing.JFrame {
 		usernameLabel.setText(username);
 	}
 
-	public void setOffline(String username) {
+	public void setOffline() {
 		greetingLabel.setText("Offline Mode");
-		usernameLabel.setText(username);
-		logoutLabel.setText("Retry");
-	}
-
-	public void setError(String error) {
-		greetingLabel.setText("Login Error:");
-		usernameLabel.setText(error);
-		logoutLabel.setText("Retry");
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

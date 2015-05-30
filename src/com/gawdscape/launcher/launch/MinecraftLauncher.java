@@ -75,10 +75,6 @@ public class MinecraftLauncher implements MinecraftExit {
 		}
 		processLauncher.addCommands(args);
 
-		if ((session == null) || (session.getSelectedProfile() == null)) {
-			processLauncher.addCommands("--demo");
-		}
-
 		if (config.getGlobalResourcePacks()) {
 			processLauncher.addCommands("--resourcePackDir",
 					new File(config.getGameDir(), "resourcepacks").getAbsolutePath());
@@ -105,11 +101,7 @@ public class MinecraftLauncher implements MinecraftExit {
 		}
 		try {
 			MinecraftProcess process = processLauncher.start();
-			Log.println(
-					"#==============================================================================#\n"
-					+ "#--------------------------------- Minecraft ----------------------------------#\n"
-					+ "#==============================================================================#");
-			Log.info(process.toString());
+			Log.finer(process.toString());
 			process.safeSetExitRunnable(this);
 		} catch (IOException e) {
 			Log.error("Couldn't launch game", e);
@@ -117,42 +109,41 @@ public class MinecraftLauncher implements MinecraftExit {
 	}
 
 	private String[] getMinecraftArguments(String packName, Minecraft version, String gsArgs, File gameDirectory) {
+		Map<String, String> map = new HashMap();
 		if (version.getMinecraftArguments() == null) {
 			Log.severe("Can't run version, missing minecraftArguments");
 			return null;
 		}
 
-		// TODO: Properly serialize properties. Priority: Low
-		// There's probably a better way to do this... But fuck it.
-		String userProperties = "";
-		if (session.getUser() != null && session.getUser().getProperties() != null) {
-			userProperties = session.getUser().getProperties().toString();
-		}
+		if (session != null) {
+			// TODO: Properly serialize properties. Priority: Low
+			// There's probably a better way to do this... But fuck it.
+			String userProperties = "";
+			if (session.getUser() != null && session.getUser().getProperties() != null) {
+				userProperties = session.getUser().getProperties().toString();
+			}
 
-		// Get Twitch Access Token
-		String twitchToken = "";
-		if (userProperties.contains("twitch_access_token")) {
-			int start = userProperties.indexOf("twitch_access_token") + 30;
-			twitchToken = String.format("\"twitch_access_token\":[\"%s\"]", userProperties.substring(start, start + 31));
-		}
+			// Get Twitch Access Token
+			String twitchToken = "";
+			if (userProperties.contains("twitch_access_token")) {
+				int start = userProperties.indexOf("twitch_access_token") + 30;
+				twitchToken = String.format("\"twitch_access_token\":[\"%s\"]", userProperties.substring(start, start + 31));
+			}
 
-		Map<String, String> map = new HashMap();
-		map.put("auth_access_token", session.getAccessToken());
-		map.put("user_properties", String.format("{%s}", twitchToken));
-		if (session.getSessionId() != null) {
+			map.put("auth_access_token", session.getAccessToken());
+			map.put("user_properties", String.format("{%s}", twitchToken));
 			map.put("auth_session", session.getSessionId());
-		} else {
-			map.put("auth_session", "-");
-		}
-		if (session.getSelectedProfile().getId() != null) {
 			map.put("auth_player_name", session.getSelectedProfile().getName());
 			map.put("auth_uuid", session.getSelectedProfile().getId());
 			map.put("user_type", session.getSelectedProfile().isLegacy() ? "legacy" : "mojang");
 		} else {
+			map.put("auth_session", "-");
 			map.put("auth_player_name", "Player");
 			map.put("auth_uuid", new UUID(0L, 0L).toString());
 			map.put("user_type", "legacy");
+			map.put("user_properties", "{}");
 		}
+
 		map.put("profile_name", packName);
 		map.put("version_name", version.getId());
 

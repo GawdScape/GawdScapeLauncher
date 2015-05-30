@@ -1,10 +1,13 @@
 package com.gawdscape.launcher;
 
 import com.gawdscape.json.modpacks.ModPack;
+import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.ImageUtils;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
+import com.sun.management.OperatingSystemMXBean;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -17,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class OptionsDialog extends javax.swing.JDialog {
 
-	private static long maxMemoryMB;
+	private final long maxMemoryMB;
 
 	/**
 	 * Creates new form OptionsDialog
@@ -27,7 +30,7 @@ public class OptionsDialog extends javax.swing.JDialog {
 	 */
 	public OptionsDialog(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
-		maxMemoryMB = ((com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalPhysicalMemorySize() / 1048576L;
+		maxMemoryMB = ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalPhysicalMemorySize() / 1048576L;
 		initComponents();
 		setLocationRelativeTo(parent);
 	}
@@ -464,6 +467,9 @@ public class OptionsDialog extends javax.swing.JDialog {
 				windowHeight.getText()
 		);
 		Config.saveConfig(GawdScapeLauncher.config);
+		if (resourcePackCheckBox.isSelected()) {
+			new File(GawdScapeLauncher.config.getGameDir(), "resourcepacks").mkdirs();
+		}
 		dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 
@@ -519,33 +525,34 @@ public class OptionsDialog extends javax.swing.JDialog {
 
     private void addPackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPackButtonActionPerformed
 		String url = JOptionPane.showInputDialog(this, "Enter Mod Pack URL:");
-		if (url == null || url.isEmpty())
+		if (url == null || url.isEmpty()) {
 			return;
-		if (url.endsWith("/"))
+		}
+		if (url.endsWith("/")) {
 			url = url.substring(0, url.length() - 1);
+		}
 		try {
 			String json = JsonUtils.readJsonFromUrl(url + "/pack.json");
 			ModPack pack = JsonUtils.getGson().fromJson(json, ModPack.class);
-			if (pack != null &&
-					(pack.getId() != null
+			if (pack != null
+					&& (pack.getId() != null
 					&& pack.getVersion() != null
-					&& pack.getMinecraftVersion() != null)
-			) {
+					&& pack.getMinecraftVersion() != null)) {
 				int accept = JOptionPane.showConfirmDialog(this,
-						"Do you want to add Mod Pack?\n" +
-						pack.getId() +
-						"\nVersion: " + pack.getVersion() +
-						"\nMinecraft: " + pack.getMinecraftVersion() +
-						"\nLibraries: " + pack.getLibraries() +
-						"\nMods: " + pack.getMods() +
-						"\nMain Class: " + pack.getMainClass() +
-						"\nArguments: " + pack.getMinecraftArguments() +
-						"\nGawdMod: " + pack.getGawdModVersion());
+						"Do you want to add Mod Pack?\n"
+						+ pack.getId()
+						+ "\nVersion: " + pack.getVersion()
+						+ "\nMinecraft: " + pack.getMinecraftVersion()
+						+ "\nLibraries: " + pack.getLibraries()
+						+ "\nMods: " + pack.getMods()
+						+ "\nMain Class: " + pack.getMainClass()
+						+ "\nArguments: " + pack.getMinecraftArguments()
+						+ "\nGawdMod: " + pack.getGawdModVersion());
 				if (accept == JOptionPane.YES_OPTION) {
 					GawdScapeLauncher.modpacks.addCustomPack(pack.getId(), url);
 					JOptionPane.showMessageDialog(this,
-							"Added Mod Pack: " + pack.getId() +
-							"\nYou will need to restart the Launcher.");
+							"Added Mod Pack: " + pack.getId()
+							+ "\nYou will need to restart the Launcher.");
 				}
 			}
 		} catch (FileNotFoundException ex) {

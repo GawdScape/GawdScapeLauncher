@@ -73,7 +73,7 @@ public class Log {
 		log(Level.FINE, text);
 	}
 
-	public static void benchmark (String text, long start) {
+	public static void benchmark(String text, long start) {
 		long end = System.currentTimeMillis();
 		finest(text + (end - start) + "ms");
 	}

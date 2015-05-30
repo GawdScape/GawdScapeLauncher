@@ -290,9 +290,8 @@ public class LogFrame extends javax.swing.JFrame {
 			return;
 		}
 		if (text.contains("http://")
-			|| text.contains("https://")
-			|| text.contains("www.")
-		) {
+				|| text.contains("https://")
+				|| text.contains("www.")) {
 			int start = text.indexOf("http://");
 			if (start < 0) {
 				start = text.indexOf("https://");
@@ -361,8 +360,8 @@ public class LogFrame extends javax.swing.JFrame {
 	}
 
 	private void initText() {
-		print("GawdScape Launcher [Version " + Constants.VERSION + "]\n" +
-				"(c) " + Constants.THIS_YEAR + " GawdScape Networks.\n\n", null);
+		print("GawdScape Launcher [Version " + Constants.VERSION + "]\n"
+				+ "(c) " + Constants.THIS_YEAR + " GawdScape Networks.\n\n", null);
 	}
 
 	private class URLLinkAction extends AbstractAction {

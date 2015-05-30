@@ -10,6 +10,7 @@ import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 
@@ -54,24 +55,44 @@ public class GawdScapeLauncher {
 		Log.benchmark("Config took ", startTime2);
 
 		/* Create and display the form */
-		startTime2 = System.currentTimeMillis();
 		if (config.getShowLog()) {
+			startTime2 = System.currentTimeMillis();
 			Log.info("Initializing Log.");
 			Log.showLog = config.getShowLog();
 			logFrame = new LogFrame(config.getColorLog(), config.getLinkLog());
 			logFrame.setVisible(true);
+			Log.benchmark("Log took ", startTime2);
 		}
-		Log.benchmark("Log took ", startTime2);
+
+		startTime2 = System.currentTimeMillis();
+		try {
+			InetAddress.getByName("authserver.mojang.com");
+		} catch (UnknownHostException ex) {
+			offlineMode = true;
+			Log.warning("Auth server offline. Enabling offline mode.");
+		}
+		Log.benchmark("Auth Server ping took ", startTime2);
 
 		// Get list of mod packs
 		startTime2 = System.currentTimeMillis();
 		modpacks = new ModPackManager();
 
+		if (offlineMode) {
+			try {
+				modpacks.loadLocalPacks();
+				modpacks.loadCustomPacks();
+				launcherFrame = new LauncherFrame(false);
+				launcherFrame.setOffline();
+				launcherFrame.setVisible(true);
+				Log.benchmark("Opened GawdScape Launcher in ", startTime);
+			} catch (IOException ex) {
+				Log.error("Error loading local mod pack index.", ex);
+			}
+			return;
+		}
+
 		try {
 			modpacks.downloadPacks();
-		} catch (UnknownHostException e) {
-			offlineMode = true;
-			Log.severe("Error connecting to mod pack server.");
 		} catch (IOException ex) {
 			Log.error("Error downloading mod pack index.", ex);
 		}
@@ -81,20 +102,7 @@ public class GawdScapeLauncher {
 		} catch (IOException ex) {
 			Log.error("Error loading custom mod pack index.", ex);
 		}
-		Log.benchmark("Mod Packs took ", startTime2);
-
-		if (offlineMode) {
-			try {
-				modpacks.loadLocalPacks();
-				launcherFrame = new LauncherFrame();
-				launcherFrame.setVisible(true);
-				Log.benchmark("Opened GawdScape Launcher in ", startTime);
-			} catch (IOException ex) {
-				Log.error("Error loading local mod pack index.", ex);
-			}
-			return;
-		}
-		
+		Log.benchmark("Loaded mod packs in ", startTime2);
 
 		SessionManager sessionManager = SessionManager.loadSessions();
 
@@ -104,31 +112,32 @@ public class GawdScapeLauncher {
 			startTime2 = System.currentTimeMillis();
 			Log.info("Session found. Refreshing session for " + sessionManager.getAutoLoginUser());
 			session = AuthManager.refresh(sessionManager.getAutoLoginToken());
-			sessionManager.addSession(session);
-			SessionManager.saveSessions(sessionManager);
 			Log.benchmark("Auto Login took ", startTime2);
 		}
 
-
-		startTime2 = System.currentTimeMillis();
 		// Are we logged in?
 		if (session != null && session.getAccessToken() != null) {
+			sessionManager.addSession(session);
+			SessionManager.saveSessions(sessionManager);
 			// Valid session, continue
 			Log.info("Refreshed session for " + session.getSelectedProfile().getName());
 			// Should we skip the launcher and just launch Minecraft?
 			if (config.getSkipLauncher()) {
-				updater = new Updater();
-				updater.setPack(modpacks.getPackById(config.getDefaultPack()));
+				updater = new Updater(
+						modpacks.getPackById(config.getDefaultPack()));
 				updater.start();
 			} else {
 				// Initalize launcher frame
-				launcherFrame = new LauncherFrame();
+				startTime2 = System.currentTimeMillis();
+				launcherFrame = new LauncherFrame(config.getShowNews());
 				launcherFrame.setUsername(session.getSelectedProfile().getName());
 				launcherFrame.setVisible(true);
+				Log.benchmark("Loaded Launcher Frame in ", startTime2);
 			}
 		} else {
 			// Nope, Login
-			launcherFrame = new LauncherFrame();
+			startTime2 = System.currentTimeMillis();
+			launcherFrame = new LauncherFrame(config.getShowNews());
 			loginDialog = new LoginDialog(launcherFrame, true, sessionManager);
 			if (session != null && session.getError() != null) {
 				loginDialog.setError(session.getErrorMessage());
@@ -136,10 +145,12 @@ public class GawdScapeLauncher {
 				Log.severe(session.getErrorMessage());
 			}
 			loginDialog.setVisible(true);
+			Log.benchmark("Loaded Login Dialog in ", startTime2);
 		}
-		Log.benchmark("Login Check took ", startTime2);
 
+		startTime2 = System.currentTimeMillis();
 		checkLauncherUpdate();
+		Log.benchmark("Launcher update check took ", startTime2);
 
 		Log.benchmark("Opened GawdScape Launcher in ", startTime);
 	}

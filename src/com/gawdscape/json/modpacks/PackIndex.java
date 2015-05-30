@@ -7,6 +7,7 @@ import java.util.List;
  * @author Vinnie
  */
 public class PackIndex {
+
 	private final List<String> packs;
 
 	public PackIndex(List<String> packs) {

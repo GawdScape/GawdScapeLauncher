@@ -8,6 +8,7 @@ import java.util.Set;
  * @author Vinnie
  */
 public class PackIndexCustom {
+
 	private final Map<String, String> packs;
 
 	public PackIndexCustom(Map<String, String> packs) {

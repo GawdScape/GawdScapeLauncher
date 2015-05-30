@@ -21,7 +21,7 @@ For more information refer to the [Wiki](https://github.com/GawdScape/GawdScapeL
 If you are having an issue please post it on the [Issue Tracker](https://github.com/GawdScape/GawdScapeLauncher/issues).
 
 Minimum Requirements:
-- [Java 7](http://www.java.com)
+- [Java 8](http://www.java.com)
 - [A valid Minecraft account](http://www.minecraft.net)
 
 GawdScape Launcher is copyright by GawdScape. | Minecraft is copyright by Mojang. | GSON is copyright Google.

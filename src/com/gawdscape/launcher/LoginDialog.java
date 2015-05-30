@@ -21,6 +21,7 @@ public final class LoginDialog extends javax.swing.JDialog {
 
 	/**
 	 * Creates new form LoginDialog
+	 *
 	 * @param parent
 	 * @param modal
 	 * @param manager

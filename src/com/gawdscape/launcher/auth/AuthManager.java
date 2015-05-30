@@ -4,7 +4,6 @@ import com.gawdscape.json.auth.RefreshRequest;
 import com.gawdscape.json.auth.AuthRequest;
 import com.gawdscape.json.auth.SessionResponse;
 import com.gawdscape.launcher.util.Constants;
-import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.google.gson.Gson;
 import java.io.DataOutputStream;
@@ -21,13 +20,13 @@ import java.nio.charset.Charset;
  */
 public class AuthManager {
 
-	private static final Gson gson = JsonUtils.getGson();
+	private static final Gson gson = new Gson();
 
 	// Login with username and password
 	public static SessionResponse authenticate(String username, String password, String clientToken) {
 		AuthRequest request = new AuthRequest(Constants.MINECRAFT, username, password, clientToken);
 		String result = postJson(Constants.MC_AUTH, gson.toJson(request));
-		Log.fine("Authentication: " + result);
+		Log.finer("Authentication: " + result);
 		SessionResponse response = gson.fromJson(result, SessionResponse.class);
 		return response;
 	}
@@ -35,7 +34,7 @@ public class AuthManager {
 	// Login with UUID and ClientToken
 	public static SessionResponse refresh(RefreshRequest request) {
 		String result = postJson(Constants.MC_REFRESH, gson.toJson(request));
-		Log.fine("Refresh: " + result);
+		Log.finer("Refresh: " + result);
 		SessionResponse response = gson.fromJson(result, SessionResponse.class);
 		return response;
 	}

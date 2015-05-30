@@ -26,17 +26,6 @@ public class DownloadDialog extends javax.swing.JDialog {
 		title.setText(s);
 	}
 
-	public void setExtracting() {
-		title.setText("Extracting natives...");
-		source.setText("");
-		progressBar.setIndeterminate(true);
-		progressLabel.setText("");
-		progress.setText("This may take a few moments...");
-		destinationLabel.setText("Extract to:");
-		destination.setText("");
-		totalProgress.setString("");
-	}
-
 	public void setLaunching() {
 		title.setText("Launching Mod Pack...");
 		source.setText("Enjoy :)");
@@ -48,6 +37,15 @@ public class DownloadDialog extends javax.swing.JDialog {
 	public void setFile(String fileName, String host, String localPath) {
 		fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
 		source.setText(fileName + " from " + host);
+		if (localPath.length() >= 60) {
+			localPath = "..." + localPath.substring(localPath.length() - 57, localPath.length());
+		}
+		destination.setText(localPath);
+	}
+
+	public void setExtractingFile(String fileName, String localPath) {
+		fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+		source.setText(fileName);
 		if (localPath.length() >= 60) {
 			localPath = "..." + localPath.substring(localPath.length() - 57, localPath.length());
 		}
@@ -172,7 +170,7 @@ public class DownloadDialog extends javax.swing.JDialog {
                     .addComponent(destination, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(totalProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(cancel)
                 .addContainerGap())
         );
@@ -185,7 +183,7 @@ public class DownloadDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(downloadPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(downloadPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();

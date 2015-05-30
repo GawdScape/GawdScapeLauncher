@@ -27,6 +27,7 @@ public final class AboutDialog extends javax.swing.JDialog {
 
 	/**
 	 * Creates new form AboutDialog
+	 *
 	 * @param parent
 	 * @param modal
 	 */
@@ -62,8 +63,9 @@ public final class AboutDialog extends javax.swing.JDialog {
 	}
 
 	public String listLibraries(List<Library> libs) {
-		if (libs == null)
+		if (libs == null) {
 			return "[]";
+		}
 		ArrayList<String> output = new ArrayList();
 		libs.stream().forEach((lib) -> {
 			output.add(lib.getName());
@@ -72,8 +74,9 @@ public final class AboutDialog extends javax.swing.JDialog {
 	}
 
 	public String listMods(List<Mod> mods) {
-		if (mods == null)
+		if (mods == null) {
 			return "[]";
+		}
 		ArrayList<String> output = new ArrayList();
 		mods.stream().forEach((mod) -> {
 			output.add(mod.getName());
@@ -425,31 +428,31 @@ public final class AboutDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void issuesLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_issuesLinkMouseClicked
-        OperatingSystem.openLink(Constants.LAUNCHER_ISSUE_LINK);
+		OperatingSystem.openLink(Constants.LAUNCHER_ISSUE_LINK);
     }//GEN-LAST:event_issuesLinkMouseClicked
 
     private void wikiLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_wikiLinkMouseClicked
-        OperatingSystem.openLink(Constants.LAUNCHER_WIKI_LINK);
+		OperatingSystem.openLink(Constants.LAUNCHER_WIKI_LINK);
     }//GEN-LAST:event_wikiLinkMouseClicked
 
     private void githubLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_githubLinkMouseClicked
-        OperatingSystem.openLink(Constants.GS_GITHUB_LINK);
+		OperatingSystem.openLink(Constants.GS_GITHUB_LINK);
     }//GEN-LAST:event_githubLinkMouseClicked
 
     private void forumsLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_forumsLinkMouseClicked
-        OperatingSystem.openLink(Constants.GS_FORUM_LINK);
+		OperatingSystem.openLink(Constants.GS_FORUM_LINK);
     }//GEN-LAST:event_forumsLinkMouseClicked
 
     private void gameDirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gameDirMouseClicked
-        OperatingSystem.openFolder(GawdScapeLauncher.config.getGameDirectory());
+		OperatingSystem.openFolder(GawdScapeLauncher.config.getGameDirectory());
     }//GEN-LAST:event_gameDirMouseClicked
 
     private void directoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_directoryMouseClicked
-        OperatingSystem.openFolder(Directories.getWorkingDirectory());
+		OperatingSystem.openFolder(Directories.getWorkingDirectory());
     }//GEN-LAST:event_directoryMouseClicked
 
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        dispose();
+		dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -16,7 +16,8 @@ import java.util.Set;
  * @author Vinnie
  */
 public class ModPackManager {
-	public static final String packURL = "http://localhost/packIndex.json";//Constants.GS_PACK_URL + "Index/packs.json";
+
+	public static final String packURL = Constants.GS_PACK_URL + "Index/packs.json";
 	public static final File packFile = new File(Directories.getPackDataPath(), "packIndex.json");
 	public static final File customPackFile = new File(Directories.getPackDataPath(), "packIndexCustom.json");
 	public final HashMap<String, String> packs;
@@ -29,32 +30,38 @@ public class ModPackManager {
 		return packs.size();
 	}
 
-    public Set<String> getPacks() {
-        return packs.keySet();
-    }
+	public Set<String> getPacks() {
+		return packs.keySet();
+	}
 
 	public void downloadPacks() throws IOException {
 		String json = JsonUtils.readJsonFromUrl(packURL);
 		PackIndex index = JsonUtils.getGson().fromJson(json, PackIndex.class);
 		index.getModPacks().stream().forEach(
-				(pack) -> {packs.put(pack, Constants.GS_PACK_URL + pack);}
+				(pack) -> {
+					packs.put(pack, Constants.GS_PACK_URL + pack);
+				}
 		);
 		savePacks(index);
 	}
 
 	public void loadLocalPacks() throws IOException {
-		if (!packFile.exists())
+		if (!packFile.exists()) {
 			return;
+		}
 		String json = JsonUtils.readJsonFromFile(packFile);
 		PackIndex index = JsonUtils.getGson().fromJson(json, PackIndex.class);
 		index.getModPacks().stream().forEach(
-				(pack) -> {packs.put(pack, Constants.GS_PACK_URL + pack);}
+				(pack) -> {
+					packs.put(pack, Constants.GS_PACK_URL + pack);
+				}
 		);
 	}
 
 	public void loadCustomPacks() throws IOException {
-		if (!customPackFile.exists())
+		if (!customPackFile.exists()) {
 			return;
+		}
 		String json = JsonUtils.readJsonFromFile(customPackFile);
 		PackIndexCustom index = JsonUtils.getGson().fromJson(json, PackIndexCustom.class);
 		packs.putAll(index.getPackMap());

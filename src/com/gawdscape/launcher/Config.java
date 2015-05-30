@@ -6,6 +6,7 @@ import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -237,6 +238,8 @@ public class Config {
 		String configJson = "";
 		try {
 			configJson = JsonUtils.readJsonFromFile(configFile);
+		} catch (FileNotFoundException ex) {
+			Log.warning("Missing config file.");
 		} catch (IOException ex) {
 			Log.error("Error loading launcher configuration.", ex);
 		}

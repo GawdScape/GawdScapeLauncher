@@ -7,26 +7,13 @@ import com.gawdscape.json.game.Library;
 import com.gawdscape.json.game.Mod;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
-import com.gawdscape.launcher.util.FileUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
-import java.util.jar.JarOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 /**
  *
@@ -38,6 +25,7 @@ public class DownloadManager {
 	public static ExecutorService pool = Executors.newFixedThreadPool(processorCores * 2);
 	public static int poolSize = 0;
 	public static int thisFile = 0;
+	public static String mcVer;
 
 	public static DownloadDialog downloadDialog;
 
@@ -55,6 +43,16 @@ public class DownloadManager {
 		pool.submit(new DownloadTask(url, toPath));
 	}
 
+	public static void addMinecraftToQueue(String url, String toPath) {
+		poolSize++;
+		pool.submit(new DownloadMinecraftTask(url, toPath, mcVer));
+	}
+
+	public static void addNativeToQueue(String url, String toPath) {
+		poolSize++;
+		pool.submit(new DownloadNativeTask(url, toPath, mcVer));
+	}
+
 	public static boolean completeQueue() {
 		pool.shutdown();
 		try {
@@ -67,26 +65,26 @@ public class DownloadManager {
 	}
 
 	public static void queueAssets(AssetIndex index) {
-		index.getUniqueObjects().stream().map((object) -> 
-				object.getHash().substring(0, 2) + "/" + object.getHash())
+		index.getUniqueObjects().stream().map((object)
+				-> object.getHash().substring(0, 2) + "/" + object.getHash())
 				.forEach((filename) -> {
-			addToQueue(
-					Constants.MC_ASSET_URL + filename,
-					Directories.getAssetObjectPath() + filename
-			);
-		});
+					addToQueue(
+							Constants.MC_ASSET_URL + filename,
+							Directories.getAssetObjectPath() + filename
+					);
+				});
 	}
 
-	public static void queueMinecraft(String version) {
-		addToQueue(
-				Constants.getMcJar(version),
-				Directories.getMcJar(version)
+	public static void queueMinecraft() {
+		addMinecraftToQueue(
+				Constants.getMcJar(mcVer),
+				Directories.getMcJar(mcVer)
 		);
 	}
 
 	public static void queueGawdMod(String mcVer, String gmVer) {
 		addToQueue(
-				Constants.GS_MOD_URL + gmVer + "/" + mcVer + ".jar",
+				Constants.getGawdModJar(gmVer, mcVer),
 				Directories.getGawdModJar(gmVer, mcVer)
 		);
 	}
@@ -103,7 +101,7 @@ public class DownloadManager {
 					if (path.contains("${arch}")) {
 						path = path.replace("${arch}", OperatingSystem.getArchDataModel());
 					}
-					addToQueue(
+					addNativeToQueue(
 							library.getDownloadUrl() + path,
 							Directories.getLibraryPath() + path
 					);
@@ -125,110 +123,9 @@ public class DownloadManager {
 			addToQueue(
 					mod.getDownloadUrl() + mod.getArtifactPath(),
 					GawdScapeLauncher.config.getGameDir(packName)
-							+ File.separator + "mods"
-							+ File.separator + mod.getArtifactFilename(null)
+					+ File.separator + "mods"
+					+ File.separator + mod.getArtifactFilename(null)
 			);
 		});
-	}
-
-	public static void extractNatives(String mcVer, Collection<Library> mcLibraries) {
-		File nativesDir = new File(Directories.getNativesPath(mcVer));
-		if (nativesDir.exists()) {
-			try {
-				FileUtils.delete(nativesDir);
-			} catch (IOException ex) {
-				Log.error("Error deleting old natives directory", ex);
-			}
-		}
-		downloadDialog.setExtracting();
-		if (mcLibraries != null) {
-			mcLibraries.stream().filter((library) -> (library.getNatives() != null)).forEach((library) -> {
-				String natives = library.getNatives().get(OperatingSystem.getCurrentPlatform());
-				if (natives != null) {
-					String path = library.getArtifactPath(natives);
-					if (path.contains("${arch}")) {
-						path = path.replace("${arch}", OperatingSystem.getArchDataModel());
-					}
-					try {
-						unZipNazives(mcVer, path);
-					} catch (IOException ex) {
-						Log.error("Error extracting " + path, ex);
-					}
-				}
-			});
-		}
-	}
-
-	public static void unZipNazives(String mcVer, String path) throws IOException {
-		File archive = new File(Directories.getLibraryPath(), path);
-		Log.info("Starting to extract " + archive.toString());
-		ZipFile zip = new JarFile(archive);
-		Enumeration entries = zip.entries();
-		while (entries.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) entries.nextElement();
-			File target = new File(Directories.getNativesPath(mcVer), entry.getName());
-			downloadDialog.setFile(target.getName(), archive.getName(), target.getParent());
-
-			if (entry.getName().contains("META-INF")) {
-				continue;
-			}
-
-			target.getParentFile().mkdirs();
-
-			if (!entry.isDirectory()) {
-				BufferedInputStream inputStream = new BufferedInputStream(zip.getInputStream(entry));
-
-				byte[] buffer = new byte[2048];
-				FileOutputStream outputStream = new FileOutputStream(target);
-				try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream)) {
-					int length;
-					while ((length = inputStream.read(buffer, 0, buffer.length)) != -1) {
-						bufferedOutputStream.write(buffer, 0, length);
-					}
-				} finally {
-					outputStream.close();
-					inputStream.close();
-				}
-			}
-		}
-	}
-
-	public static void removeMinecraftMetaInf(String ver) {
-		Log.info("Removing META-INF from minecraft-" + ver + ".jar...");
-		downloadDialog.changeTitle("Removing META-INF...");
-		File inputFile = new File(Directories.getMcJar(ver));
-		File outputTmpFile = new File(Directories.getMcJar(ver) + ".tmp");
-
-		downloadDialog.setFile("/META-INF", inputFile.getName(), outputTmpFile.toString());
-
-		try (
-				JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
-				JarOutputStream output = new JarOutputStream(new FileOutputStream(outputTmpFile))
-		) {
-			JarEntry entry;
-			while ((entry = input.getNextJarEntry()) != null) {
-				if (entry.getName().contains("META-INF")) {
-					continue;
-				}
-				output.putNextEntry(entry);
-				byte[] buffer = new byte[1024];
-				int length;
-				while ((length = input.read(buffer, 0, buffer.length)) != -1) {
-					output.write(buffer, 0, length);
-				}
-				output.closeEntry();
-			}
-			output.close();
-			input.close();
-
-			if (!inputFile.delete()) {
-				Log.severe("Failed to delete minecraft-" + ver + ".jar");
-			}
-			if (!outputTmpFile.renameTo(inputFile)) {
-				Log.severe("Failed to rename minecraft-" + ver + ".jar.tmp");
-			}
-		} catch (IOException e) {
-			Log.error("Error removing META-INF", e);
-		}
 	}
 }

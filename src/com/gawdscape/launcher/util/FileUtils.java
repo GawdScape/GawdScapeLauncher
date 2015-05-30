@@ -62,6 +62,8 @@ public class FileUtils {
 			ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 			FileOutputStream fos = new FileOutputStream(destination);
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+			fos.close();
+			rbc.close();
 		} catch (FileNotFoundException ex) {
 			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (MalformedURLException ex) {
@@ -84,6 +86,7 @@ public class FileUtils {
 			}
 			byte[] hash = md.digest();
 			checksum = new BigInteger(1, hash).toString(16); //don't use this, truncates leading zero
+			fis.close();
 		} catch (IOException ex) {
 			Log.error("Error hashing file", ex);
 		} catch (NoSuchAlgorithmException ex) {
