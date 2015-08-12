@@ -5,6 +5,7 @@ import com.gawdscape.launcher.GawdScapeLauncher;
 import com.gawdscape.json.game.AssetIndex;
 import com.gawdscape.json.game.Library;
 import com.gawdscape.json.game.Mod;
+import com.gawdscape.json.modpacks.ModType;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.Log;
@@ -115,6 +116,17 @@ public class DownloadManager {
 		});
 	}
 
+	public static String getModsDir(ModType type) {
+		switch (type) {
+			case COREMOD:
+				return "coremods";
+			case JARMOD:
+				return "bin" + File.separator + "mods";
+			default:
+				return "mods";
+		}
+	}
+
 	public static void queueMods(String packName, Collection<Mod> mods) {
 		if (mods == null) {
 			return;
@@ -123,7 +135,7 @@ public class DownloadManager {
 			addToQueue(
 					mod.getDownloadUrl() + mod.getArtifactPath(),
 					GawdScapeLauncher.config.getGameDir(packName)
-					+ File.separator + "mods"
+					+ File.separator + getModsDir(mod.getType())
 					+ File.separator + mod.getArtifactFilename(null)
 			);
 		});
