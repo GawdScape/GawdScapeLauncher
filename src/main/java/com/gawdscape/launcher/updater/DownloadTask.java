@@ -134,7 +134,7 @@ public class DownloadTask implements Callable, ProgressDelegate {
 
 	@Override
 	public Object call() throws Exception {
-		Log.finer("Strating download of: " + url.toString());
+		Log.finer("Starting download of: " + url.toString());
 		DownloadManager.thisFile++;
 		attemptDownload();
 		DownloadManager.downloadDialog.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);

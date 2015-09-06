@@ -67,9 +67,7 @@ public final class AboutDialog extends javax.swing.JDialog {
 			return "[]";
 		}
 		ArrayList<String> output = new ArrayList();
-		libs.stream().forEach((lib) -> {
-			output.add(lib.getName());
-		});
+		libs.stream().forEach((lib) -> output.add(lib.getName()));
 		return output.toString();
 	}
 
@@ -78,9 +76,7 @@ public final class AboutDialog extends javax.swing.JDialog {
 			return "[]";
 		}
 		ArrayList<String> output = new ArrayList();
-		mods.stream().forEach((mod) -> {
-			output.add(mod.getName());
-		});
+		mods.stream().forEach((mod) -> output.add(mod.getName()));
 		return output.toString();
 	}
 
@@ -167,11 +163,7 @@ public final class AboutDialog extends javax.swing.JDialog {
         description2.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
 
         closeButton.setText("Close");
-        closeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeButtonActionPerformed(evt);
-            }
-        });
+        closeButton.addActionListener(evt -> closeButtonActionPerformed(evt));
 
         copyright.setText("GawdScapeLauncher  Copyright (C) "+Constants.THIS_YEAR+"  GawdScape");
 

@@ -186,7 +186,7 @@ public class Config {
 		return skipLauncher;
 	}
 
-	public boolean getjoinServer() {
+	public boolean getJoinServer() {
 		return joinServer;
 	}
 

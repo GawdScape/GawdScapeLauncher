@@ -52,7 +52,7 @@ public class JsonUtils {
 		}
 	}
 
-	public static String readJsonFromFile(File filePath) throws FileNotFoundException, IOException {
+	public static String readJsonFromFile(File filePath) throws IOException {
 		FileReader rd = new FileReader(filePath);
 		return readAll(rd);
 	}

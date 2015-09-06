@@ -111,26 +111,14 @@ public class LauncherFrame extends javax.swing.JFrame {
         newsPane.setContentType("text/html"); // NOI18N
         newsPane.setText("Loading news...");
         newsPane.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        newsPane.addHyperlinkListener(new javax.swing.event.HyperlinkListener() {
-            public void hyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {
-                newsPaneHyperlinkUpdate(evt);
-            }
-        });
+        newsPane.addHyperlinkListener(evt -> newsPaneHyperlinkUpdate(evt));
         scrollPane.setViewportView(newsPane);
 
         playButton.setText("Play");
-        playButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                playButtonActionPerformed(evt);
-            }
-        });
+        playButton.addActionListener(evt -> playButtonActionPerformed(evt));
 
         optionsButton.setText("Options");
-        optionsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optionsButtonActionPerformed(evt);
-            }
-        });
+        optionsButton.addActionListener(evt -> optionsButtonActionPerformed(evt));
 
         greetingLabel.setText("Welcome back");
         greetingLabel.setFont(greetingLabel.getFont().deriveFont(greetingLabel.getFont().getStyle() | java.awt.Font.BOLD));

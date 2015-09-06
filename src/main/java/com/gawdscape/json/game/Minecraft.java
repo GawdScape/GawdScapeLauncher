@@ -69,9 +69,7 @@ public class Minecraft {
 
 	public Minecraft(Minecraft version) {
 		this(version.getId(), version.getReleaseTime(), version.getUpdatedTime(), version.getType(), version.getMainClass(), version.getMinecraftArguments());
-		version.getLibraries().stream().forEach((lib) -> {
-			libraries.add(new Library(lib));
-		});
+		version.getLibraries().stream().forEach((lib) -> libraries.add(new Library(lib)));
 	}
 
 	public Minecraft(Minecraft version, String mainClass, String minecraftArguments) {
@@ -132,18 +130,14 @@ public class Minecraft {
 
 	public Collection<Library> getRelevantLibraries() {
 		List<Library> result = new ArrayList();
-		libraries.stream().filter((lib) -> (lib.appliesToCurrentEnvironment())).forEach((lib) -> {
-			result.add(lib);
-		});
+		libraries.stream().filter((lib) -> (lib.appliesToCurrentEnvironment())).forEach(result::add);
 		return result;
 	}
 
 	public Collection<File> getClassPath() {
 		Collection<Library> libs = getRelevantLibraries();
 		Collection<File> result = new ArrayList();
-		libs.stream().filter((lib) -> (lib.getNatives() == null)).forEach((lib) -> {
-			result.add(new File(Directories.getLibraryPath(), lib.getArtifactPath()));
-		});
+		libs.stream().filter((lib) -> (lib.getNatives() == null)).forEach((lib) -> result.add(new File(Directories.getLibraryPath(), lib.getArtifactPath())));
 		return result;
 	}
 

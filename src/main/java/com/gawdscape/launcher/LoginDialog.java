@@ -9,7 +9,6 @@ import com.gawdscape.launcher.util.ImageUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
 import java.awt.Color;
-import java.util.Iterator;
 
 /**
  *
@@ -65,7 +64,7 @@ public final class LoginDialog extends javax.swing.JDialog {
         });
 
         infoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        infoLabel.setText("<html>Please login using your Minecraft acccount.");
+        infoLabel.setText("<html>Please login using your Minecraft account.");
 
         usernameLabel.setText("Username or Email:");
 
@@ -74,11 +73,7 @@ public final class LoginDialog extends javax.swing.JDialog {
         rememberCheckBox.setText("Remember account?");
 
         loginButton.setText("Login");
-        loginButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginButtonActionPerformed(evt);
-            }
-        });
+        loginButton.addActionListener(evt -> loginButtonActionPerformed(evt));
 
         helpLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         helpLabel.setText("Launcher Help");
@@ -99,18 +94,10 @@ public final class LoginDialog extends javax.swing.JDialog {
         });
 
         usernameComboBox.setEditable(true);
-        usernameComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                usernameComboBoxActionPerformed(evt);
-            }
-        });
+        usernameComboBox.addActionListener(evt -> usernameComboBoxActionPerformed(evt));
 
         autoLoginCheckBox.setText("Auto login?");
-        autoLoginCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                autoLoginCheckBoxActionPerformed(evt);
-            }
-        });
+        autoLoginCheckBox.addActionListener(evt -> autoLoginCheckBoxActionPerformed(evt));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -213,10 +200,9 @@ public final class LoginDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_usernameComboBoxActionPerformed
 
 	public void loadUsers() {
-		Iterator it = sessionManager.getSavedUsernames().iterator();
-		while (it.hasNext()) {
-			usernameComboBox.addItem(it.next());
-		}
+        for (String username : sessionManager.getSavedUsernames()) {
+            usernameComboBox.addItem(username);
+        }
 		if (sessionManager.getLastUser() != null) {
 			usernameComboBox.setSelectedItem(sessionManager.getLastUser());
 		}

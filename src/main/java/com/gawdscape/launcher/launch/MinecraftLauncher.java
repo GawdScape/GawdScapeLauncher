@@ -84,7 +84,7 @@ public class MinecraftLauncher implements MinecraftExit {
 			processLauncher.addCommands("--fullscreen");
 		}
 
-		if (config.getjoinServer()) {
+		if (config.getJoinServer()) {
 			String ip = config.getServerIP();
 			if (ip.contains(":")) {
 				String[] socket = ip.split(":");

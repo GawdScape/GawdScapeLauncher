@@ -65,11 +65,11 @@ public class FileUtils {
 			fos.close();
 			rbc.close();
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, "Error: File Not Found", ex);
 		} catch (MalformedURLException ex) {
-			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, "Error: Invalid URL", ex);
 		} catch (IOException ex) {
-			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, "IO Error", ex);
 		}
 	}
 

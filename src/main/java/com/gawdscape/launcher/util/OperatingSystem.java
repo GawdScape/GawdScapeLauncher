@@ -16,7 +16,7 @@ public enum OperatingSystem {
 	private final String name;
 	private final String[] aliases;
 
-	private OperatingSystem(String name, String... aliases) {
+	OperatingSystem(String name, String... aliases) {
 		this.name = name;
 		this.aliases = (aliases == null ? new String[0] : aliases);
 	}
@@ -62,8 +62,8 @@ public enum OperatingSystem {
 	public static void openLink(URI link) {
 		try {
 			Class<?> desktopClass = Class.forName("java.awt.Desktop");
-			Object o = desktopClass.getMethod("getDesktop", new Class[0]).invoke(null, new Object[0]);
-			desktopClass.getMethod("browse", new Class[]{URI.class}).invoke(o, new Object[]{link});
+			Object desktop = desktopClass.getMethod("getDesktop", null).invoke(null);
+			desktopClass.getMethod("browse", URI.class).invoke(desktop, link);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			Log.error("Failed to open link " + link.toString(), e);
 		}
@@ -81,7 +81,7 @@ public enum OperatingSystem {
 				Log.error("Couldn't open " + path + " through /usr/bin/open", e);
 			}
 		} else if (os == WINDOWS) {
-			String cmd = String.format("cmd.exe /C start \"Open file\" \"%s\"", new Object[]{absolutePath});
+			String cmd = String.format("cmd.exe /C start \"Open file\" \"%s\"", absolutePath);
 			try {
 				Runtime.getRuntime().exec(cmd);
 				return;
@@ -91,8 +91,8 @@ public enum OperatingSystem {
 		}
 		try {
 			Class<?> desktopClass = Class.forName("java.awt.Desktop");
-			Object desktop = desktopClass.getMethod("getDesktop", new Class[0]).invoke(null, new Object[0]);
-			desktopClass.getMethod("browse", new Class[]{URI.class}).invoke(desktop, new Object[]{path.toURI()});
+			Object desktop = desktopClass.getMethod("getDesktop", null).invoke(null);
+			desktopClass.getMethod("browse", URI.class).invoke(desktop, path.toURI());
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			Log.error("Couldn't open " + path + " through Desktop.browse()", e);
 		}

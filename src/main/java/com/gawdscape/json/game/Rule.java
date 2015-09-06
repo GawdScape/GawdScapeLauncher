@@ -13,11 +13,11 @@ public class Rule {
 	public Rule() {
 	}
 
-	public static enum Action {
+	public enum Action {
 
 		ALLOW, DISALLOW;
 
-		private Action() {
+		Action() {
 		}
 	}
 

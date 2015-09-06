@@ -35,7 +35,7 @@ public class Constants {
 	public static final URI LAUNCHER_ISSUE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/issues");
 	public static final URI MC_BUY_LINK = constantURI("https://minecraft.net/store/minecraft");
 
-	public static String GS_SERVER_IP = "server.gawdscape.com";
+	public static final String GS_SERVER_IP = "server.gawdscape.com";
 
 	public static URI constantURI(String input) {
 		try {

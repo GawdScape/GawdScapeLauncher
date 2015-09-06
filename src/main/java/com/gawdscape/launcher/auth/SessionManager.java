@@ -69,17 +69,11 @@ public class SessionManager {
 	}
 
 	public boolean isAutoLoginUser(String username) {
-		if (autoLoginUser == null) {
-			return false;
-		}
-		return autoLoginUser.equals(username);
+		return autoLoginUser != null && autoLoginUser.equals(username);
 	}
 
 	public boolean shouldAutoLogin() {
-		if (autoLoginUser != null) {
-			return sessions.containsKey(autoLoginUser);
-		}
-		return false;
+		return autoLoginUser != null && sessions.containsKey(autoLoginUser);
 	}
 
 	public static SessionManager loadSessions() {

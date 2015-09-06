@@ -60,7 +60,7 @@ public class DownloadNativeTask extends DownloadTask {
 
 	@Override
 	public Object call() throws Exception {
-		Log.finer("Strating download of native: " + url.toString());
+		Log.finer("Starting download of native: " + url.toString());
 		DownloadManager.thisFile++;
 		if (attemptDownload()) {
 			try {

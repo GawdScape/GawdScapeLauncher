@@ -27,22 +27,20 @@ public class AuthManager {
 		AuthRequest request = new AuthRequest(Constants.MINECRAFT, username, password, clientToken);
 		String result = postJson(Constants.MC_AUTH, gson.toJson(request));
 		Log.finer("Authentication: " + result);
-		SessionResponse response = gson.fromJson(result, SessionResponse.class);
-		return response;
+		return gson.fromJson(result, SessionResponse.class);
 	}
 
 	// Login with UUID and ClientToken
 	public static SessionResponse refresh(RefreshRequest request) {
 		String result = postJson(Constants.MC_REFRESH, gson.toJson(request));
 		Log.finer("Refresh: " + result);
-		SessionResponse response = gson.fromJson(result, SessionResponse.class);
-		return response;
+		return gson.fromJson(result, SessionResponse.class);
 	}
 
 	private static String postJson(URL url, String json) {
 		try {
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			byte[] payloadAsBytes = json.getBytes(Charset.forName("UTF-8"));
+			byte[] payloadAsBytes = json.getBytes("UTF-8");
 
 			conn.setConnectTimeout(15000);
 			conn.setReadTimeout(15000);

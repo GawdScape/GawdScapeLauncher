@@ -59,10 +59,10 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="launcherSetingsPanel" max="32767" attributes="0"/>
+                      <Component id="launcherSettingsPanel" max="32767" attributes="0"/>
                       <Component id="titleLabel" max="32767" attributes="0"/>
-                      <Component id="logSetingsPanel" alignment="0" max="32767" attributes="0"/>
-                      <Component id="gameSetingsPanel" alignment="0" max="32767" attributes="0"/>
+                      <Component id="logSettingsPanel" alignment="0" max="32767" attributes="0"/>
+                      <Component id="gameSettingsPanel" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
@@ -94,11 +94,11 @@
                   <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="titleLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="launcherSetingsPanel" min="-2" max="-2" attributes="0"/>
+                  <Component id="launcherSettingsPanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="logSetingsPanel" min="-2" max="-2" attributes="0"/>
+                  <Component id="logSettingsPanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="gameSetingsPanel" min="-2" max="-2" attributes="0"/>
+                  <Component id="gameSettingsPanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="javaButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -162,7 +162,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveButtonActionPerformed"/>
           </Events>
         </Component>
-        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="launcherSetingsPanel">
+        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="launcherSettingsPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -219,7 +219,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="logSetingsPanel">
+        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="logSettingsPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -305,7 +305,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="gameSetingsPanel">
+        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="gameSettingsPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -490,7 +490,7 @@
             <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="joinServerCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="GawdScapeLauncher.config.getjoinServer()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getJoinServer()" type="code"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Join Server on Launch"/>
                 <Property name="toolTipText" type="java.lang.String" value="Automatically connect to a server on launch?"/>
@@ -506,7 +506,7 @@
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="IP of Server to Join"/>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="GawdScapeLauncher.config.getjoinServer()" type="code"/>
+                  <Connection code="GawdScapeLauncher.config.getJoinServer()" type="code"/>
                 </Property>
               </Properties>
             </Component>

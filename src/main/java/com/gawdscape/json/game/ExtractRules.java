@@ -25,9 +25,7 @@ public class ExtractRules {
 
 	public ExtractRules(ExtractRules rules) {
 		this.exclude = new ArrayList();
-		exclude.stream().forEach((exclud) -> {
-			exclude.add(exclud);
-		});
+		exclude.stream().forEach(exclude::add);
 	}
 
 	public List<String> getExcludes() {
@@ -35,9 +33,6 @@ public class ExtractRules {
 	}
 
 	public boolean shouldExtract(String path) {
-		if (exclude == null) {
-			return true;
-		}
-		return exclude.stream().noneMatch((rule) -> (path.startsWith(rule)));
+		return exclude == null || exclude.stream().noneMatch((rule) -> (path.startsWith(rule)));
 	}
 }

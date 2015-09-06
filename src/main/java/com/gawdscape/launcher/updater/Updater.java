@@ -204,7 +204,7 @@ public class Updater extends Thread {
 					Directories.getNativesPath(minecraft.getId())));
 		} catch (FileNotFoundException ex) {
 		} catch (IOException ex) {
-			Log.error("Error deleteing natives directory", ex);
+			Log.error("Error deleting natives directory", ex);
 		}
 
 		DownloadManager.queueLibraries(minecraft.getRelevantLibraries());
@@ -237,7 +237,7 @@ public class Updater extends Thread {
 					GawdScapeLauncher.config.getGameDir(packName), "mods"));
 		} catch (FileNotFoundException ex) {
 		} catch (IOException ex) {
-			Log.error("Error deleteing mods directory", ex);
+			Log.error("Error deleting mods directory", ex);
 		}
 
 		// Download Mod pack
@@ -253,9 +253,7 @@ public class Updater extends Thread {
 		// Save gawdscape.json to indicate we're up to date
 		saveModPackData();
 
-		java.awt.EventQueue.invokeLater(() -> {
-			DownloadManager.downloadDialog.setLaunching();
-		});
+		java.awt.EventQueue.invokeLater(DownloadManager.downloadDialog::setLaunching);
 		Directories.createGameDirs(
 				GawdScapeLauncher.config.getGameDir(packName));
 		// Try to launch now

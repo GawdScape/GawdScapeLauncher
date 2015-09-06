@@ -21,21 +21,16 @@ public class ProcessMonitorThread
 	@Override
 	public void run() {
 		setName("ProcessMonitor");
-		InputStreamReader reader = new InputStreamReader(process.getRawProcess().getInputStream());
-		BufferedReader buf = new BufferedReader(reader);
 		String line;
-		try {
+		try (
+				InputStreamReader reader = new InputStreamReader(process.getRawProcess().getInputStream(), "UTF-8");
+				BufferedReader buf = new BufferedReader(reader)
+		) {
 			while ((line = buf.readLine()) != null) {
 				Log.println(line);
 			}
 		} catch (IOException ex) {
 			Log.error("Error reading from Minecraft process", ex);
-		} finally {
-			try {
-				reader.close();
-			} catch (IOException ex) {
-				Log.error("", ex);
-			}
 		}
 		MinecraftExit onExit = process.getExitRunnable();
 		if (onExit != null) {

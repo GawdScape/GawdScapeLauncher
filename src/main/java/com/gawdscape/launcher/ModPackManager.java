@@ -38,9 +38,7 @@ public class ModPackManager {
 		String json = JsonUtils.readJsonFromUrl(packURL);
 		PackIndex index = JsonUtils.getGson().fromJson(json, PackIndex.class);
 		index.getModPacks().stream().forEach(
-				(pack) -> {
-					packs.put(pack, Constants.GS_PACK_URL + pack);
-				}
+				(pack) -> packs.put(pack, Constants.GS_PACK_URL + pack)
 		);
 		savePacks(index);
 	}
@@ -52,9 +50,7 @@ public class ModPackManager {
 		String json = JsonUtils.readJsonFromFile(packFile);
 		PackIndex index = JsonUtils.getGson().fromJson(json, PackIndex.class);
 		index.getModPacks().stream().forEach(
-				(pack) -> {
-					packs.put(pack, Constants.GS_PACK_URL + pack);
-				}
+				(pack) -> packs.put(pack, Constants.GS_PACK_URL + pack)
 		);
 	}
 

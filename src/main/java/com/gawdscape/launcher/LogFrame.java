@@ -221,10 +221,7 @@ public class LogFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_logPaneMouseMoved
 
 	public boolean doScroll() {
-		if (logPane.getSelectedText() != null && !logPane.getSelectedText().isEmpty()) {
-			return false;
-		}
-		return scroll;
+		return !(logPane.getSelectedText() != null && !logPane.getSelectedText().isEmpty()) && scroll;
 	}
 
 	public void print(String text, Style style) {

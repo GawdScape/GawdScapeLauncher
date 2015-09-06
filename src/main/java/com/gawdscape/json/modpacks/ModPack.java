@@ -51,12 +51,8 @@ public class ModPack {
 
 	public ModPack(ModPack version) {
 		this(version.getId(), version.getVersion(), version.getMinecraftVersion(), version.getGawdModVersion(), version.getMainClass(), version.getMinecraftArguments());
-		version.getLibraries().stream().forEach((lib) -> {
-			libraries.add(new Library(lib));
-		});
-		version.getMods().stream().forEach((mod) -> {
-			mods.add(new Mod(mod));
-		});
+		version.getLibraries().stream().forEach((lib) -> libraries.add(new Library(lib)));
+		version.getMods().stream().forEach((mod) -> mods.add(new Mod(mod)));
 	}
 
 	public String getId() {
@@ -84,9 +80,7 @@ public class ModPack {
 		if (libraries == null) {
 			return result;
 		}
-		libraries.stream().filter((library) -> (library.appliesToCurrentEnvironment())).forEach((library) -> {
-			result.add(library);
-		});
+		libraries.stream().filter((library) -> (library.appliesToCurrentEnvironment())).forEach(result::add);
 		return result;
 	}
 
@@ -105,9 +99,7 @@ public class ModPack {
 	public Collection<File> getClassPath() {
 		Collection<Library> libs = getRelevantLibraries();
 		Collection<File> result = new ArrayList();
-		libs.stream().filter((lib) -> (lib.getNatives() == null)).forEach((lib) -> {
-			result.add(new File(Directories.getLibraryPath(), lib.getArtifactPath()));
-		});
+		libs.stream().filter((lib) -> (lib.getNatives() == null)).forEach((lib) -> result.add(new File(Directories.getLibraryPath(), lib.getArtifactPath())));
 		return result;
 	}
 

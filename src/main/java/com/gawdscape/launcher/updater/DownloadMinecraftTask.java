@@ -63,7 +63,7 @@ public class DownloadMinecraftTask extends DownloadTask {
 
 	@Override
 	public Object call() throws Exception {
-		Log.finer("Strating download of minecraft: " + url.toString());
+		Log.finer("Starting download of minecraft: " + url.toString());
 		DownloadManager.thisFile++;
 		if (attemptDownload()) {
 			removeMetaInf();

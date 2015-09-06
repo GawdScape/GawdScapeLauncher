@@ -4,6 +4,8 @@ import com.gawdscape.launcher.updater.DownloadManager;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.ImageUtils;
 
+import java.awt.*;
+
 /**
  *
  * @author Vinnie
@@ -100,7 +102,7 @@ public class DownloadDialog extends javax.swing.JDialog {
 
         title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         title.setText("Mod Pack Download");
-        title.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        title.setFont(new java.awt.Font("Tahoma", Font.BOLD, 18)); // NOI18N
 
         source.setText("Preparing for download...");
 
@@ -121,11 +123,7 @@ public class DownloadDialog extends javax.swing.JDialog {
         totalProgress.setStringPainted(true);
 
         cancel.setText("Cancel");
-        cancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelActionPerformed(evt);
-            }
-        });
+        cancel.addActionListener(evt -> cancelActionPerformed(evt));
 
         javax.swing.GroupLayout downloadPanelLayout = new javax.swing.GroupLayout(downloadPanel);
         downloadPanel.setLayout(downloadPanelLayout);

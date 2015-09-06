@@ -39,15 +39,11 @@ public class Library {
 		}
 		if (library.rules != null) {
 			rules = new ArrayList();
-			library.rules.stream().forEach((rule) -> {
-				rules.add(new Rule(rule));
-			});
+			library.rules.stream().forEach((rule) -> rules.add(new Rule(rule)));
 		}
 		if (library.natives != null) {
 			natives = new LinkedHashMap();
-			library.getNatives().entrySet().stream().forEach((entry) -> {
-				natives.put(entry.getKey(), entry.getValue());
-			});
+			library.getNatives().entrySet().stream().forEach((entry) -> natives.put(entry.getKey(), entry.getValue()));
 		}
 	}
 

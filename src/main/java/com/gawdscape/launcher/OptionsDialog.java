@@ -1,12 +1,12 @@
 package com.gawdscape.launcher;
 
 import com.gawdscape.json.modpacks.ModPack;
-import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.ImageUtils;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.Log;
 import com.gawdscape.launcher.util.OperatingSystem;
 import com.sun.management.OperatingSystemMXBean;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -51,15 +51,15 @@ public class OptionsDialog extends javax.swing.JDialog {
         updateButton = new com.gawdscape.launcher.ui.TransparentButton();
         cancelButton = new com.gawdscape.launcher.ui.TransparentButton();
         saveButton = new com.gawdscape.launcher.ui.TransparentButton();
-        launcherSetingsPanel = new com.gawdscape.launcher.ui.TransparentPanel();
+        launcherSettingsPanel = new com.gawdscape.launcher.ui.TransparentPanel();
         newsCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
         skipLauncherCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
-        logSetingsPanel = new com.gawdscape.launcher.ui.TransparentPanel();
+        logSettingsPanel = new com.gawdscape.launcher.ui.TransparentPanel();
         logCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
         closeLogCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
         colorLogCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
         linkLogCheckBox = new com.gawdscape.launcher.ui.TransparentCheckBox();
-        gameSetingsPanel = new com.gawdscape.launcher.ui.TransparentPanel();
+        gameSettingsPanel = new com.gawdscape.launcher.ui.TransparentPanel();
         gameDirLabel = new com.gawdscape.launcher.ui.TransparentLabel();
         browseButton = new com.gawdscape.launcher.ui.TransparentButton();
         gameDirButton = new com.gawdscape.launcher.ui.TransparentButton();
@@ -124,7 +124,7 @@ public class OptionsDialog extends javax.swing.JDialog {
             }
         });
 
-        launcherSetingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Launcher Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+        launcherSettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Launcher Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
 
         newsCheckBox.setSelected(GawdScapeLauncher.config.getShowNews());
         newsCheckBox.setText("Show News");
@@ -134,28 +134,28 @@ public class OptionsDialog extends javax.swing.JDialog {
         skipLauncherCheckBox.setText("One-click Launch");
         skipLauncherCheckBox.setToolTipText("Open Minecraft without using the launcher?");
 
-        javax.swing.GroupLayout launcherSetingsPanelLayout = new javax.swing.GroupLayout(launcherSetingsPanel);
-        launcherSetingsPanel.setLayout(launcherSetingsPanelLayout);
-        launcherSetingsPanelLayout.setHorizontalGroup(
-            launcherSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(launcherSetingsPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout launcherSettingsPanelLayout = new javax.swing.GroupLayout(launcherSettingsPanel);
+        launcherSettingsPanel.setLayout(launcherSettingsPanelLayout);
+        launcherSettingsPanelLayout.setHorizontalGroup(
+            launcherSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(launcherSettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(newsCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(skipLauncherCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        launcherSetingsPanelLayout.setVerticalGroup(
-            launcherSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(launcherSetingsPanelLayout.createSequentialGroup()
+        launcherSettingsPanelLayout.setVerticalGroup(
+            launcherSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(launcherSettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(launcherSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(launcherSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(newsCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(skipLauncherCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        logSetingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Log Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+        logSettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Log Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
 
         logCheckBox.setSelected(GawdScapeLauncher.config.getShowLog());
         logCheckBox.setText("Show Log");
@@ -173,36 +173,36 @@ public class OptionsDialog extends javax.swing.JDialog {
         linkLogCheckBox.setText("Parse Links");
         linkLogCheckBox.setToolTipText("Make links clickable when shown?");
 
-        javax.swing.GroupLayout logSetingsPanelLayout = new javax.swing.GroupLayout(logSetingsPanel);
-        logSetingsPanel.setLayout(logSetingsPanelLayout);
-        logSetingsPanelLayout.setHorizontalGroup(
-            logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(logSetingsPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout logSettingsPanelLayout = new javax.swing.GroupLayout(logSettingsPanel);
+        logSettingsPanel.setLayout(logSettingsPanelLayout);
+        logSettingsPanelLayout.setHorizontalGroup(
+            logSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logSettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(logSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(colorLogCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(logCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 185, Short.MAX_VALUE))
                 .addGap(6, 6, 6)
-                .addGroup(logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(logSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(closeLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 185, Short.MAX_VALUE)
                     .addComponent(linkLogCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        logSetingsPanelLayout.setVerticalGroup(
-            logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(logSetingsPanelLayout.createSequentialGroup()
+        logSettingsPanelLayout.setVerticalGroup(
+            logSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logSettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(logSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(closeLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(logSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(logSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(colorLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(linkLogCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        gameSetingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Game Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+        gameSettingsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Game Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
 
         gameDirLabel.setText("Game Directory:");
 
@@ -248,7 +248,7 @@ public class OptionsDialog extends javax.swing.JDialog {
         maxMemoryLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         maxMemoryLabel.setText((maxMemoryMB) + " MB");
 
-        joinServerCheckBox.setSelected(GawdScapeLauncher.config.getjoinServer());
+        joinServerCheckBox.setSelected(GawdScapeLauncher.config.getJoinServer());
         joinServerCheckBox.setText("Join Server on Launch");
         joinServerCheckBox.setToolTipText("Automatically connect to a server on launch?");
         joinServerCheckBox.addItemListener(new java.awt.event.ItemListener() {
@@ -259,7 +259,7 @@ public class OptionsDialog extends javax.swing.JDialog {
 
         serverIP.setText(GawdScapeLauncher.config.getServerIP());
         serverIP.setToolTipText("IP of Server to Join");
-        serverIP.setEnabled(GawdScapeLauncher.config.getjoinServer());
+        serverIP.setEnabled(GawdScapeLauncher.config.getJoinServer());
 
         windowSizeCheckBox.setSelected(GawdScapeLauncher.config.getWindowSize());
         windowSizeCheckBox.setText("Set Minecraft Window Size");
@@ -288,38 +288,38 @@ public class OptionsDialog extends javax.swing.JDialog {
         resourcePackCheckBox.setText("Share Resource Packs");
         resourcePackCheckBox.setToolTipText("Should Mod Packs share Resource Packs or have their own?");
 
-        javax.swing.GroupLayout gameSetingsPanelLayout = new javax.swing.GroupLayout(gameSetingsPanel);
-        gameSetingsPanel.setLayout(gameSetingsPanelLayout);
-        gameSetingsPanelLayout.setHorizontalGroup(
-            gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(gameSetingsPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout gameSettingsPanelLayout = new javax.swing.GroupLayout(gameSettingsPanel);
+        gameSettingsPanel.setLayout(gameSettingsPanelLayout);
+        gameSettingsPanelLayout.setHorizontalGroup(
+            gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(gameSettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(gameSetingsPanelLayout.createSequentialGroup()
+                .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gameSettingsPanelLayout.createSequentialGroup()
                         .addComponent(gameDirLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(browseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(gameDirButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(gameSetingsPanelLayout.createSequentialGroup()
+                    .addGroup(gameSettingsPanelLayout.createSequentialGroup()
                         .addComponent(memoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(allocatedMemoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(memorySlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(gameDirField, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(gameSetingsPanelLayout.createSequentialGroup()
+                    .addGroup(gameSettingsPanelLayout.createSequentialGroup()
                         .addComponent(minMemoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(maxMemoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(gameSetingsPanelLayout.createSequentialGroup()
-                        .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(gameSettingsPanelLayout.createSequentialGroup()
+                        .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(joinServerCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(windowSizeCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
                             .addComponent(fullscreenCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(20, 20, 20)
-                        .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(gameSetingsPanelLayout.createSequentialGroup()
+                        .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(gameSettingsPanelLayout.createSequentialGroup()
                                 .addComponent(windowWidth, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -329,38 +329,38 @@ public class OptionsDialog extends javax.swing.JDialog {
                             .addComponent(resourcePackCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
-        gameSetingsPanelLayout.setVerticalGroup(
-            gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(gameSetingsPanelLayout.createSequentialGroup()
+        gameSettingsPanelLayout.setVerticalGroup(
+            gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(gameSettingsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(gameDirLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(gameDirButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(gameDirField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(memoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(allocatedMemoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(memorySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(minMemoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(maxMemoryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(joinServerCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(serverIP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(windowSizeCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(windowWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(x, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(windowHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(gameSetingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(gameSettingsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fullscreenCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(resourcePackCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -387,10 +387,10 @@ public class OptionsDialog extends javax.swing.JDialog {
             .addGroup(optionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(launcherSetingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(launcherSettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(logSetingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(gameSetingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(logSettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(gameSettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, optionsPanelLayout.createSequentialGroup()
                         .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(optionsPanelLayout.createSequentialGroup()
@@ -414,11 +414,11 @@ public class OptionsDialog extends javax.swing.JDialog {
                 .addGap(23, 23, 23)
                 .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(launcherSetingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(launcherSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(logSetingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(logSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(gameSetingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(gameSettingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(optionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(javaButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -574,14 +574,14 @@ public class OptionsDialog extends javax.swing.JDialog {
     private com.gawdscape.launcher.ui.TransparentButton gameDirButton;
     private javax.swing.JTextField gameDirField;
     private com.gawdscape.launcher.ui.TransparentLabel gameDirLabel;
-    private com.gawdscape.launcher.ui.TransparentPanel gameSetingsPanel;
+    private com.gawdscape.launcher.ui.TransparentPanel gameSettingsPanel;
     private com.gawdscape.launcher.ui.TransparentButton javaButton;
     private com.gawdscape.launcher.ui.TransparentCheckBox joinServerCheckBox;
-    private com.gawdscape.launcher.ui.TransparentPanel launcherSetingsPanel;
+    private com.gawdscape.launcher.ui.TransparentPanel launcherSettingsPanel;
     private com.gawdscape.launcher.ui.TransparentCheckBox linkLogCheckBox;
     private com.gawdscape.launcher.ui.TransparentButton logButton;
     private com.gawdscape.launcher.ui.TransparentCheckBox logCheckBox;
-    private com.gawdscape.launcher.ui.TransparentPanel logSetingsPanel;
+    private com.gawdscape.launcher.ui.TransparentPanel logSettingsPanel;
     private com.gawdscape.launcher.ui.TransparentLabel maxMemoryLabel;
     private com.gawdscape.launcher.ui.TransparentLabel memoryLabel;
     private com.gawdscape.launcher.ui.TransparentSlider memorySlider;

@@ -1,5 +1,7 @@
 package com.gawdscape.launcher;
 
+import java.awt.*;
+
 /**
  *
  * @author Vinnie
@@ -40,16 +42,12 @@ public class JavaSettingsDialog extends javax.swing.JDialog {
 
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         titleLabel.setText("Java Settings");
-        titleLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("Tahoma", Font.BOLD, 14)); // NOI18N
 
         executableCheckBox.setSelected(GawdScapeLauncher.config.getCustomJava());
         executableCheckBox.setText("Executable:");
         executableCheckBox.setToolTipText("Use custom Java executable?");
-        executableCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                executableCheckBoxActionPerformed(evt);
-            }
-        });
+        executableCheckBox.addActionListener(evt -> executableCheckBoxActionPerformed(evt));
 
         executableTextField.setText(GawdScapeLauncher.config.getJavaPath());
         executableTextField.setToolTipText("Java Executable File");
@@ -62,11 +60,7 @@ public class JavaSettingsDialog extends javax.swing.JDialog {
 
         closeButton.setText("Close");
         closeButton.setToolTipText("Changes are saved with other settings.");
-        closeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                closeButtonActionPerformed(evt);
-            }
-        });
+        closeButton.addActionListener(evt -> closeButtonActionPerformed(evt));
 
         javax.swing.GroupLayout javaPanelLayout = new javax.swing.GroupLayout(javaPanel);
         javaPanel.setLayout(javaPanelLayout);

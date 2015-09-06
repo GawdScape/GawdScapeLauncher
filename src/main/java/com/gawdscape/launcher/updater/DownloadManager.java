@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class DownloadManager {
 
 	public static final int processorCores = Runtime.getRuntime().availableProcessors();
-	public static ExecutorService pool = Executors.newFixedThreadPool(processorCores * 2);
+	public static final ExecutorService pool = Executors.newFixedThreadPool(processorCores * 2);
 	public static int poolSize = 0;
 	public static int thisFile = 0;
 	public static String mcVer;

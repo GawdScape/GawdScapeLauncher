@@ -36,8 +36,7 @@ public final class ProcessLauncher {
 	public MinecraftProcess start()
 			throws IOException {
 		List<String> full = getFullCommands();
-		MinecraftProcess mc = new MinecraftProcess(full, new ProcessBuilder(full).directory(directory).redirectErrorStream(true).start());
-		return mc;
+		return new MinecraftProcess(full, new ProcessBuilder(full).directory(directory).redirectErrorStream(true).start());
 	}
 
 	public List<String> getFullCommands() {

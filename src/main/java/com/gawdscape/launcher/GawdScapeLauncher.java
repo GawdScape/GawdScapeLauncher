@@ -127,7 +127,7 @@ public class GawdScapeLauncher {
 						modpacks.getPackById(config.getDefaultPack()));
 				updater.start();
 			} else {
-				// Initalize launcher frame
+				// Initialize launcher frame
 				startTime2 = System.currentTimeMillis();
 				launcherFrame = new LauncherFrame(config.getShowNews());
 				launcherFrame.setUsername(session.getSelectedProfile().getName());
