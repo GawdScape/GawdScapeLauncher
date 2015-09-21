@@ -11,39 +11,39 @@ import java.util.Set;
  */
 public class AssetIndex {
 
-	private final Map<String, AssetObject> objects;
-	private boolean virtual;
+    private final Map<String, AssetObject> objects;
+    private boolean virtual;
 
-	public AssetIndex() {
-		objects = new LinkedHashMap();
+    public AssetIndex() {
+	objects = new LinkedHashMap<>();
+    }
+
+    public Map<String, AssetObject> getFileMap() {
+	return objects;
+    }
+
+    public Set<AssetObject> getUniqueObjects() {
+	return new HashSet<>(objects.values());
+    }
+
+    public boolean isVirtual() {
+	return virtual;
+    }
+
+    public class AssetObject {
+
+	private String hash;
+	private long size;
+
+	public AssetObject() {
 	}
 
-	public Map<String, AssetObject> getFileMap() {
-		return objects;
+	public String getHash() {
+	    return hash;
 	}
 
-	public Set<AssetObject> getUniqueObjects() {
-		return new HashSet(objects.values());
+	public long getSize() {
+	    return size;
 	}
-
-	public boolean isVirtual() {
-		return virtual;
-	}
-
-	public class AssetObject {
-
-		private String hash;
-		private long size;
-
-		public AssetObject() {
-		}
-
-		public String getHash() {
-			return hash;
-		}
-
-		public long getSize() {
-			return size;
-		}
-	}
+    }
 }

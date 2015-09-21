@@ -6,5 +6,5 @@ package com.gawdscape.launcher.launch;
  */
 public interface MinecraftExit {
 
-	void onMinecraftExit(MinecraftProcess process);
+    void onMinecraftExit(MinecraftProcess process);
 }

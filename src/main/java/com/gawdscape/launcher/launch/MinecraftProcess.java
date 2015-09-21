@@ -8,71 +8,70 @@ import java.util.List;
  */
 public class MinecraftProcess {
 
-	private final ProcessMonitorThread monitor;
-	private final List<String> commands;
-	private final Process process;
-	private MinecraftExit onExit;
+    private final List<String> commands;
+    private final Process process;
+    private MinecraftExit onExit;
 
-	public MinecraftProcess(List<String> commands, Process process) {
-		this.monitor = new ProcessMonitorThread(this);
-		this.commands = commands;
-		this.process = process;
+    public MinecraftProcess(List<String> commands, Process process) {
+	ProcessMonitorThread monitor = new ProcessMonitorThread(this);
+	this.commands = commands;
+	this.process = process;
 
-		monitor.start();
+	monitor.start();
+    }
+
+    public Process getRawProcess() {
+	return process;
+    }
+
+    public List<String> getStartupCommands() {
+	return commands;
+    }
+
+    public String getStartupCommand() {
+	return process.toString();
+    }
+
+    public boolean isRunning() {
+	try {
+	    process.exitValue();
+	} catch (IllegalThreadStateException ex) {
+	    return true;
 	}
+	return false;
+    }
 
-	public Process getRawProcess() {
-		return process;
-	}
+    public void setExitRunnable(MinecraftExit runnable) {
+	onExit = runnable;
+    }
 
-	public List<String> getStartupCommands() {
-		return commands;
+    public void safeSetExitRunnable(MinecraftExit runnable) {
+	setExitRunnable(runnable);
+	if ((!isRunning())
+		&& (runnable != null)) {
+	    runnable.onMinecraftExit(this);
 	}
+    }
 
-	public String getStartupCommand() {
-		return process.toString();
-	}
+    public MinecraftExit getExitRunnable() {
+	return onExit;
+    }
 
-	public boolean isRunning() {
-		try {
-			process.exitValue();
-		} catch (IllegalThreadStateException ex) {
-			return true;
-		}
-		return false;
+    public int getExitCode() {
+	try {
+	    return process.exitValue();
+	} catch (IllegalThreadStateException ex) {
+	    ex.fillInStackTrace();
+	    throw ex;
 	}
+    }
 
-	public void setExitRunnable(MinecraftExit runnable) {
-		onExit = runnable;
-	}
+    @Override
+    public String toString() {
+	return "MinecraftProcess[commands=" + commands + ", isRunning=" + isRunning() + "]";
+    }
 
-	public void safeSetExitRunnable(MinecraftExit runnable) {
-		setExitRunnable(runnable);
-		if ((!isRunning())
-				&& (runnable != null)) {
-			runnable.onMinecraftExit(this);
-		}
-	}
-
-	public MinecraftExit getExitRunnable() {
-		return onExit;
-	}
-
-	public int getExitCode() {
-		try {
-			return process.exitValue();
-		} catch (IllegalThreadStateException ex) {
-			ex.fillInStackTrace();
-			throw ex;
-		}
-	}
-
-	@Override
-	public String toString() {
-		return "MinecraftProcess[commands=" + commands + ", isRunning=" + isRunning() + "]";
-	}
-
-	public void stop() {
-		process.destroy();
-	}
+    public void stop() {
+	process.destroy();
+    }
 }

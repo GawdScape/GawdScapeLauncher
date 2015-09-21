@@ -8,13 +8,13 @@ import java.util.List;
  */
 public class PackIndex {
 
-	private final List<String> packs;
+    private final List<String> packs;
 
-	public PackIndex(List<String> packs) {
-		this.packs = packs;
-	}
+    public PackIndex(List<String> packs) {
+	this.packs = packs;
+    }
 
-	public List<String> getModPacks() {
-		return packs;
-	}
+    public List<String> getModPacks() {
+	return packs;
+    }
 }

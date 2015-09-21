@@ -1,6 +1,7 @@
 package com.gawdscape.launcher.launch;
 
 import com.gawdscape.launcher.util.OperatingSystem;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,66 +14,66 @@ import java.util.List;
  */
 public final class ProcessLauncher {
 
-	private final String jvmPath;
-	private final List<String> commands;
-	private File directory;
+    private final String jvmPath;
+    private final List<String> commands;
+    private File directory;
 
-	public ProcessLauncher(String jvmPath, int memory, String commands) {
-		if (jvmPath == null) {
-			jvmPath = OperatingSystem.getJavaDir();
-		}
-		this.jvmPath = jvmPath;
-		this.commands = new ArrayList();
-		if (commands != null && !commands.isEmpty()) {
-			if (!commands.toLowerCase().contains("-xmx")) {
-				addCommands("-Xmx" + memory + "M");
-			}
-			addSplitCommands(commands);
-		} else {
-			addCommands("-Xmx" + memory + "M");
-		}
+    public ProcessLauncher(String jvmPath, int memory, String commands) {
+	if (jvmPath == null) {
+	    jvmPath = OperatingSystem.getJavaDir();
 	}
-
-	public MinecraftProcess start()
-			throws IOException {
-		List<String> full = getFullCommands();
-		return new MinecraftProcess(full, new ProcessBuilder(full).directory(directory).redirectErrorStream(true).start());
+	this.jvmPath = jvmPath;
+	this.commands = new ArrayList<>();
+	if (commands != null && !commands.isEmpty()) {
+	    if (!commands.toLowerCase().contains("-xmx")) {
+		addCommands("-Xmx" + memory + "M");
+	    }
+	    addSplitCommands(commands);
+	} else {
+	    addCommands("-Xmx" + memory + "M");
 	}
+    }
 
-	public List<String> getFullCommands() {
-		List<String> result = new ArrayList(commands);
-		result.add(0, getJavaPath());
-		return result;
-	}
+    public MinecraftProcess start()
+	    throws IOException {
+	List<String> full = getFullCommands();
+	return new MinecraftProcess(full, new ProcessBuilder(full).directory(directory).redirectErrorStream(true).start());
+    }
 
-	public List<String> getCommands() {
-		return commands;
-	}
+    public List<String> getFullCommands() {
+	List<String> result = new ArrayList<>(commands);
+	result.add(0, getJavaPath());
+	return result;
+    }
 
-	public void addCommands(String... commands) {
-		this.commands.addAll(Arrays.asList(commands));
-	}
+    public List<String> getCommands() {
+	return commands;
+    }
 
-	public void addSplitCommands(String commands) {
-		addCommands(commands.split(" "));
-	}
+    public void addCommands(String... commands) {
+	this.commands.addAll(Arrays.asList(commands));
+    }
 
-	public ProcessLauncher directory(File directory) {
-		this.directory = directory;
+    public void addSplitCommands(String commands) {
+	addCommands(commands.split(" "));
+    }
 
-		return this;
-	}
+    public ProcessLauncher directory(File directory) {
+	this.directory = directory;
 
-	public File getDirectory() {
-		return directory;
-	}
+	return this;
+    }
 
-	protected String getJavaPath() {
-		return jvmPath;
-	}
+    public File getDirectory() {
+	return directory;
+    }
 
-	@Override
-	public String toString() {
-		return "ProcessLauncher[commands=" + commands + ", java=" + jvmPath + "]";
-	}
+    protected String getJavaPath() {
+	return jvmPath;
+    }
+
+    @Override
+    public String toString() {
+	return "ProcessLauncher[commands=" + commands + ", java=" + jvmPath + "]";
+    }
 }

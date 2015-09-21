@@ -1,18 +1,16 @@
 package com.gawdscape.launcher.updater;
 
+import com.gawdscape.launcher.GawdScapeLauncher;
 import com.gawdscape.launcher.util.FileUtils;
-import com.gawdscape.launcher.util.Log;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 /**
  *
@@ -20,124 +18,116 @@ import java.util.concurrent.Callable;
  */
 public class DownloadTask implements Callable, ProgressDelegate {
 
-	URL url;
-	File file;
-	double progress;
-	String expectedMD5;
-	String currentMD5;
-	int tries;
+    final File file;
+    URL url;
+    private int tries;
 
-	public DownloadTask(String remoteURL, String localPath) {
-		try {
-			url = new URL(remoteURL);
-		} catch (MalformedURLException ex) {
-			Log.error("Bad download URL", ex);
-		}
-		file = new File(localPath);
-		file.getParentFile().mkdirs();
+    public DownloadTask(String remoteURL, String localPath) {
+	file = new File(localPath);
+	file.getParentFile().mkdirs();
+	try {
+	    url = new URL(remoteURL);
+	} catch (MalformedURLException ex) {
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "Bad download URL for file: " + file.getName(), ex);
+	}
+    }
+
+    private String getCurrentMD5() {
+	try {
+	    return FileUtils.checkSum(new FileInputStream(file));
+	    //GawdScapeLauncher.logger.log(Level.FINE, "{0} [Local: {1}, Remote: {2}]", new Object[]{file.getName(), currentMD5, expectedMD5});
+	} catch (FileNotFoundException ex) {
+	    return "-1";
+	}
+    }
+
+    private void downloadFile(HttpURLConnection connection) {
+	FileOutputStream fos;
+	ReadableByteChannel rbc;
+	try {
+	    rbc = new RBCWrapper(Channels.newChannel(connection.getInputStream()), connection.getContentLength(), this);
+	    fos = new FileOutputStream(file);
+	    // The actual fucking download line
+	    fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+	    // ^^
+	    fos.close();
+	    rbc.close();
+	    connection.disconnect();
+	} catch (IOException ex) {
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error downloading file: " + file.getName(), ex);
+	}
+    }
+
+    public boolean attemptDownload() {
+	HttpURLConnection connection = createConnection(url);
+
+	String expectedMD5 = connection.getHeaderField("ETag");
+	if (expectedMD5.length() == 34) {
+	    expectedMD5 = expectedMD5.substring(1, 33);
+	} else if (expectedMD5.length() == 32) {
+	} else {
+	    expectedMD5 = "0";
 	}
 
-	public void getCurrentMD5() {
-		currentMD5 = "-1";
-		if (file.exists()) {
-			try {
-				currentMD5 = FileUtils.checkSum(new FileInputStream(file));
-				Log.fine(file.getName()
-						+ " [Local: " + currentMD5 + ", Remote: " + expectedMD5 + "]");
-			} catch (FileNotFoundException ex) {
-				currentMD5 = "-2";
-			}
-		}
+	if (expectedMD5.equals(getCurrentMD5())) {
+	    GawdScapeLauncher.logger.log(Level.FINE, "[{0}/3] Skipping: {1}", new Object[]{tries + 1, file.getName()});
+	    return true;
 	}
 
-	private void downloadFile(HttpURLConnection connection) {
-		FileOutputStream fos;
-		ReadableByteChannel rbc;
-		try {
-			rbc = new RBCWrapper(Channels.newChannel(connection.getInputStream()), connection.getContentLength(), this);
-			fos = new FileOutputStream(file);
-			// The actual fucking download line
-			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-			// ^^
-			fos.close();
-			rbc.close();
-			connection.disconnect();
-		} catch (IOException e) {
-			Log.error("Error downloading file", e);
-		}
+	//GawdScapeLauncher.logger.log(Level.FINE, "Saving to: {0}", file.toString());
+	downloadFile(connection);
+
+	if (expectedMD5.equals("0")) {
+	    return true;
 	}
 
-	public boolean attemptDownload() {
-		HttpURLConnection connection = createConnection(url);
-
-		expectedMD5 = connection.getHeaderField("ETag");
-		if (expectedMD5.length() == 34) {
-			expectedMD5 = expectedMD5.substring(1, 33);
-		} else if (expectedMD5.length() == 32) {
-		} else {
-			expectedMD5 = "0";
-		}
-
-		getCurrentMD5();
-
-		if (currentMD5.equals(expectedMD5)) {
-			Log.finer("Skipping " + file.getName());
-			return true;
-		}
-
-		Log.finer("Saving to: " + file.toString());
-		downloadFile(connection);
-
-		if (expectedMD5.equals("0")) {
-			return true;
-		}
-
-		while (tries < 3) {
-			getCurrentMD5();
-			if (currentMD5.equals(expectedMD5)) {
-				return true;
-			}
-			Log.warning("[" + (tries + 1) + "/3] Download Failed " + file.getName());
-			downloadFile(createConnection(url));
-			tries++;
-		}
-		return false;
-	}
-
-	@Override
-	public void progressCallback(RBCWrapper rbc, double progress) {
-		this.progress = progress;
-		DownloadManager.downloadDialog.setFile(file.getName(), url.getHost(), file.getParentFile().getPath());
-		DownloadManager.downloadDialog.setProgress((int) progress, (int) rbc.getReadSoFar(), (int) rbc.getExpectedSize());
-	}
-
-	private HttpURLConnection createConnection(URL url) {
-		HttpURLConnection connection = null;
-		try {
-			HttpURLConnection.setFollowRedirects(false);
-
-			connection = (HttpURLConnection) url.openConnection();
-
-			int status = connection.getResponseCode();
-			if (status != HttpURLConnection.HTTP_OK) {
-				if (status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_SEE_OTHER) {
-					String location = connection.getHeaderField("Location");
-					Log.fine("Being redirected to: " + location);
-					connection = (HttpURLConnection) new URL(location).openConnection();
-				}
-			}
-		} catch (IOException e) {
-		}
-
-		return connection;
-	}
-
-	@Override
-	public Object call() throws Exception {
-		Log.finer("Starting download of: " + url.toString());
-		DownloadManager.thisFile++;
-		attemptDownload();
-		DownloadManager.downloadDialog.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);
+	while (tries < 3) {
+	    if (expectedMD5.equals(getCurrentMD5())) {
 		return true;
+	    }
+	    GawdScapeLauncher.logger.log(Level.WARNING, "[{0}/3] {1} File hash did not match.", new Object[]{tries + 1, file.getName()});
+	    tries++;
+	    if (attemptDownload()) {
+		return true;
+	    }
 	}
+	return false;
+    }
+
+    @Override
+    public void progressCallback(RBCWrapper rbc, double progress) {
+	DownloadManager.downloadDialog.setFile(file.getName(), url.getHost(), file.getParentFile().getPath());
+	DownloadManager.downloadDialog.setProgress((int) progress, (int) rbc.getReadSoFar(), (int) rbc.getExpectedSize());
+    }
+
+    private HttpURLConnection createConnection(URL url) {
+	HttpURLConnection connection = null;
+	try {
+	    HttpURLConnection.setFollowRedirects(false);
+
+	    connection = (HttpURLConnection) url.openConnection();
+
+	    int status = connection.getResponseCode();
+	    if (status != HttpURLConnection.HTTP_OK) {
+		if (status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_SEE_OTHER) {
+		    String location = connection.getHeaderField("Location");
+		    GawdScapeLauncher.logger.log(Level.FINE, "URL: {0}\n\t->Redirect: {1}", new Object[]{url.toString(), location});
+		    connection = (HttpURLConnection) new URL(location).openConnection();
+		}
+	    }
+	} catch (IOException ex) {
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error connecting to URL " + url.toString(), ex);
+	}
+
+	return connection;
+    }
+
+    @Override
+    public Object call() throws Exception {
+	GawdScapeLauncher.logger.log(Level.FINE, "[0/3] Starting download of: {0}", file.getName());
+	DownloadManager.thisFile++;
+	attemptDownload();
+	DownloadManager.downloadDialog.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);
+	return true;
+    }
 }

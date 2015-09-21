@@ -6,5 +6,5 @@ package com.gawdscape.launcher.updater;
  */
 public interface ProgressDelegate {
 
-	void progressCallback(RBCWrapper rbc, double progress);
+    void progressCallback(RBCWrapper rbc, double progress);
 }

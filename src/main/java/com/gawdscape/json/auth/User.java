@@ -8,14 +8,14 @@ import com.google.gson.JsonElement;
  */
 public class User {
 
-	private String id;
-	private JsonElement properties;
+    private String id;
+    private JsonElement properties;
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+	return id;
+    }
 
-	public JsonElement getProperties() {
-		return properties;
-	}
+    public JsonElement getProperties() {
+	return properties;
+    }
 }

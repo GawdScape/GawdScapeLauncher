@@ -1,6 +1,6 @@
 package com.gawdscape.launcher.ui;
 
-import javax.swing.JButton;
+import javax.swing.*;
 
 /**
  *
@@ -8,12 +8,12 @@ import javax.swing.JButton;
  */
 public class TransparentButton extends JButton {
 
-	public TransparentButton() {
-		super();
-	}
+    public TransparentButton() {
+	super();
+    }
 
-	@Override
-	public boolean isOpaque() {
-		return false;
-	}
+    @Override
+    public boolean isOpaque() {
+	return false;
+    }
 }

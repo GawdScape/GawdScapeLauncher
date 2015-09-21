@@ -1,8 +1,7 @@
 package com.gawdscape.launcher.ui;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import javax.swing.JLabel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -10,14 +9,14 @@ import javax.swing.JLabel;
  */
 public class WhiteLinkLabel extends JLabel {
 
-	public WhiteLinkLabel() {
-		super();
-		setForeground(Color.WHITE);
-		setCursor(new Cursor(Cursor.HAND_CURSOR));
-	}
+    public WhiteLinkLabel() {
+	super();
+	setForeground(Color.WHITE);
+	setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
 
-	@Override
-	public boolean isOpaque() {
-		return false;
-	}
+    @Override
+    public boolean isOpaque() {
+	return false;
+    }
 }

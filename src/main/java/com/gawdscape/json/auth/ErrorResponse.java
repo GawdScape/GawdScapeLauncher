@@ -6,19 +6,19 @@ package com.gawdscape.json.auth;
  */
 public class ErrorResponse {
 
-	private final String error = "";
-	private final String errorMessage = "";
-	private final String cause = "";
+    private final String error = "";
+    private final String errorMessage = "";
+    private final String cause = "";
 
-	public String getError() {
-		return this.error;
-	}
+    public String getError() {
+	return this.error;
+    }
 
-	public String getErrorMessage() {
-		return this.errorMessage;
-	}
+    public String getErrorMessage() {
+	return this.errorMessage;
+    }
 
-	public String getCause() {
-		return this.cause;
-	}
+    public String getCause() {
+	return this.cause;
+    }
 }

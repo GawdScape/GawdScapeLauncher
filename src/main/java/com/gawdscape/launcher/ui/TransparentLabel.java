@@ -1,7 +1,7 @@
 package com.gawdscape.launcher.ui;
 
-import java.awt.Color;
-import javax.swing.JLabel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -9,18 +9,18 @@ import javax.swing.JLabel;
  */
 public class TransparentLabel extends JLabel {
 
-	public TransparentLabel(String text, int horizontalAlignment) {
-		super(text, horizontalAlignment);
-		setForeground(Color.WHITE);
-	}
+    public TransparentLabel(String text, int horizontalAlignment) {
+	super(text, horizontalAlignment);
+	setForeground(Color.WHITE);
+    }
 
-	public TransparentLabel() {
-		super();
-		setForeground(Color.WHITE);
-	}
+    public TransparentLabel() {
+	super();
+	setForeground(Color.WHITE);
+    }
 
-	@Override
-	public boolean isOpaque() {
-		return false;
-	}
+    @Override
+    public boolean isOpaque() {
+	return false;
+    }
 }

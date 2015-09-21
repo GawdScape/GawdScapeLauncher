@@ -38,6 +38,10 @@
   </Layout>
   <SubComponents>
     <Container class="com.gawdscape.launcher.ui.DirtPanel" name="downloadPanel">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -117,6 +121,10 @@
             <Property name="text" type="java.lang.String" value="Progress:"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+          </AuxValues>
         </Component>
         <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="destinationLabel">
           <Properties>
@@ -152,7 +160,7 @@
             <Property name="stringPainted" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="cancel">
+        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="cancel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancel"/>
           </Properties>

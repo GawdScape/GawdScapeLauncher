@@ -1,40 +1,44 @@
 package com.gawdscape.launcher.launch;
 
-import com.gawdscape.launcher.util.Log;
+import com.gawdscape.launcher.GawdScapeLauncher;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
 
 /**
  *
  * @author Vinnie
  */
 public class ProcessMonitorThread
-		extends Thread {
+	extends Thread {
 
-	private final MinecraftProcess process;
+    private final MinecraftProcess process;
 
-	public ProcessMonitorThread(MinecraftProcess process) {
-		this.process = process;
-	}
+    public ProcessMonitorThread(MinecraftProcess process) {
+	super("ProcessMonitor");
+	this.process = process;
+    }
 
-	@Override
-	public void run() {
-		setName("ProcessMonitor");
-		String line;
-		try (
-				InputStreamReader reader = new InputStreamReader(process.getRawProcess().getInputStream(), "UTF-8");
-				BufferedReader buf = new BufferedReader(reader)
-		) {
-			while ((line = buf.readLine()) != null) {
-				Log.println(line);
+    @Override
+    public void run() {
+	String line;
+	try (BufferedReader buf = new BufferedReader(
+		new InputStreamReader(
+			process.getRawProcess().getInputStream(), "UTF-8"))) {
+		    while ((line = buf.readLine()) != null) {
+			System.out.println(line);
+			if (GawdScapeLauncher.logFrame != null) {
+			    GawdScapeLauncher.logFrame.formatAndPrintLine(line);
 			}
+		    }
 		} catch (IOException ex) {
-			Log.error("Error reading from Minecraft process", ex);
+		    GawdScapeLauncher.logger.log(Level.SEVERE, "Error reading from Minecraft process", ex);
 		}
 		MinecraftExit onExit = process.getExitRunnable();
 		if (onExit != null) {
-			onExit.onMinecraftExit(process);
+		    onExit.onMinecraftExit(process);
 		}
-	}
+    }
 }

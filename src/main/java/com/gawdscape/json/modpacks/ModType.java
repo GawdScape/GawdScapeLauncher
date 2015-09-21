@@ -5,5 +5,6 @@ package com.gawdscape.json.modpacks;
  * @author Vinnie
  */
 public enum ModType {
-	FORGE, LITEMOD, COREMOD, JARMOD
+
+    FORGE, LITEMOD, COREMOD, JARMOD
 }

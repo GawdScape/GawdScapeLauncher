@@ -1,7 +1,7 @@
 package com.gawdscape.launcher.ui;
 
-import java.awt.Color;
-import javax.swing.JCheckBox;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -9,13 +9,13 @@ import javax.swing.JCheckBox;
  */
 public class TransparentCheckBox extends JCheckBox {
 
-	public TransparentCheckBox() {
-		super();
-		setForeground(Color.WHITE);
-	}
+    public TransparentCheckBox() {
+	super();
+	setForeground(Color.WHITE);
+    }
 
-	@Override
-	public boolean isOpaque() {
-		return false;
-	}
+    @Override
+    public boolean isOpaque() {
+	return false;
+    }
 }

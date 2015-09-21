@@ -1,8 +1,7 @@
 package com.gawdscape.launcher.ui;
 
-import java.awt.Insets;
-import java.awt.LayoutManager;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -10,29 +9,29 @@ import javax.swing.JPanel;
  */
 public class TransparentPanel extends JPanel {
 
-	private Insets insets;
+    private Insets insets;
 
-	public TransparentPanel() {
-	}
+    public TransparentPanel() {
+    }
 
-	public TransparentPanel(LayoutManager mgr) {
-		setLayout(mgr);
-	}
+    public TransparentPanel(LayoutManager mgr) {
+	setLayout(mgr);
+    }
 
-	@Override
-	public boolean isOpaque() {
-		return false;
-	}
+    @Override
+    public boolean isOpaque() {
+	return false;
+    }
 
-	public void setInsets(int top, int left, int bottom, int right) {
-		insets = new Insets(top, left, bottom, right);
-	}
+    public void setInsets(int top, int left, int bottom, int right) {
+	insets = new Insets(top, left, bottom, right);
+    }
 
-	@Override
-	public Insets getInsets() {
-		if (insets == null) {
-			return super.getInsets();
-		}
-		return insets;
+    @Override
+    public Insets getInsets() {
+	if (insets == null) {
+	    return super.getInsets();
 	}
+	return insets;
+    }
 }

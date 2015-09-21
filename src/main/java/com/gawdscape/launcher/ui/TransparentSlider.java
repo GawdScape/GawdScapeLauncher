@@ -1,7 +1,7 @@
 package com.gawdscape.launcher.ui;
 
-import java.awt.Color;
-import javax.swing.JSlider;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
@@ -9,13 +9,13 @@ import javax.swing.JSlider;
  */
 public class TransparentSlider extends JSlider {
 
-	public TransparentSlider() {
-		super();
-		setForeground(Color.WHITE);
-	}
+    public TransparentSlider() {
+	super();
+	setForeground(Color.WHITE);
+    }
 
-	@Override
-	public boolean isOpaque() {
-		return false;
-	}
+    @Override
+    public boolean isOpaque() {
+	return false;
+    }
 }
