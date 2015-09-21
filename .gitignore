@@ -17,6 +17,15 @@ build/
 dist/
 deploy/
 
+# IntelliJ
+# =========================
+.idea/
+*.iml
+
+# Maven
+# =========================
+target/
+dependency-reduced-pom.xml
 
 # =========================
 # Operating System Files
@@ -30,7 +39,8 @@ deploy/
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
