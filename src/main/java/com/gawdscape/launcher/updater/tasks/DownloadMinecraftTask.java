@@ -1,6 +1,7 @@
-package com.gawdscape.launcher.updater;
+package com.gawdscape.launcher.updater.tasks;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
+import com.gawdscape.launcher.updater.DownloadManager;
 import com.gawdscape.launcher.util.Directories;
 
 import java.io.File;
@@ -65,7 +66,7 @@ public class DownloadMinecraftTask extends DownloadTask {
 
     @Override
     public Object call() throws Exception {
-	GawdScapeLauncher.logger.log(Level.FINE, "Starting download of minecraft: {0}", url.toString());
+	GawdScapeLauncher.logger.log(Level.FINE, "Starting download of Minecraft {0}.jar", mcVersion);
 	DownloadManager.thisFile++;
 	if (attemptDownload()) {
 	    removeMetaInf();

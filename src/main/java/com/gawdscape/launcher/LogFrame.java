@@ -365,7 +365,7 @@ public class LogFrame extends javax.swing.JFrame {
 	    try {
 		uri = new URI(url);
 	    } catch (URISyntaxException ex) {
-		GawdScapeLauncher.logger.log(Level.SEVERE, "Invalid URI", ex);
+		//GawdScapeLauncher.logger.log(Level.SEVERE, "Invalid URI: {0}", url);
 	    }
 	}
 

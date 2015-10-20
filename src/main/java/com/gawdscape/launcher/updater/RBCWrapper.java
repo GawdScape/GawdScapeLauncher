@@ -15,7 +15,7 @@ public class RBCWrapper implements ReadableByteChannel {
     private final ReadableByteChannel rbc;
     private long readSoFar;
 
-    RBCWrapper(ReadableByteChannel rbc, long expectedSize, ProgressDelegate delegate) {
+    public RBCWrapper(ReadableByteChannel rbc, long expectedSize, ProgressDelegate delegate) {
 	this.delegate = delegate;
 	this.expectedSize = expectedSize;
 	this.rbc = rbc;

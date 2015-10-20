@@ -47,95 +47,69 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
-                  <Component id="packModsLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="packMods" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" attributes="0">
-                  <Component id="packLibrariesLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="packLibraries" max="32767" attributes="0"/>
-              </Group>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="userModLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="userMods" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="packVersionLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="packVersion" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Component id="forumsLink" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="githubLink" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="wikiLink" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="issuesLink" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="forumsLink" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="githubLink" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="wikiLink" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="issuesLink" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                                   <Component id="javaVersionLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="javaVersion" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
                                   <Component id="gameDirLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="gameDir" min="-2" max="-2" attributes="0"/>
+                                  <Component id="copyright" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="versionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="description1" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="directoryLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="packLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="mcVersionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="mcVersionLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="mcVersion" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="closeButton" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="packLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="pack" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="userModLabel" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="directoryLabel" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="txtModLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="packModsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="packLibrariesLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="architectureLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="directory" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="architecture" min="-2" max="-2" attributes="0"/>
+                                      <Component id="packLibsScrollPane" min="-2" max="-2" attributes="0"/>
+                                      <Component id="packModsScrollPane" min="-2" max="-2" attributes="0"/>
+                                      <Component id="userModsScrollPane" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="gameDir" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="javaVersion" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtModVersion" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="mcVersion" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="packVersion" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="pack" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="directory" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="version" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <Component id="copyright" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="versionLabel" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="version" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="gawdscapeImg" min="-2" pref="256" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                  <Component id="launcherImg" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="description1" alignment="0" max="32767" attributes="0"/>
-                              <Component id="description2" alignment="0" max="32767" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="architectureLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="architecture" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="gmLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="gmVersion" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="gawdscapeImg" min="-2" pref="256" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                          <Component id="launcherImg" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
                   </Group>
-              </Group>
-              <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="closeButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -147,11 +121,9 @@
                       <Component id="launcherImg" max="-2" attributes="0"/>
                       <Component id="gawdscapeImg" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="description1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="description2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="versionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="version" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -178,23 +150,23 @@
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="gmLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="gmVersion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtModLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtModVersion" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="packLibrariesLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="packLibraries" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Component id="packLibsScrollPane" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="packModsLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="packMods" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Component id="packModsScrollPane" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="userModLabel" min="-2" max="-2" attributes="0"/>
-                      <Component id="userMods" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Component id="userModsScrollPane" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -220,9 +192,9 @@
                       <Component id="wikiLink" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="issuesLink" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace type="separate" max="32767" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="closeButton" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -255,18 +227,6 @@
             <Property name="text" type="java.lang.String" value="The better Minecraft launcher..."/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="18" style="0"/>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-          </AuxValues>
-        </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="description2">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Also downloads GawdScape mod packs."/>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="16" style="0"/>
             </Property>
           </Properties>
           <AuxValues>
@@ -507,9 +467,9 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gmLabel">
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="txtModLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="GawdMod Version:"/>
+            <Property name="text" type="java.lang.String" value="Texperience Version:"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
@@ -530,26 +490,65 @@
             <Property name="text" type="java.lang.String" value="Not Installed"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packLibraries">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="N/A"/>
-          </Properties>
-        </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packMods">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="N/A"/>
-          </Properties>
-        </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gmVersion">
+        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="txtModVersion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Not Installed"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="userMods">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="None"/>
-          </Properties>
-        </Component>
+        <Container class="javax.swing.JScrollPane" name="packModsScrollPane">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTextArea" name="packMods">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="rows" type="int" value="2"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JScrollPane" name="packLibsScrollPane">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTextArea" name="packLibraries">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="rows" type="int" value="2"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JScrollPane" name="userModsScrollPane">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTextArea" name="userMods">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="rows" type="int" value="2"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
   </SubComponents>

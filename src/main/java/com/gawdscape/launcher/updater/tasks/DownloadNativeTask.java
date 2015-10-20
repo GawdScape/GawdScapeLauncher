@@ -1,6 +1,7 @@
-package com.gawdscape.launcher.updater;
+package com.gawdscape.launcher.updater.tasks;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
+import com.gawdscape.launcher.updater.DownloadManager;
 import com.gawdscape.launcher.util.Directories;
 
 import java.io.*;
@@ -58,7 +59,7 @@ public class DownloadNativeTask extends DownloadTask {
 
     @Override
     public Object call() throws Exception {
-	GawdScapeLauncher.logger.log(Level.FINE, "Starting download of native: {0}", url.toString());
+	GawdScapeLauncher.logger.log(Level.FINE, "Starting download of native: {0}", file.getName());
 	DownloadManager.thisFile++;
 	if (attemptDownload()) {
 	    try {

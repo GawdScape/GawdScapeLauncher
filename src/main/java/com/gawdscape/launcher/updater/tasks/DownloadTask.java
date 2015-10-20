@@ -1,6 +1,9 @@
-package com.gawdscape.launcher.updater;
+package com.gawdscape.launcher.updater.tasks;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
+import com.gawdscape.launcher.updater.DownloadManager;
+import com.gawdscape.launcher.updater.ProgressDelegate;
+import com.gawdscape.launcher.updater.RBCWrapper;
 import com.gawdscape.launcher.util.FileUtils;
 
 import java.io.*;
@@ -54,7 +57,7 @@ public class DownloadTask implements Callable, ProgressDelegate {
 	    rbc.close();
 	    connection.disconnect();
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error downloading file: " + file.getName(), ex);
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "[" + (tries + 1) + "/3] Error downloading file: " + file.getName(), ex);
 	}
     }
 
@@ -116,7 +119,7 @@ public class DownloadTask implements Callable, ProgressDelegate {
 		}
 	    }
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error connecting to URL " + url.toString(), ex);
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "[" + (tries + 1) + "/3] Error connecting to URL " + url.toString(), ex);
 	}
 
 	return connection;
@@ -124,7 +127,7 @@ public class DownloadTask implements Callable, ProgressDelegate {
 
     @Override
     public Object call() throws Exception {
-	GawdScapeLauncher.logger.log(Level.FINE, "[0/3] Starting download of: {0}", file.getName());
+	GawdScapeLauncher.logger.log(Level.INFO, "[1/3] Starting download of: {0}", file.getName());
 	DownloadManager.thisFile++;
 	attemptDownload();
 	DownloadManager.downloadDialog.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);

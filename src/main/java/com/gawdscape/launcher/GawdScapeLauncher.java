@@ -6,12 +6,14 @@ import com.gawdscape.launcher.auth.SessionManager;
 import com.gawdscape.launcher.launch.MinecraftLauncher;
 import com.gawdscape.launcher.updater.Updater;
 import com.gawdscape.launcher.util.*;
+import java.awt.Font;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.plaf.FontUIResource;
 
 /**
  *
@@ -38,6 +40,16 @@ public class GawdScapeLauncher {
 	GawdScapeLauncher.logger.setLevel(Level.ALL);
     }
 
+    public static void setUIFont (FontUIResource font){
+        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value != null && value instanceof FontUIResource)
+                UIManager.put(key, font);
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -50,10 +62,12 @@ public class GawdScapeLauncher {
 	/* Set the System look and feel */
 	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code ">
 	try {
-	    javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-	} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
 	    logger.log(Level.SEVERE, "Error setting look and feel.", ex);
 	}
+
+        setUIFont(new FontUIResource("Arial", Font.PLAIN, 12));
 	//</editor-fold>
 
 	// Load config
@@ -94,7 +108,7 @@ public class GawdScapeLauncher {
 	startTime2 = System.currentTimeMillis();
 	modpacks = new ModPackManager();
 
-	if (offlineMode) {
+	/*if (offlineMode) {
 	    try {
 		modpacks.loadLocalPacks();
 		modpacks.loadCustomPacks();
@@ -106,7 +120,7 @@ public class GawdScapeLauncher {
 		logger.log(Level.SEVERE, "Error loading local mod pack index.", ex);
 	    }
 	    return;
-	}
+	}*/
 
 	try {
 	    modpacks.downloadPacks();

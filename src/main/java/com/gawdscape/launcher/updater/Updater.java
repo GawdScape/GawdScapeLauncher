@@ -13,6 +13,9 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -218,31 +221,27 @@ public class Updater extends Thread {
 	    return;
 	}
 
+        // Backup important mods
+        backupMods();
+
+	// Delete mods
+	deleteMods();
+
 	// Download Minecraft if necessary
 	if (newMcVer) {
-	    disableMods();
-
 	    if (!downloadMinecraftData()) {
 		return;
 	    }
 	    downloadMinecraft();
 	}
 
-	// Delete modpack mods
-	try {
-	    FileUtils.delete(new File(
-		    GawdScapeLauncher.config.getGameDir(packName), "mods"));
-	} catch (FileNotFoundException ex) {
-	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting mods directory", ex);
-	}
-
 	// Download Mod pack
 	DownloadManager.queueLibraries(modpack.getRelevantLibraries());
 	DownloadManager.queueMods(packName, modpack.getMods());
-	if (modpack.getGawdModVersion() != null) {
-	    DownloadManager.queueGawdMod(modpack.getMinecraftVersion(),
-		    modpack.getGawdModVersion());
+        DownloadManager.queueArchives(packName, modpack.getArchives());
+	if (modpack.getTexperienceVersion() != null) {
+	    DownloadManager.queueTexperienceMod(modpack.getMinecraftVersion(),
+		    modpack.getTexperienceVersion());
 	}
 
 	if (!DownloadManager.completeQueue()) {
@@ -256,8 +255,12 @@ public class Updater extends Thread {
 	saveModPackData();
 
 	java.awt.EventQueue.invokeLater(DownloadManager.downloadDialog::setLaunching);
+
 	Directories.createGameDirs(
 		GawdScapeLauncher.config.getGameDir(packName));
+
+        downloadServerList();
+
 	// Try to launch now
 	launch();
 
@@ -271,23 +274,48 @@ public class Updater extends Thread {
 	Utils.benchmark("Updated Minecraft in {0}ms", startTime);
     }
 
-    private void disableMods() {
-	File modDir = new File(
-		GawdScapeLauncher.config.getGameDir(packName), "bin");
-	GawdScapeLauncher.logger.log(Level.INFO, "Disabling mods in folder {0}", modDir.getPath());
-	if (!modDir.exists()) {
-	    return;
+    private void deleteMods() {
+        File packDir = GawdScapeLauncher.config.getGameDir(packName);
+        try {
+	    FileUtils.delete(new File(packDir, "bin"));
+	} catch (FileNotFoundException ex) {
+	} catch (IOException ex) {
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting bin directory", ex);
 	}
-	for (File modFile : modDir.listFiles()) {
-	    if (modFile.isFile()) {
-		String modName = modFile.getName().toLowerCase();
-		if (modName.endsWith(".jar") || modName.endsWith(".zip")) {
-		    modName = modFile.getName();
-		    modFile.renameTo(new File(modDir, modName + ".disabled"));
-		    GawdScapeLauncher.logger.log(Level.INFO, "Disabled mod: {0}", modName);
-		}
-	    }
+        try {
+	    FileUtils.delete(new File(packDir, "coremods"));
+	} catch (FileNotFoundException ex) {
+	} catch (IOException ex) {
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting coremods directory", ex);
 	}
+        try {
+	    FileUtils.delete(new File(packDir, "mods"));
+	} catch (FileNotFoundException ex) {
+	} catch (IOException ex) {
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting mods directory", ex);
+	}
+    }
+
+    private void backupMods() {
+        File packDir = GawdScapeLauncher.config.getGameDir(packName);
+        if (!packDir.exists())
+            return;
+        File binDir = new File(packDir, "bin");
+        File modsDir = new File(packDir, "mods");
+        List<File> files = new ArrayList<>();
+        files.addAll(Arrays.asList(binDir.listFiles()));
+        files.addAll(Arrays.asList(modsDir.listFiles()));
+        files.stream().filter((modFile) -> (modFile.isFile())).forEach((modFile) -> {
+            String fileName = modFile.getName().toLowerCase();
+            if (fileName.contains("optifine")) {
+                try {
+                    FileUtils.copyFile(modFile, new File(packDir, "backup/" + modFile.getName()));
+                    GawdScapeLauncher.logger.log(Level.INFO, "Backed up mod: {0}", modFile.getName());
+                } catch (IOException ex) {
+                    GawdScapeLauncher.logger.log(Level.SEVERE, "Error copying file", ex);
+                }
+            }
+        });
     }
 
     private void launch() {
@@ -307,15 +335,23 @@ public class Updater extends Thread {
 	}
 	Utils.benchmark("Launched Minecraft in {0}ms", startTime);
 	GawdScapeLauncher.logger.info(
-		"\n#==============================================================================#"
-		+ "\n#--------------------------------- Minecraft ----------------------------------#"
-		+ "\n#==============================================================================#");
+		"\n#==============================================================================#" +
+		"\n#--------------------------------- Minecraft ----------------------------------#" +
+		"\n#==============================================================================#");
     }
 
     private void updatePackLogo() {
 	File logo = new File(Directories.getLogoPath(packName));
 	FileUtils.downloadFile(
 		GawdScapeLauncher.modpacks.getPackUrl(packName) + "/logo.png", logo);
+    }
+
+    private void downloadServerList() {
+	File serverList = new File(GawdScapeLauncher.config.getGameDir(packName), "servers.dat");
+        if (!serverList.exists()) {
+            FileUtils.downloadFile(
+                    GawdScapeLauncher.modpacks.getPackUrl(packName) + "/servers.dat", serverList);
+        }
     }
 
     @Override

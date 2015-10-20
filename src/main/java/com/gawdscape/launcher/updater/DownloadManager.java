@@ -1,11 +1,15 @@
 package com.gawdscape.launcher.updater;
 
+import com.gawdscape.launcher.updater.tasks.DownloadTask;
+import com.gawdscape.launcher.updater.tasks.DownloadNativeTask;
+import com.gawdscape.launcher.updater.tasks.DownloadMinecraftTask;
 import com.gawdscape.json.game.AssetIndex;
+import com.gawdscape.json.game.ZipArchive;
 import com.gawdscape.json.game.Library;
 import com.gawdscape.json.game.Mod;
-import com.gawdscape.json.modpacks.ModType;
 import com.gawdscape.launcher.DownloadDialog;
 import com.gawdscape.launcher.GawdScapeLauncher;
+import com.gawdscape.launcher.updater.tasks.DownloadExtractTask;
 import com.gawdscape.launcher.util.Constants;
 import com.gawdscape.launcher.util.Directories;
 import com.gawdscape.launcher.util.OperatingSystem;
@@ -55,6 +59,11 @@ public class DownloadManager {
 	pool.submit(new DownloadNativeTask(url, toPath, mcVer));
     }
 
+    private static void addArchiveToQueue(String url, String toPath) {
+	poolSize++;
+	pool.submit(new DownloadExtractTask(url, toPath));
+    }
+
     public static boolean completeQueue() {
 	pool.shutdown();
 	try {
@@ -82,10 +91,10 @@ public class DownloadManager {
 	);
     }
 
-    public static void queueGawdMod(String mcVer, String gmVer) {
+    public static void queueTexperienceMod(String mcVersion, String version) {
 	addToQueue(
-		Constants.getGawdModJar(gmVer, mcVer),
-		Directories.getGawdModJar(gmVer, mcVer)
+		Constants.getTexperienceJar(version, mcVersion),
+		Directories.getTexperienceJar(version, mcVersion)
 	);
     }
 
@@ -115,17 +124,6 @@ public class DownloadManager {
 	});
     }
 
-    private static String getModsDir(ModType type) {
-	switch (type) {
-	    case COREMOD:
-		return "coremods";
-	    case JARMOD:
-		return "bin" + File.separator + "mods";
-	    default:
-		return "mods";
-	}
-    }
-
     public static void queueMods(String packName, Collection<Mod> mods) {
 	if (mods == null) {
 	    return;
@@ -133,8 +131,19 @@ public class DownloadManager {
 	mods.stream().forEach((mod) -> addToQueue(
 		mod.getDownloadUrl() + mod.getArtifactPath(),
 		GawdScapeLauncher.config.getGameDir(packName)
-		+ File.separator + getModsDir(mod.getType())
+		+ File.separator + mod.getModsDir()
 		+ File.separator + mod.getArtifactFilename(null)
+	));
+    }
+
+    public static void queueArchives(String packName, Collection<ZipArchive> archives) {
+	if (archives == null) {
+	    return;
+	}
+	archives.stream().forEach((archive) -> addArchiveToQueue(
+		archive.getDownloadUrl() + archive.getArtifactPath(),
+		GawdScapeLauncher.config.getGameDir(packName)
+                + File.separator + archive.getArtifactFilename(null)
 	));
     }
 }

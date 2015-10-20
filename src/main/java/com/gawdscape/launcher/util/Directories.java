@@ -25,13 +25,13 @@ public class Directories {
 	if (os.equals(OperatingSystem.LINUX)) {
 	    workingDirectory = new File(userHome, '.' + applicationName + '/');
 	}
-	if (os.equals(OperatingSystem.WINDOWS)) {
+        else if (os.equals(OperatingSystem.WINDOWS)) {
 	    String applicationData = System.getenv("APPDATA");
 	    String folder = applicationData != null ? applicationData : userHome;
 
 	    workingDirectory = new File(folder, '.' + applicationName + '/');
 	}
-	if (os.equals(OperatingSystem.OSX)) {
+        else if (os.equals(OperatingSystem.OSX)) {
 	    workingDirectory = new File(userHome, "Library/Application Support/" + applicationName);
 	}
 	if ((!workingDirectory.exists()) && (!workingDirectory.mkdirs())) {
@@ -64,12 +64,12 @@ public class Directories {
 	return getWorkingDirectory() + separator + "bin" + separator;
     }
 
-    public static String getGawdModPath() {
-	return getBinPath() + "gawdmod" + separator;
+    public static String getTexperiencePath() {
+	return getBinPath() + "texperience" + separator;
     }
 
-    public static String getGawdModJar(String gmVer, String mcVer) {
-	return getGawdModPath() + gmVer + "_" + mcVer + ".jar";
+    public static String getTexperienceJar(String version, String mcVersion) {
+	return getTexperiencePath() + version + "_" + mcVersion + ".jar";
     }
 
     public static String getMcPath(String version) {

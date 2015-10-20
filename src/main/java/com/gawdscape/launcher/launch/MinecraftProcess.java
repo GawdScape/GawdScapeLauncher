@@ -58,12 +58,7 @@ public class MinecraftProcess {
     }
 
     public int getExitCode() {
-	try {
-	    return process.exitValue();
-	} catch (IllegalThreadStateException ex) {
-	    ex.fillInStackTrace();
-	    throw ex;
-	}
+        return process.exitValue();
     }
 
     @Override

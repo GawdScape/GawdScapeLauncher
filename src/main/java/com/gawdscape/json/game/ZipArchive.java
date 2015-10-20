@@ -1,38 +1,32 @@
 package com.gawdscape.json.game;
 
-import com.gawdscape.json.modpacks.ModType;
-import static com.gawdscape.launcher.updater.DownloadManager.mcVer;
 import com.gawdscape.launcher.util.Constants;
-import java.io.File;
 
 /**
  *
  * @author Vinnie
  */
-public class Mod {
+public class ZipArchive {
 
     private String name;
-    private ModType type;
     private ExtractRules extract;
     private String url;
 
-    public Mod() {
+    public ZipArchive() {
     }
 
-    public Mod(String name) {
+    public ZipArchive(String name) {
 	if ((name == null) || (name.length() == 0)) {
-	    throw new IllegalArgumentException("Mod name cannot be null or empty");
+	    throw new IllegalArgumentException("Archive name cannot be null or empty");
 	}
 	this.name = name;
-	this.type = ModType.FORGE;
     }
 
-    public Mod(Mod mod) {
-	name = mod.name;
-	type = mod.getType();
-	url = mod.url;
-	if (mod.extract != null) {
-	    extract = new ExtractRules(mod.extract);
+    public ZipArchive(ZipArchive zip) {
+	name = zip.name;
+	url = zip.url;
+	if (zip.extract != null) {
+	    extract = new ExtractRules(zip.extract);
 	}
     }
 
@@ -40,15 +34,11 @@ public class Mod {
 	return name;
     }
 
-    public ModType getType() {
-	return type;
-    }
-
     public ExtractRules getExtractRules() {
 	return extract;
     }
 
-    public Mod setExtractRules(ExtractRules rules) {
+    public ZipArchive setExtractRules(ExtractRules rules) {
 	extract = rules;
 	return this;
     }
@@ -81,40 +71,14 @@ public class Mod {
 	} else {
 	    classifier = "";
 	}
-	String extension = getFileExtension();
+	String extension = "zip";
 	String[] parts = name.split(":", 3);
 	return String.format("%s-%s%s.%s", parts[1], parts[2], classifier, extension);
     }
 
-    public String getFileExtension() {
-        switch (type) {
-            case FORGEZIP:
-                return "zip";
-            case LITEMOD:
-                return "litemod";
-            case VERSIONLITEMOD:
-                return "litemod";
-        }
-        return "jar";
-    }
-
-    public String getModsDir() {
-        switch (type) {
-            case COREMOD:
-                return "coremods";
-            case VERSIONMOD:
-                return "mods" + File.separator + mcVer;
-            case VERSIONLITEMOD:
-                return "mods" + File.separator + mcVer;
-            case JARMOD:
-                return "bin";
-        }
-        return "mods";
-    }
-
     @Override
     public String toString() {
-	return "Mod{name='" + name + "'" + ", type=" + type + ", extract=" + extract + "}";
+	return "Archive{name='" + name + "', extract=" + extract + "}";
     }
 
     public boolean hasCustomUrl() {
@@ -125,6 +89,6 @@ public class Mod {
 	if (url != null) {
 	    return url;
 	}
-	return Constants.GS_STORAGE_URL + "Mods/";
+	return Constants.GS_STORAGE_URL + "Archives/";
     }
 }

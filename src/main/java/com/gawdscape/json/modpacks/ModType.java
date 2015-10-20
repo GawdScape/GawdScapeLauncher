@@ -6,5 +6,11 @@ package com.gawdscape.json.modpacks;
  */
 public enum ModType {
 
-    FORGE, LITEMOD, COREMOD, JARMOD
+    FORGE, // Standard Forge .jar mod
+    COREMOD, // Forge Core Mod
+    VERSIONMOD, // Version specific Forge mod
+    FORGEZIP, // Forge .zip mod (can be extracted)
+    LITEMOD, // LiteLoader .litemod
+    VERSIONLITEMOD, // Version specific LiteLoader mod
+    JARMOD // Modifications to Minecraft.jar file
 }

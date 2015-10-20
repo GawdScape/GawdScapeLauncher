@@ -37,9 +37,13 @@ public class DownloadDialog extends javax.swing.JDialog {
 
     public void setFile(String fileName, String host, String localPath) {
 	fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-	source.setText(fileName + " from " + host);
-	if (localPath.length() >= 60) {
-	    localPath = "..." + localPath.substring(localPath.length() - 57, localPath.length());
+        fileName = fileName + " from " + host;
+        if (fileName.length() > 65) {
+            fileName = fileName.substring(0, 60) + " ...";
+        }
+	source.setText(fileName);
+	if (localPath.length() >= 50) {
+	    localPath = "... " + localPath.substring(localPath.length() - 45, localPath.length());
 	}
 	destination.setText(localPath);
     }
@@ -75,7 +79,7 @@ public class DownloadDialog extends javax.swing.JDialog {
         totalProgress = new javax.swing.JProgressBar();
         cancel = new com.gawdscape.launcher.ui.TransparentButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Mod Pack Download");
         setIconImage(ImageUtils.getFavIcon());
 

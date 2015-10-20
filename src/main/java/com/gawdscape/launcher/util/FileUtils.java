@@ -12,7 +12,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -62,11 +61,11 @@ public class FileUtils {
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 	    }
 	} catch (FileNotFoundException ex) {
-	    Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, "Error: File Not Found");
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error: File Not Found");
 	} catch (MalformedURLException ex) {
-	    Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, "Error: Invalid URL");
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error: Invalid URL");
 	} catch (IOException ex) {
-	    Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, "IO Error", ex);
+	    GawdScapeLauncher.logger.log(Level.SEVERE, "IO Error", ex);
 	}
     }
 

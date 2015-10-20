@@ -1,5 +1,6 @@
 package com.gawdscape.json.modpacks;
 
+import com.gawdscape.json.game.ZipArchive;
 import com.gawdscape.json.game.Library;
 import com.gawdscape.json.game.Mod;
 import com.gawdscape.launcher.util.Directories;
@@ -17,16 +18,17 @@ public class ModPack {
     private String id;
     private String version;
     private String minecraftVersion;
-    private String gawdmodVersion;
+    private String texperienceVersion;
     private String mainClass;
     private String minecraftArguments;
     private List<Library> libraries;
     private List<Mod> mods;
+    private List<ZipArchive> archives;
 
     public ModPack() {
     }
 
-    public ModPack(String id, String version, String minecraftVersion, String gawdmodVersion, String mainClass, String minecraftArguments) {
+    public ModPack(String id, String version, String minecraftVersion, String texperienceVersion, String mainClass, String minecraftArguments) {
 	if ((id == null) || (id.length() == 0)) {
 	    throw new IllegalArgumentException("ID cannot be null or empty");
 	}
@@ -38,7 +40,7 @@ public class ModPack {
 	}
 	this.id = id;
 	this.minecraftVersion = minecraftVersion;
-	this.gawdmodVersion = gawdmodVersion;
+	this.texperienceVersion = texperienceVersion;
 	this.mainClass = mainClass;
 	this.minecraftArguments = minecraftArguments;
 	libraries = new ArrayList<>();
@@ -46,7 +48,7 @@ public class ModPack {
     }
 
     public ModPack(ModPack version) {
-	this(version.getId(), version.getVersion(), version.getMinecraftVersion(), version.getGawdModVersion(), version.getMainClass(), version.getMinecraftArguments());
+	this(version.getId(), version.getVersion(), version.getMinecraftVersion(), version.getTexperienceVersion(), version.getMainClass(), version.getMinecraftArguments());
 	version.getLibraries().stream().forEach((lib) -> libraries.add(new Library(lib)));
 	version.getMods().stream().forEach((mod) -> mods.add(new Mod(mod)));
     }
@@ -63,8 +65,8 @@ public class ModPack {
 	return minecraftVersion;
     }
 
-    public String getGawdModVersion() {
-	return gawdmodVersion;
+    public String getTexperienceVersion() {
+	return texperienceVersion;
     }
 
     public List<Library> getLibraries() {
@@ -82,6 +84,10 @@ public class ModPack {
 
     public List<Mod> getMods() {
 	return mods;
+    }
+
+    public List<ZipArchive> getArchives() {
+	return archives;
     }
 
     public String getMainClass() {

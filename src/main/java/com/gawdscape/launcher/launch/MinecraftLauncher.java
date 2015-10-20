@@ -64,6 +64,8 @@ public class MinecraftLauncher implements MinecraftExit {
 	processLauncher.addCommands("-Djava.library.path=" + nativeDir.getAbsolutePath());
 	// UTF-8 Mode
 	processLauncher.addCommands("-Dfile.encoding=UTF-8");
+        // Tell Forge to ignore META-INF
+        processLauncher.addCommands("-Dfml.ignoreInvalidMinecraftCertificates=true");
 	processLauncher.addCommands("-cp", constructClassPath(mc, pack));
 	String mainClass = mc.getMainClass();
 	if (pack.getMainClass() != null) {
@@ -175,12 +177,10 @@ public class MinecraftLauncher implements MinecraftExit {
     }
 
     private File getAssetObject(String assetVersion, String name) throws IOException {
-	File assetsDir = new File(Directories.getAssetPath(), "assets");
-	File indexDir = new File(assetsDir, "indexes");
-	File objectsDir = new File(assetsDir, "objects");
+	File indexDir = new File(Directories.getAssetIndexPath());
+	File objectsDir = new File(Directories.getAssetObjectPath());
 	File indexFile = new File(indexDir, assetVersion + ".json");
 	AssetIndex index = JsonUtils.getGson().fromJson(JsonUtils.readJsonFromFile(indexFile), AssetIndex.class);
-
 	String hash = (index.getFileMap().get(name)).getHash();
 	return new File(objectsDir, hash.substring(0, 2) + "/" + hash);
     }
@@ -226,11 +226,8 @@ public class MinecraftLauncher implements MinecraftExit {
     }
 
     private String constructClassPath(Minecraft mc, ModPack pack) {
-	StringBuilder result = new StringBuilder();
-	// Libraries
-	Collection<File> classPath = mc.getClassPath();
-	classPath.addAll(pack.getClassPath());
-	// Mods
+	ArrayList<File> classPath = new ArrayList<>();
+        // User Mods
 	try {
 	    File modDir = new File(GawdScapeLauncher.config.getGameDir(pack.getId()), "bin");
 	    if (!modDir.exists()) {
@@ -247,12 +244,19 @@ public class MinecraftLauncher implements MinecraftExit {
 	} catch (Exception e) {
 	    GawdScapeLauncher.logger.severe("Error loading mods");
 	}
-	if (pack.getGawdModVersion() != null) {
-	    classPath.add(new File(Directories.getGawdModJar(
-		    pack.getGawdModVersion(), pack.getMinecraftVersion())));
+	// Libraries
+        classPath.addAll(pack.getClassPath());
+        classPath.addAll(mc.getClassPath());
+        // Texperience Mod
+	if (pack.getTexperienceVersion()!= null) {
+	    classPath.add(new File(Directories.getTexperienceJar(
+		    pack.getTexperienceVersion(), pack.getMinecraftVersion())));
 	}
 	// Minecraft
 	classPath.add(new File(Directories.getMcJar(mc.getId())));
+
+        // Build command
+        StringBuilder result = new StringBuilder();
 	String separator = System.getProperty("path.separator");
 	for (File file : classPath) {
 	    if (!file.isFile()) {
@@ -268,20 +272,23 @@ public class MinecraftLauncher implements MinecraftExit {
 
     @Override
     public void onMinecraftExit(MinecraftProcess process) {
-	int exitCode = process.getExitCode();
-	if (exitCode == 0) {
-	    GawdScapeLauncher.logger.log(Level.INFO, "Game ended with no troubles detected (exit code {0})", exitCode);
-	    if (config.getCloseLog()) {
-		System.exit(0);
-	    }
-	} else if (GawdScapeLauncher.logFrame != null) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Game ended with bad state (exit code {0})", exitCode);
-	    SwingUtilities.invokeLater(() -> {
-		GawdScapeLauncher.logger.info("Ignoring visibility rule and showing log due to a game crash");
-		GawdScapeLauncher.logFrame.setVisible(true);
-	    });
+        try {
+            int exitCode = process.getExitCode();
+            if (exitCode == 0) {
+                GawdScapeLauncher.logger.info("Game ended with no troubles detected (exit code 0)");
+                if (config.getCloseLog()) {
+                    System.exit(0);
+                }
+            } else if (GawdScapeLauncher.logFrame != null) {
+                GawdScapeLauncher.logger.log(Level.SEVERE, "Game ended with bad state (exit code {0})", exitCode);
+                SwingUtilities.invokeLater(() -> {
+                    GawdScapeLauncher.logger.info("Ignoring visibility rule and showing log due to a game crash");
+                    GawdScapeLauncher.logFrame.setVisible(true);
+                });
+            }
+        } catch (IllegalThreadStateException ex) {
+            GawdScapeLauncher.logger.warning("The Minecraft process has not yet exited.");
 	}
-	// You close log, what you know??
     }
 
     public void cleanupSkinCache() {

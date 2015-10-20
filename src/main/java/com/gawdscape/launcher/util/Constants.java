@@ -15,7 +15,7 @@ import java.util.logging.Level;
  */
 public class Constants {
 
-    public static final int VERSION = 13;
+    public static final int VERSION = 14;
 
     public static final int THIS_YEAR = 2015;
 
@@ -27,9 +27,9 @@ public class Constants {
     public static final String MC_DOWNLOAD_URL = "https://s3.amazonaws.com/Minecraft.Download/";
     public static final String MC_LIBRARY_URL = "https://libraries.minecraft.net/";
     public static final String MC_ASSET_URL = "http://resources.download.minecraft.net/";
-    public static final String GS_MOD_URL = "https://github.com/GawdScape/GawdMod/releases/download/";
     public static final String GS_PACK_URL = "https://raw.githubusercontent.com/GawdScape/GawdPack/";
     public static final String GS_STORAGE_URL = "https://raw.githubusercontent.com/GawdScape/GawdStorage/";
+    public static final String TXT_MOD_URL = "https://github.com/GawdScape/TexperienceMod/releases/download/";
     public static final String LAUNCHER_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScapeLauncher/master/latest.version";
     public static final URI UPDATE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/releases/latest");
     public static final URI GS_FORUM_LINK = constantURI("http://www.gawdscape.com/");
@@ -38,8 +38,7 @@ public class Constants {
     public static final URI LAUNCHER_ISSUE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/issues");
     public static final URI MC_BUY_LINK = constantURI("https://minecraft.net/store/minecraft");
 
-    public static final String GS_SERVER_IP = "server.gawdscape.com";
-    public static final String MC_AUTH_IP = "authserver.mojang.com";
+    public static final String GS_SERVER_IP = "mc.gawdscape.com";
     public static final int MC_AUTH_TIMEOUT = 15000;
 
     public static URI constantURI(String input) {
@@ -68,7 +67,7 @@ public class Constants {
 	return MC_DOWNLOAD_URL + "versions/" + version + "/" + version + ".json";
     }
 
-    public static String getGawdModJar(String version, String mcVersion) {
-	return GS_MOD_URL + version + "/" + mcVersion + ".jar";
+    public static String getTexperienceJar(String version, String mcVersion) {
+        return TXT_MOD_URL + version + "/" + mcVersion + ".jar";
     }
 }
