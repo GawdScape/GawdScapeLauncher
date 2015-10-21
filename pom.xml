@@ -7,7 +7,7 @@
     <name>GawdScape Launcher</name>
     <groupId>com.gawdscape</groupId>
     <artifactId>launcher</artifactId>
-    <version>14</version>
+    <version>15</version>
 
     <organization>
 	<name>GawdScape</name>

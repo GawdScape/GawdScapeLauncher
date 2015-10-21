@@ -300,11 +300,15 @@ public class Updater extends Thread {
         File packDir = GawdScapeLauncher.config.getGameDir(packName);
         if (!packDir.exists())
             return;
-        File binDir = new File(packDir, "bin");
-        File modsDir = new File(packDir, "mods");
         List<File> files = new ArrayList<>();
-        files.addAll(Arrays.asList(binDir.listFiles()));
-        files.addAll(Arrays.asList(modsDir.listFiles()));
+        File binDir = new File(packDir, "bin");
+        if (binDir.exists()) {
+            files.addAll(Arrays.asList(binDir.listFiles()));
+        }
+        File modsDir = new File(packDir, "mods");
+        if (modsDir.exists()) {
+            files.addAll(Arrays.asList(modsDir.listFiles()));
+        }
         files.stream().filter((modFile) -> (modFile.isFile())).forEach((modFile) -> {
             String fileName = modFile.getName().toLowerCase();
             if (fileName.contains("optifine")) {

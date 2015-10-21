@@ -15,7 +15,7 @@ import java.util.logging.Level;
  */
 public class Constants {
 
-    public static final int VERSION = 14;
+    public static final int VERSION = 15;
 
     public static final int THIS_YEAR = 2015;
 
