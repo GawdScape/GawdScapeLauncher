@@ -346,6 +346,7 @@ public class Updater extends Thread {
 
     private void updatePackLogo() {
 	File logo = new File(Directories.getLogoPath(packName));
+        logo.getParentFile().mkdirs();
 	FileUtils.downloadFile(
 		GawdScapeLauncher.modpacks.getPackUrl(packName) + "/logo.png", logo);
     }

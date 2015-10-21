@@ -53,10 +53,10 @@ public final class LauncherFrame extends javax.swing.JFrame {
 	    packCombo.addItem(id);
 	    packs[id] = pack;
 	    File packLogo = new File(Directories.getLogoPath(pack));
-	    /*if (!packLogo.exists()) {
+	    if (!packLogo.exists()) {
 		packLogo.getParentFile().mkdirs();
 		FileUtils.downloadFile(GawdScapeLauncher.modpacks.getPackUrl(pack) + "/logo.png", packLogo);
-	    }*/
+	    }
 	    if (packLogo.exists()) {
 		ImageIcon logo = new ImageIcon(packLogo.getPath());
 		logo.setDescription(pack);
