@@ -216,6 +216,7 @@ public final class LauncherFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        packCombo.setPreferredSize(new java.awt.Dimension(281, 71));
         packCombo.setRenderer(modComboRenderer);
 
         javax.swing.GroupLayout bottomPanelLayout = new javax.swing.GroupLayout(bottomPanel);

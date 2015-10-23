@@ -260,7 +260,7 @@ public class MinecraftLauncher implements MinecraftExit {
 	String separator = System.getProperty("path.separator");
 	for (File file : classPath) {
 	    if (!file.isFile()) {
-		throw new RuntimeException("Classpath file not found: " + file);
+		GawdScapeLauncher.logger.log(Level.WARNING, "Classpath file not found: {0}", file);
 	    }
 	    if (result.length() > 0) {
 		result.append(separator);

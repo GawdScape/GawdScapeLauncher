@@ -7,7 +7,7 @@
     <name>GawdScape Launcher</name>
     <groupId>com.gawdscape</groupId>
     <artifactId>launcher</artifactId>
-    <version>15</version>
+    <version>17</version>
 
     <organization>
 	<name>GawdScape</name>
@@ -25,7 +25,7 @@
     <properties>
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<mainClass>${project.groupId}.${project.artifactId}.GawdScapeLauncher</mainClass>
-	<exeVersion>0.0.1.4</exeVersion>
+	<exeVersion>0.0.1.7</exeVersion>
 	<copyright>(c) 2015 ${project.organization.name}</copyright>
     </properties>
 

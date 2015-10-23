@@ -15,6 +15,7 @@ public class Mod {
     private ModType type;
     private ExtractRules extract;
     private String url;
+    private String classifier;
 
     public Mod() {
     }
@@ -62,7 +63,7 @@ public class Mod {
     }
 
     public String getArtifactPath() {
-	return getArtifactPath(null);
+	return getArtifactPath(classifier);
     }
 
     public String getArtifactPath(String classifier) {

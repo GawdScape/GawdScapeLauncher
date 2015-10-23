@@ -4,6 +4,7 @@ import com.gawdscape.launcher.GawdScapeLauncher;
 
 import java.io.*;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -68,6 +69,18 @@ public class FileUtils {
 	    GawdScapeLauncher.logger.log(Level.SEVERE, "IO Error", ex);
 	}
     }
+
+    public static boolean existsOnInternet(String url){
+        try {
+            HttpURLConnection.setFollowRedirects(false);
+            HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
+            con.setRequestMethod("HEAD");
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        } catch (IOException ex) {
+            GawdScapeLauncher.logger.log(Level.SEVERE, "IO Error", ex);
+            return false;
+        }
+      }
 
     public static String checkSum(FileInputStream fis) {
 	String checksum = null;

@@ -16,6 +16,7 @@ public class Library {
     private Map<OperatingSystem, String> natives;
     private ExtractRules extract;
     private String url;
+    private String classifier;
 
     public Library() {
     }
@@ -101,7 +102,7 @@ public class Library {
     }
 
     public String getArtifactPath() {
-	return getArtifactPath(null);
+	return getArtifactPath(classifier);
     }
 
     public String getArtifactPath(String classifier) {

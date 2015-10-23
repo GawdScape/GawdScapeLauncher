@@ -549,22 +549,7 @@ public class OptionsDialog extends javax.swing.JDialog {
 		    && (pack.getId() != null
 		    && pack.getVersion() != null
 		    && pack.getMinecraftVersion() != null)) {
-		int accept = JOptionPane.showConfirmDialog(this,
-			"Do you want to add Mod Pack?\n"
-			+ pack.getId()
-			+ "\nVersion: " + pack.getVersion()
-			+ "\nMinecraft: " + pack.getMinecraftVersion()
-			+ "\nLibraries: " + pack.getLibraries()
-			+ "\nMods: " + pack.getMods()
-			+ "\nMain Class: " + pack.getMainClass()
-			+ "\nArguments: " + pack.getMinecraftArguments()
-			+ "\nTexperience: " + pack.getTexperienceVersion());
-		if (accept == JOptionPane.YES_OPTION) {
-		    GawdScapeLauncher.modpacks.addCustomPack(pack.getId(), url);
-		    JOptionPane.showMessageDialog(this,
-			    "Added Mod Pack: " + pack.getId());
-		    GawdScapeLauncher.launcherFrame.loadPacks();
-		}
+		AboutModPackDialog dialog = new AboutModPackDialog(GawdScapeLauncher.launcherFrame, pack, url);
 	    }
 	} catch (MalformedURLException ex) {
 	    JOptionPane.showMessageDialog(this, "Invalid Mod Pack URL.", "Error", JOptionPane.ERROR_MESSAGE);
