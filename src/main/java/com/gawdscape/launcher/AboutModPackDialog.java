@@ -7,6 +7,7 @@ import com.gawdscape.json.modpacks.ModPack;
 import com.gawdscape.launcher.util.FileUtils;
 import com.google.gson.JsonSyntaxException;
 import java.awt.Frame;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -48,10 +49,17 @@ public class AboutModPackDialog extends javax.swing.JDialog {
             listLibraries(modpack.getLibraries());
             listMods(modpack.getMods());
             listArchives(modpack.getArchives());
-            serverList.setText(String.valueOf(FileUtils.existsOnInternet(url + "/servers.dat")));
+            serverList.setText(String.valueOf(checkServerList()));
         } catch (JsonSyntaxException ex) {
             GawdScapeLauncher.logger.log(Level.SEVERE, "Error", ex);
         }
+    }
+
+    private boolean checkServerList() {
+        if (url.startsWith("file:///")) {
+            return new File(url.substring(8), "servers.dat").exists();
+        }
+        return FileUtils.existsOnInternet(url + "/servers.dat");
     }
 
     private void listLibraries(List<Library> libList) {
