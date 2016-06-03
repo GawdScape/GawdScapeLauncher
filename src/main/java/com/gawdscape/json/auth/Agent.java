@@ -15,10 +15,10 @@ public class Agent {
     }
 
     public String getName() {
-	return this.name;
+	return name;
     }
 
     public int getVersion() {
-	return this.version;
+	return version;
     }
 }

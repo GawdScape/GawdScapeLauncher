@@ -11,11 +11,15 @@ import com.gawdscape.launcher.util.FileUtils;
 import com.gawdscape.launcher.util.JsonUtils;
 import com.gawdscape.launcher.util.OperatingSystem;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -27,28 +31,28 @@ public class MinecraftLauncher implements MinecraftExit {
     private SessionResponse session;
 
     public void launchGame(Minecraft mc, ModPack pack) throws IOException {
-	GawdScapeLauncher.logger.info("Prepare for launch...");
+	GawdScapeLauncher.LOGGER.info("Prepare for launch...");
 	config = GawdScapeLauncher.config;
 	session = GawdScapeLauncher.session;
 	if (mc == null) {
-	    GawdScapeLauncher.logger.severe("Aborting launch; Minecraft version is null?");
+	    GawdScapeLauncher.LOGGER.severe("Aborting launch; Minecraft version is null?");
 	    return;
 	}
 
 	if (pack == null) {
-	    GawdScapeLauncher.logger.severe("Aborting launch; Mod Pack version is null?");
+	    GawdScapeLauncher.LOGGER.severe("Aborting launch; Mod Pack version is null?");
 	    return;
 	}
 
 	File nativeDir = new File(Directories.getNativesPath(mc.getId()));
 	File gameDirectory = config.getGameDir(pack.getId());
-	GawdScapeLauncher.logger.log(Level.INFO, "Launching in {0}", gameDirectory);
+	GawdScapeLauncher.LOGGER.log(Level.INFO, "Launching in {0}", gameDirectory);
 	if (!gameDirectory.exists()) {
 	    if (!gameDirectory.mkdirs()) {
-		GawdScapeLauncher.logger.severe("Aborting launch; couldn't create game directory");
+		GawdScapeLauncher.LOGGER.severe("Aborting launch; couldn't create game directory");
 	    }
 	} else if (!gameDirectory.isDirectory()) {
-	    GawdScapeLauncher.logger.severe("Aborting launch; game directory is not actually a directory");
+	    GawdScapeLauncher.LOGGER.severe("Aborting launch; game directory is not actually a directory");
 	    return;
 	}
 	String javaPath = config.getCustomJava() ? config.getJavaPath() : null;
@@ -105,17 +109,17 @@ public class MinecraftLauncher implements MinecraftExit {
 	}
 	try {
 	    MinecraftProcess process = processLauncher.start();
-	    GawdScapeLauncher.logger.finer(process.toString());
+	    GawdScapeLauncher.LOGGER.finer(process.toString());
 	    process.safeSetExitRunnable(this);
 	} catch (IOException e) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Couldn't launch game", e);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Couldn't launch game", e);
 	}
     }
 
     private String[] getMinecraftArguments(String packName, Minecraft version, String gsArgs, File gameDirectory) {
-	Map<String, String> map = new HashMap<>();
+	Map<String, String> replacements = new HashMap<>();
 	if (version.getMinecraftArguments() == null) {
-	    GawdScapeLauncher.logger.severe("Can't run version, missing minecraftArguments");
+	    GawdScapeLauncher.LOGGER.severe("Can't run version, missing minecraftArguments");
 	    return null;
 	}
 
@@ -128,52 +132,45 @@ public class MinecraftLauncher implements MinecraftExit {
 	    }
 
 	    // Get Twitch Access Token
-	    String twitchToken = "";
+	    String twitchToken = "{}";
 	    if (userProperties.contains("twitch_access_token")) {
 		int start = userProperties.indexOf("twitch_access_token") + 30;
-		twitchToken = String.format("\"twitch_access_token\":[\"%s\"]", userProperties.substring(start, start + 31));
+		twitchToken = String.format("{\"twitch_access_token\":[\"%s\"]}", userProperties.substring(start, start + 31));
 	    }
 
-	    map.put("auth_access_token", session.getAccessToken());
-	    map.put("user_properties", String.format("{%s}", twitchToken));
-	    map.put("auth_session", session.getSessionId());
-	    map.put("auth_player_name", session.getSelectedProfile().getName());
-	    map.put("auth_uuid", session.getSelectedProfile().getId());
-	    map.put("user_type", session.getSelectedProfile().isLegacy() ? "legacy" : "mojang");
+	    replacements.put("auth_access_token", session.getAccessToken());
+	    replacements.put("user_properties", twitchToken);
+	    replacements.put("auth_session", session.getSessionId());
+	    replacements.put("auth_player_name", session.getSelectedProfile().getName());
+	    replacements.put("auth_uuid", session.getSelectedProfile().getId());
+	    replacements.put("user_type", session.getSelectedProfile().isLegacy() ? "legacy" : "mojang");
 	} else {
-	    map.put("auth_session", "-");
-	    map.put("auth_player_name", "Player");
-	    map.put("auth_uuid", new UUID(0L, 0L).toString());
-	    map.put("user_type", "legacy");
-	    map.put("user_properties", "{}");
+	    replacements.put("auth_session", "-");
+	    replacements.put("auth_player_name", "Player");
+	    replacements.put("auth_uuid", new UUID(0L, 0L).toString());
+	    replacements.put("user_type", "legacy");
+	    replacements.put("user_properties", "{}");
 	}
 
-	map.put("profile_name", packName);
-	map.put("version_name", version.getId());
+	replacements.put("profile_name", packName);
+	replacements.put("version_name", version.getId());
+        replacements.put("version_type", packName);
 
-	map.put("game_directory", gameDirectory.getAbsolutePath());
-	map.put("game_assets", reconstructAssets(version.getAssets()).getAbsolutePath());
+	replacements.put("game_directory", gameDirectory.getAbsolutePath());
+	replacements.put("game_assets", reconstructAssets(version.getAssets()).getAbsolutePath());
 
-	map.put("assets_root", new File(Directories.getAssetPath()).getAbsolutePath());
-	map.put("assets_index_name", version.getAssets());
+	replacements.put("assets_root", new File(Directories.getAssetPath()).getAbsolutePath());
+	replacements.put("assets_index_name", version.getAssets());
 
 	String mcArgs = version.getMinecraftArguments();
 	if (gsArgs != null) {
 	    mcArgs = gsArgs;
 	}
-	String[] split = mcArgs.split(" ");
 	// Loop through the default arguments
-	for (int i = 0; i < split.length; i++) {
-	    // Key = current command
-	    String key = split[i];
-	    // Remove the ${ } from the var
-	    key = key.substring(2, key.length() - 1);
-	    // Replace the string if it's a variable
-	    if (map.containsKey(key)) {
-		split[i] = map.get(key);
-	    }
+	for (Map.Entry<String, String> replace : replacements.entrySet()) {
+            mcArgs = mcArgs.replace("${" + replace.getKey() + "}", replace.getValue());
 	}
-	return split;
+	return mcArgs.split(" ");
     }
 
     private File getAssetObject(String assetVersion, String name) throws IOException {
@@ -192,18 +189,18 @@ public class MinecraftLauncher implements MinecraftExit {
 	File indexFile = new File(indexDir, assetVersion + ".json");
 	File virtualRoot = new File(new File(assetsDir, "virtual"), assetVersion);
 	if (!indexFile.isFile()) {
-	    GawdScapeLauncher.logger.log(Level.WARNING, "No assets index file {0}; can''t reconstruct assets", virtualRoot);
+	    GawdScapeLauncher.LOGGER.log(Level.WARNING, "No assets index file {0}; can''t reconstruct assets", virtualRoot);
 	    return virtualRoot;
 	}
 	AssetIndex index;
 	try {
 	    index = JsonUtils.getGson().fromJson(JsonUtils.readJsonFromFile(indexFile), AssetIndex.class);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading asset index", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading asset index", ex);
 	    return virtualRoot;
 	}
 	if (index.isVirtual()) {
-	    GawdScapeLauncher.logger.log(Level.INFO, "Reconstructing virtual assets folder at {0}", virtualRoot);
+	    GawdScapeLauncher.LOGGER.log(Level.INFO, "Reconstructing virtual assets folder at {0}", virtualRoot);
 	    index.getFileMap().entrySet().stream().forEach((entry) -> {
 		File target = new File(virtualRoot, entry.getKey());
 		File original = new File(new File(objectDir, (entry.getValue()).getHash().substring(0, 2)), (entry.getValue()).getHash());
@@ -211,7 +208,7 @@ public class MinecraftLauncher implements MinecraftExit {
 		    try {
 			FileUtils.copyFile(original, target);
 		    } catch (IOException ex) {
-			GawdScapeLauncher.logger.log(Level.SEVERE, "Error coping assets", ex);
+			GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error coping assets", ex);
 		    }
 		}
 	    });
@@ -219,7 +216,7 @@ public class MinecraftLauncher implements MinecraftExit {
 	    try {
 		JsonUtils.writeJsonToFile(new Date().toString(), new File(virtualRoot, ".lastused"));
 	    } catch (IOException ex) {
-		GawdScapeLauncher.logger.log(Level.SEVERE, "Error making lastUsed file", ex);
+		GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error making lastUsed file", ex);
 	    }
 	}
 	return virtualRoot;
@@ -231,18 +228,18 @@ public class MinecraftLauncher implements MinecraftExit {
 	try {
 	    File modDir = new File(GawdScapeLauncher.config.getGameDir(pack.getId()), "bin");
 	    if (!modDir.exists()) {
-		modDir.mkdir();
+		modDir.mkdirs();
 	    }
 	    String[] mods = modDir.list();
 	    for (String mod : mods) {
 		if (mod.toLowerCase().endsWith(".jar") || mod.toLowerCase().endsWith(".zip")) {
 		    classPath.add(new File(modDir, mod));
-		    GawdScapeLauncher.logger.log(Level.INFO, "Loaded Mod: {0}", mod);
+		    GawdScapeLauncher.LOGGER.log(Level.INFO, "Loaded Mod: {0}", mod);
 		}
 	    }
 
 	} catch (Exception e) {
-	    GawdScapeLauncher.logger.severe("Error loading mods");
+	    GawdScapeLauncher.LOGGER.severe("Error loading mods");
 	}
 	// Libraries
         classPath.addAll(pack.getClassPath());
@@ -260,7 +257,7 @@ public class MinecraftLauncher implements MinecraftExit {
 	String separator = System.getProperty("path.separator");
 	for (File file : classPath) {
 	    if (!file.isFile()) {
-		GawdScapeLauncher.logger.log(Level.WARNING, "Classpath file not found: {0}", file);
+		GawdScapeLauncher.LOGGER.log(Level.WARNING, "Classpath file not found: {0}", file);
 	    }
 	    if (result.length() > 0) {
 		result.append(separator);
@@ -275,29 +272,29 @@ public class MinecraftLauncher implements MinecraftExit {
         try {
             int exitCode = process.getExitCode();
             if (exitCode == 0) {
-                GawdScapeLauncher.logger.info("Game ended with no troubles detected (exit code 0)");
+                GawdScapeLauncher.LOGGER.info("Game ended with no troubles detected (exit code 0)");
                 if (config.getCloseLog()) {
                     System.exit(0);
                 }
             } else if (GawdScapeLauncher.logFrame != null) {
-                GawdScapeLauncher.logger.log(Level.SEVERE, "Game ended with bad state (exit code {0})", exitCode);
+                GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Game ended with bad state (exit code {0})", exitCode);
                 SwingUtilities.invokeLater(() -> {
-                    GawdScapeLauncher.logger.info("Ignoring visibility rule and showing log due to a game crash");
+                    GawdScapeLauncher.LOGGER.info("Ignoring visibility rule and showing log due to a game crash");
                     GawdScapeLauncher.logFrame.setVisible(true);
                 });
             }
         } catch (IllegalThreadStateException ex) {
-            GawdScapeLauncher.logger.warning("The Minecraft process has not yet exited.");
+            GawdScapeLauncher.LOGGER.warning("The Minecraft process has not yet exited.");
 	}
     }
 
     public void cleanupSkinCache() {
-	GawdScapeLauncher.logger.info("Clearing cached skins...");
+	GawdScapeLauncher.LOGGER.info("Clearing cached skins...");
 	File skinDir = new File(Directories.getAssetPath(), "skins");
 	try {
 	    FileUtils.delete(skinDir);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting skin cache.", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error deleting skin cache.", ex);
 	}
     }
 }

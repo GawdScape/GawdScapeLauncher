@@ -5,11 +5,15 @@ import com.gawdscape.json.game.Minecraft;
 import com.gawdscape.json.modpacks.ModPack;
 import com.gawdscape.launcher.Config;
 import com.gawdscape.launcher.GawdScapeLauncher;
-import com.gawdscape.launcher.LauncherFrame;
+import com.gawdscape.launcher.ui.LauncherFrame;
 import com.gawdscape.launcher.launch.MinecraftLauncher;
-import com.gawdscape.launcher.util.*;
+import com.gawdscape.launcher.util.Constants;
+import com.gawdscape.launcher.util.Directories;
+import com.gawdscape.launcher.util.FileUtils;
+import com.gawdscape.launcher.util.JsonUtils;
+import com.gawdscape.launcher.util.OperatingSystem;
+import com.gawdscape.launcher.util.Utils;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,18 +30,27 @@ import java.util.logging.Level;
 public class Updater extends Thread {
 
     private final String packName;
-    private static ModPack modpack;
-    private static Minecraft minecraft;
-    private static AssetIndex assetIndex;
+    private ModPack modpack;
+    private Minecraft minecraft;
+    private AssetIndex assetIndex;
+    private DownloadManager dlManager;
     private boolean newMcVer;
 
     public Updater(String packName) {
 	this.packName = packName;
     }
 
+    public DownloadManager getDownloadManager() {
+	return dlManager;
+    }
+
+    public String getMinecraftVersion() {
+        return minecraft.getId();
+    }
+
     private void checkForUpdate() {
 	long startTime = System.currentTimeMillis();
-	GawdScapeLauncher.logger.info("Checking for game updates...");
+	GawdScapeLauncher.LOGGER.info("Checking for game updates...");
 
 	// Checking for gawdscape.json
 	File packDataFile = new File(
@@ -94,7 +108,7 @@ public class Updater extends Thread {
 		    GawdScapeLauncher.modpacks.getPackUrl(packName) + "/pack.json");
 	    return JsonUtils.getGson().fromJson(json, ModPack.class);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading " + packName + ".json", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading " + packName + ".json", ex);
 	    return null;
 	}
     }
@@ -104,7 +118,7 @@ public class Updater extends Thread {
 	    String localJson = JsonUtils.readJsonFromFile(jsonFile);
 	    return JsonUtils.getGson().fromJson(localJson, ModPack.class);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading local " + packName + ".json", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading local " + packName + ".json", ex);
 	    return null;
 	}
     }
@@ -115,7 +129,7 @@ public class Updater extends Thread {
 	    JsonUtils.writeJsonToFile(json, new File(
 		    Directories.getPackDataPath(), packName + ".json"));
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error saving " + packName + ".json", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error saving " + packName + ".json", ex);
 	}
     }
 
@@ -127,7 +141,7 @@ public class Updater extends Thread {
 	    String localJson = JsonUtils.readJsonFromFile(minecraftJsonFile);
 	    minecraft = JsonUtils.getGson().fromJson(localJson, Minecraft.class);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading local Minecraft "
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading local Minecraft "
 		    + modpack.getMinecraftVersion() + ".json", ex);
 	    return false;
 	}
@@ -142,7 +156,7 @@ public class Updater extends Thread {
 		    Constants.getMcJson(modpack.getMinecraftVersion()));
 	    minecraft = JsonUtils.getGson().fromJson(minecraftJson, Minecraft.class);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading Minecraft "
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading Minecraft "
 		    + modpack.getMinecraftVersion() + ".json", ex);
 	    return false;
 	}
@@ -150,7 +164,7 @@ public class Updater extends Thread {
 	    JsonUtils.writeJsonToFile(minecraftJson,
 		    new File(Directories.getMcJson(modpack.getMinecraftVersion())));
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error saving Minecraft "
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error saving Minecraft "
 		    + modpack.getMinecraftVersion() + ".json", ex);
 	}
 
@@ -162,7 +176,7 @@ public class Updater extends Thread {
 		    + minecraft.getAssets() + ".json");
 	    assetIndex = JsonUtils.getGson().fromJson(assetJson, AssetIndex.class);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading Assets "
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading Assets "
 		    + minecraft.getAssets() + ".json", ex);
 	    return false;
 	}
@@ -171,7 +185,7 @@ public class Updater extends Thread {
 		    new File(Directories.getAssetIndexPath(),
 			    minecraft.getAssets() + ".json"));
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error saving Assets"
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error saving Assets"
 		    + minecraft.getAssets() + ".json", ex);
 	}
 	return true;
@@ -197,25 +211,26 @@ public class Updater extends Thread {
     }
 
     private void downloadMinecraft() {
-	DownloadManager.mcVer = minecraft.getId();
+	dlManager.setMinecraftVersion(minecraft.getId());
 
 	try {
 	    FileUtils.delete(new File(
 		    Directories.getNativesPath(minecraft.getId())));
 	} catch (FileNotFoundException ex) {
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting natives directory", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error deleting natives directory", ex);
 	}
 
-	DownloadManager.queueLibraries(minecraft.getRelevantLibraries());
-	DownloadManager.queueMinecraft();
-	DownloadManager.queueAssets(assetIndex);
+	dlManager.queueLibraries(minecraft.getRelevantLibraries());
+	dlManager.queueMinecraft();
+	dlManager.queueAssets(assetIndex);
     }
 
     private void update() {
 	long startTime = System.currentTimeMillis();
 
-	DownloadManager.createDialog(packName);
+        dlManager = new DownloadManager();
+	dlManager.createDialog(packName);
 
 	if (modpack == null) {
 	    return;
@@ -236,25 +251,24 @@ public class Updater extends Thread {
 	}
 
 	// Download Mod pack
-	DownloadManager.queueLibraries(modpack.getRelevantLibraries());
-	DownloadManager.queueMods(packName, modpack.getMods());
-        DownloadManager.queueArchives(packName, modpack.getArchives());
+	dlManager.queueLibraries(modpack.getRelevantLibraries());
+	dlManager.queueMods(packName, modpack.getMods());
+        dlManager.queueArchives(packName, modpack.getArchives());
 	if (modpack.getTexperienceVersion() != null) {
-	    DownloadManager.queueTexperienceMod(modpack.getMinecraftVersion(),
+	    dlManager.queueTexperienceMod(modpack.getMinecraftVersion(),
 		    modpack.getTexperienceVersion());
 	}
 
-	if (!DownloadManager.completeQueue()) {
+	if (!dlManager.completeQueue()) {
 	    // Close the download dialog
-	    DownloadManager.downloadDialog.dispose();
-	    DownloadManager.downloadDialog = null;
+	    dlManager.closeDialog();
 	    return;
 	}
 
 	// Save gawdscape.json to indicate we're up to date
 	saveModPackData();
 
-	java.awt.EventQueue.invokeLater(DownloadManager.downloadDialog::setLaunching);
+	dlManager.setDialogLaunching();
 
 	Directories.createGameDirs(
 		GawdScapeLauncher.config.getGameDir(packName));
@@ -268,8 +282,7 @@ public class Updater extends Thread {
 	updatePackLogo();
 
 	// Close the download dialog
-	DownloadManager.downloadDialog.dispose();
-	DownloadManager.downloadDialog = null;
+	dlManager.closeDialog();
 
 	Utils.benchmark("Updated Minecraft in {0}ms", startTime);
     }
@@ -280,19 +293,19 @@ public class Updater extends Thread {
 	    FileUtils.delete(new File(packDir, "bin"));
 	} catch (FileNotFoundException ex) {
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting bin directory", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error deleting bin directory", ex);
 	}
         try {
 	    FileUtils.delete(new File(packDir, "coremods"));
 	} catch (FileNotFoundException ex) {
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting coremods directory", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error deleting coremods directory", ex);
 	}
         try {
 	    FileUtils.delete(new File(packDir, "mods"));
 	} catch (FileNotFoundException ex) {
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error deleting mods directory", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error deleting mods directory", ex);
 	}
     }
 
@@ -314,9 +327,9 @@ public class Updater extends Thread {
             if (fileName.contains("optifine")) {
                 try {
                     FileUtils.copyFile(modFile, new File(packDir, "backup/" + modFile.getName()));
-                    GawdScapeLauncher.logger.log(Level.INFO, "Backed up mod: {0}", modFile.getName());
+                    GawdScapeLauncher.LOGGER.log(Level.INFO, "Backed up mod: {0}", modFile.getName());
                 } catch (IOException ex) {
-                    GawdScapeLauncher.logger.log(Level.SEVERE, "Error copying file", ex);
+                    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error copying file", ex);
                 }
             }
         });
@@ -335,10 +348,10 @@ public class Updater extends Thread {
 	    }
 	    GawdScapeLauncher.launcherFrame = null;
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading Minecraft", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading Minecraft", ex);
 	}
 	Utils.benchmark("Launched Minecraft in {0}ms", startTime);
-	GawdScapeLauncher.logger.info(
+	GawdScapeLauncher.LOGGER.info(
 		"\n#==============================================================================#" +
 		"\n#--------------------------------- Minecraft ----------------------------------#" +
 		"\n#==============================================================================#");
@@ -369,7 +382,7 @@ public class Updater extends Thread {
 	    return;
 	}
 	if (Config.forceUpdate) {
-	    GawdScapeLauncher.logger.info("Forcing update...");
+	    GawdScapeLauncher.LOGGER.info("Forcing update...");
 	    modpack = downloadModPackData();
 	    newMcVer = true;
 	    update();

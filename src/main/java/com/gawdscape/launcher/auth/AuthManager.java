@@ -28,14 +28,14 @@ public class AuthManager {
     public static SessionResponse authenticate(String username, String password, String clientToken) {
 	AuthRequest request = new AuthRequest(Constants.MINECRAFT, username, password, clientToken);
 	String result = postJson(Constants.MC_LOGIN, gson.toJson(request));
-	GawdScapeLauncher.logger.log(Level.FINE, "Authentication: {0}", result);
+	GawdScapeLauncher.LOGGER.log(Level.FINE, "Authentication: {0}", result);
 	return gson.fromJson(result, SessionResponse.class);
     }
 
     // Login with UUID and ClientToken
     public static SessionResponse refresh(RefreshRequest request) {
 	String result = postJson(Constants.MC_REFRESH, gson.toJson(request));
-	GawdScapeLauncher.logger.log(Level.FINE, "Refresh: {0}", result);
+	GawdScapeLauncher.LOGGER.log(Level.FINE, "Refresh: {0}", result);
 	return gson.fromJson(result, SessionResponse.class);
     }
 
@@ -67,9 +67,9 @@ public class AuthManager {
 		return response.toString();
 	    }
 	} catch (UnknownHostException e) {
-	    GawdScapeLauncher.logger.severe("Error connecting to authentication server.");
+	    GawdScapeLauncher.LOGGER.severe("Error connecting to authentication server.");
 	} catch (IOException e) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Authentication Error: {0}", e.getMessage());
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Authentication Error: {0}", e.getMessage());
 	}
 	return null;
     }

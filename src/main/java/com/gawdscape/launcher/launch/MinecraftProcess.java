@@ -13,11 +13,8 @@ public class MinecraftProcess {
     private MinecraftExit onExit;
 
     public MinecraftProcess(List<String> commands, Process process) {
-	ProcessMonitorThread monitor = new ProcessMonitorThread(this);
 	this.commands = commands;
 	this.process = process;
-
-	monitor.start();
     }
 
     public Process getRawProcess() {

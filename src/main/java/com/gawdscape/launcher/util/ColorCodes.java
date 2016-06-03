@@ -1,6 +1,6 @@
 package com.gawdscape.launcher.util;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  *

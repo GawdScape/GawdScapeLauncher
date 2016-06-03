@@ -69,7 +69,7 @@ public class ModPackManager {
 	    String json = JsonUtils.getGson().toJson(index);
 	    JsonUtils.writeJsonToFile(json, packFile);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error saving mod packs.", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error saving mod packs.", ex);
 	}
     }
 
@@ -78,7 +78,7 @@ public class ModPackManager {
 	    String json = JsonUtils.getGson().toJson(index);
 	    JsonUtils.writeJsonToFile(json, customPackFile);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error saving custom mod packs.", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error saving custom mod packs.", ex);
 	}
     }
 

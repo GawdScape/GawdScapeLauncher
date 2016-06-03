@@ -2,7 +2,11 @@ package com.gawdscape.launcher.util;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -62,11 +66,11 @@ public class FileUtils {
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 	    }
 	} catch (FileNotFoundException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error: File Not Found");
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error: File Not Found");
 	} catch (MalformedURLException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error: Invalid URL");
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error: Invalid URL");
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "IO Error", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "IO Error", ex);
 	}
     }
 
@@ -77,7 +81,7 @@ public class FileUtils {
             con.setRequestMethod("HEAD");
             return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
         } catch (IOException ex) {
-            GawdScapeLauncher.logger.log(Level.SEVERE, "IO Error", ex);
+            GawdScapeLauncher.LOGGER.log(Level.SEVERE, "IO Error", ex);
             return false;
         }
       }
@@ -97,9 +101,9 @@ public class FileUtils {
 	    checksum = new BigInteger(1, hash).toString(16); //don't use this, truncates leading zero
 	    fis.close();
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error hashing file", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error hashing file", ex);
 	} catch (NoSuchAlgorithmException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error calculating MD5", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error calculating MD5", ex);
 	}
 
 	return checksum;

@@ -14,20 +14,20 @@ public class SessionResponse extends ErrorResponse {
 
     // User UUID
     public String getAccessToken() {
-	return this.accessToken;
+	return accessToken;
     }
 
     // Client UUID
     public String getClientToken() {
-	return this.clientToken;
+	return clientToken;
     }
 
     public Profile[] getAvailableProfiles() {
-	return this.availableProfiles;
+	return availableProfiles;
     }
 
     public Profile getSelectedProfile() {
-	return this.selectedProfile;
+	return selectedProfile;
     }
 
     public User getUser() {
@@ -36,6 +36,6 @@ public class SessionResponse extends ErrorResponse {
 
     // Session Token
     public String getSessionId() {
-	return "token:" + this.accessToken + ":" + this.selectedProfile.getId();
+	return "token:" + accessToken + ":" + selectedProfile.getId();
     }
 }

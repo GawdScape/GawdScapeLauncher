@@ -11,14 +11,14 @@ public class ErrorResponse {
     private final String cause = "";
 
     public String getError() {
-	return this.error;
+	return error;
     }
 
     public String getErrorMessage() {
-	return this.errorMessage;
+	return errorMessage;
     }
 
     public String getCause() {
-	return this.cause;
+	return cause;
     }
 }

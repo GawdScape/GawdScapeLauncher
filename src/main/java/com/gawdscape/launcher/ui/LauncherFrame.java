@@ -1,17 +1,27 @@
-package com.gawdscape.launcher;
+package com.gawdscape.launcher.ui;
 
+import com.gawdscape.launcher.Config;
+import com.gawdscape.launcher.GawdScapeLauncher;
 import com.gawdscape.launcher.auth.SessionManager;
 import com.gawdscape.launcher.updater.Updater;
-import com.gawdscape.launcher.util.*;
+import com.gawdscape.launcher.util.Constants;
+import com.gawdscape.launcher.util.Directories;
+import com.gawdscape.launcher.util.FileUtils;
+import com.gawdscape.launcher.util.ImageUtils;
+import com.gawdscape.launcher.util.OperatingSystem;
 
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
+import javax.swing.event.HyperlinkEvent;
 
 /**
  *
@@ -19,11 +29,11 @@ import java.util.logging.Level;
  */
 public final class LauncherFrame extends javax.swing.JFrame {
 
-    private static String[] packs = new String[0];
-    private static ImageIcon[] packLogos = new ImageIcon[0];
-    private static String username = "Guest";
     private final boolean news;
     private final ModPackComboRenderer modComboRenderer;
+    private String[] packs = new String[0];
+    private ImageIcon[] packLogos = new ImageIcon[0];
+    private String username = "Guest";
 
     /**
      * Creates new form LauncherFrame
@@ -31,12 +41,11 @@ public final class LauncherFrame extends javax.swing.JFrame {
      * @param news
      */
     public LauncherFrame(boolean news) {
-	GawdScapeLauncher.logger.finer("Initializing launcher frame.");
+	GawdScapeLauncher.LOGGER.finer("Initializing launcher frame.");
 	this.news = news;
 	modComboRenderer = new ModPackComboRenderer();
 	modComboRenderer.setPreferredSize(new Dimension(256, 64));
 	initComponents();
-	setLocationRelativeTo(null);
 	loadPacks();
 	loadNews();
     }
@@ -76,7 +85,7 @@ public final class LauncherFrame extends javax.swing.JFrame {
 	    try {
 		newsPane.setPage(Constants.LAUNCHER_NEWS);
 	    } catch (IOException ex) {
-		GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading news", ex);
+		GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading news", ex);
 	    }
 	} else {
 	    remove(scrollPane);
@@ -95,15 +104,15 @@ public final class LauncherFrame extends javax.swing.JFrame {
 
         scrollPane = new javax.swing.JScrollPane();
         newsPane = new javax.swing.JEditorPane();
-        com.gawdscape.launcher.ui.CobblestonePanel bottomPanel = new com.gawdscape.launcher.ui.CobblestonePanel();
-        com.gawdscape.launcher.ui.TransparentPanel profilePanel = new com.gawdscape.launcher.ui.TransparentPanel();
-        playButton = new com.gawdscape.launcher.ui.TransparentButton();
-        com.gawdscape.launcher.ui.TransparentButton optionsButton = new com.gawdscape.launcher.ui.TransparentButton();
-        greetingLabel = new com.gawdscape.launcher.ui.TransparentLabel();
-        usernameLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
-        com.gawdscape.launcher.ui.WhiteLinkLabel switchUsersLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
-        com.gawdscape.launcher.ui.WhiteLinkLabel logoutLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
-        com.gawdscape.launcher.ui.WhiteLinkLabel aboutLabel = new com.gawdscape.launcher.ui.WhiteLinkLabel();
+        com.gawdscape.launcher.ui.components.CobblestonePanel bottomPanel = new com.gawdscape.launcher.ui.components.CobblestonePanel();
+        com.gawdscape.launcher.ui.components.TransparentPanel profilePanel = new com.gawdscape.launcher.ui.components.TransparentPanel();
+        playButton = new com.gawdscape.launcher.ui.components.TransparentButton();
+        com.gawdscape.launcher.ui.components.TransparentButton optionsButton = new com.gawdscape.launcher.ui.components.TransparentButton();
+        greetingLabel = new com.gawdscape.launcher.ui.components.TransparentLabel();
+        usernameLabel = new com.gawdscape.launcher.ui.components.WhiteLinkLabel();
+        com.gawdscape.launcher.ui.components.WhiteLinkLabel switchUsersLabel = new com.gawdscape.launcher.ui.components.WhiteLinkLabel();
+        com.gawdscape.launcher.ui.components.WhiteLinkLabel logoutLabel = new com.gawdscape.launcher.ui.components.WhiteLinkLabel();
+        com.gawdscape.launcher.ui.components.WhiteLinkLabel aboutLabel = new com.gawdscape.launcher.ui.components.WhiteLinkLabel();
         packCombo = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -257,6 +266,7 @@ public final class LauncherFrame extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void newsPaneHyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_newsPaneHyperlinkUpdate
@@ -264,7 +274,7 @@ public final class LauncherFrame extends javax.swing.JFrame {
 	    try {
 		OperatingSystem.openLink(evt.getURL().toURI());
 	    } catch (URISyntaxException ex) {
-		GawdScapeLauncher.logger.log(Level.SEVERE, "Invalid URI", ex);
+		GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Invalid URI", ex);
 	    }
 	}
     }//GEN-LAST:event_newsPaneHyperlinkUpdate
@@ -279,7 +289,9 @@ public final class LauncherFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_playButtonActionPerformed
 
     private void optionsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsButtonActionPerformed
-	new OptionsDialog(this).setVisible(true);
+	OptionsDialog options = new OptionsDialog(this);
+        options.setLocationRelativeTo(this);
+        options.setVisible(true);
     }//GEN-LAST:event_optionsButtonActionPerformed
 
     private void logoutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutLabelMouseClicked
@@ -294,6 +306,7 @@ public final class LauncherFrame extends javax.swing.JFrame {
 
     private void aboutLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aboutLabelMouseClicked
 	AboutDialog about = new AboutDialog(this);
+        about.setLocationRelativeTo(this);
 	about.setVisible(true);
     }//GEN-LAST:event_aboutLabelMouseClicked
 
@@ -302,7 +315,7 @@ public final class LauncherFrame extends javax.swing.JFrame {
 	    URI uri = new URI("http://www.gawdscape.com/player/" + username);
 	    OperatingSystem.openLink(uri);
 	} catch (URISyntaxException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Invalid URI", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Invalid URI", ex);
 	}
     }//GEN-LAST:event_usernameLabelMouseClicked
 
@@ -334,12 +347,12 @@ public final class LauncherFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.gawdscape.launcher.ui.TransparentLabel greetingLabel;
+    private com.gawdscape.launcher.ui.components.TransparentLabel greetingLabel;
     private static javax.swing.JEditorPane newsPane;
     private javax.swing.JComboBox packCombo;
-    public static com.gawdscape.launcher.ui.TransparentButton playButton;
+    public static com.gawdscape.launcher.ui.components.TransparentButton playButton;
     private javax.swing.JScrollPane scrollPane;
-    private com.gawdscape.launcher.ui.WhiteLinkLabel usernameLabel;
+    private com.gawdscape.launcher.ui.components.WhiteLinkLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 
     class ModPackComboRenderer extends JLabel implements ListCellRenderer {

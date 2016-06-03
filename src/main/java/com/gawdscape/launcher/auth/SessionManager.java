@@ -19,7 +19,7 @@ import java.util.logging.Level;
  */
 public class SessionManager {
 
-    private static final File userFile = new File(Directories.getWorkingDirectory(), "sessions.json");
+    private static final File USER_FILE = new File(Directories.getWorkingDirectory(), "sessions.json");
 
     private final HashMap<String, RefreshRequest> sessions;
     private String lastUser;
@@ -81,11 +81,11 @@ public class SessionManager {
     public static SessionManager loadSessions() {
 	String sessionJson = "";
 	try {
-	    sessionJson = JsonUtils.readJsonFromFile(userFile);
+	    sessionJson = JsonUtils.readJsonFromFile(USER_FILE);
 	} catch (FileNotFoundException ex) {
-	    GawdScapeLauncher.logger.warning("Saved sessions not found.");
+	    GawdScapeLauncher.LOGGER.warning("Saved sessions not found.");
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading saved sessions.", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading saved sessions.", ex);
 	}
 	SessionManager manager = JsonUtils.getGson().fromJson(sessionJson, SessionManager.class);
 	if (manager == null) {
@@ -97,18 +97,18 @@ public class SessionManager {
     public static void saveSessions(SessionManager manager) {
 	String sessionJson = JsonUtils.getGson().toJson(manager);
 	try {
-	    JsonUtils.writeJsonToFile(sessionJson, userFile);
+	    JsonUtils.writeJsonToFile(sessionJson, USER_FILE);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error saving sessions.", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error saving sessions.", ex);
 	}
     }
 
     public static void clearSavedSessions() {
 	String userJson = "{}";
 	try {
-	    JsonUtils.writeJsonToFile(userJson, userFile);
+	    JsonUtils.writeJsonToFile(userJson, USER_FILE);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error saving last login", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error saving last login", ex);
 	}
     }
 }

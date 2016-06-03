@@ -1,7 +1,6 @@
 package com.gawdscape.launcher.updater.tasks;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
-import com.gawdscape.launcher.updater.DownloadManager;
 import com.gawdscape.launcher.util.Directories;
 
 import java.io.File;
@@ -27,12 +26,12 @@ public class DownloadMinecraftTask extends DownloadTask {
     }
 
     private void removeMetaInf() {
-	GawdScapeLauncher.logger.log(Level.INFO, "Removing META-INF from Minecraft {0}.jar...", mcVersion);
+	GawdScapeLauncher.LOGGER.log(Level.INFO, "Removing META-INF from Minecraft {0}.jar...", mcVersion);
 	//DownloadManager.downloadDialog.changeTitle("Removing META-INF...");
 	File inputFile = new File(Directories.getMcJar(mcVersion));
 	File outputTmpFile = new File(Directories.getMcJar(mcVersion) + ".tmp");
 
-	DownloadManager.downloadDialog.setFile("/META-INF", inputFile.getName(), outputTmpFile.toString());
+	GawdScapeLauncher.updater.getDownloadManager().setFile("/META-INF", inputFile.getName(), outputTmpFile.toString());
 
 	try (
 		JarInputStream input = new JarInputStream(new FileInputStream(inputFile));
@@ -54,24 +53,24 @@ public class DownloadMinecraftTask extends DownloadTask {
 	    input.close();
 
 	    if (!inputFile.delete()) {
-		GawdScapeLauncher.logger.log(Level.SEVERE, "Failed to delete Minecraft {0}.jar", mcVersion);
+		GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Failed to delete Minecraft {0}.jar", mcVersion);
 	    }
 	    if (!outputTmpFile.renameTo(inputFile)) {
-		GawdScapeLauncher.logger.log(Level.SEVERE, "Failed to rename Minecraft {0}.jar.tmp", mcVersion);
+		GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Failed to rename Minecraft {0}.jar.tmp", mcVersion);
 	    }
 	} catch (IOException e) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error removing META-INF", e);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error removing META-INF", e);
 	}
     }
 
     @Override
     public Object call() throws Exception {
-	GawdScapeLauncher.logger.log(Level.FINE, "Starting download of Minecraft {0}.jar", mcVersion);
-	DownloadManager.thisFile++;
+	GawdScapeLauncher.LOGGER.log(Level.FINE, "Starting download of Minecraft {0}.jar", mcVersion);
+	GawdScapeLauncher.updater.getDownloadManager().incrementFile();
 	if (attemptDownload()) {
 	    removeMetaInf();
 	}
-	DownloadManager.downloadDialog.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);
+	GawdScapeLauncher.updater.getDownloadManager().updateProgress();
 	return true;
     }
 }

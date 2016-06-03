@@ -48,7 +48,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="com.gawdscape.launcher.ui.DirtPanel" name="optionsPanel">
+    <Container class="com.gawdscape.launcher.ui.components.DirtPanel" name="optionsPanel">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -124,7 +124,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="titleLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="titleLabel">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Launcher Options"/>
@@ -137,7 +137,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="logButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="logButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Open Log"/>
             <Property name="toolTipText" type="java.lang.String" value="Open the Log Window"/>
@@ -150,7 +150,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="updateButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="updateButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Force Update"/>
             <Property name="toolTipText" type="java.lang.String" value="Check for updates and validate existing files."/>
@@ -159,7 +159,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="cancelButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="cancelButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancel"/>
             <Property name="toolTipText" type="java.lang.String" value="Discard Changes"/>
@@ -172,7 +172,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="saveButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="saveButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Save"/>
             <Property name="toolTipText" type="java.lang.String" value="Save Changes"/>
@@ -185,7 +185,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="launcherSettingsPanel">
+        <Container class="com.gawdscape.launcher.ui.components.TransparentPanel" name="launcherSettingsPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -226,7 +226,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="newsCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="newsCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getShowNews()" type="code"/>
@@ -235,7 +235,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Show GawdScape news in launcher?"/>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="skipLauncherCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="skipLauncherCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getSkipLauncher()" type="code"/>
@@ -246,7 +246,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="logSettingsPanel">
+        <Container class="com.gawdscape.launcher.ui.components.TransparentPanel" name="logSettingsPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -298,7 +298,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="logCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="logCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getShowLog()" type="code"/>
@@ -307,7 +307,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Open the Log window when the launcher starts?"/>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="closeLogCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="closeLogCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getCloseLog()" type="code"/>
@@ -316,7 +316,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Close the Log window when Minecraft closes?"/>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="colorLogCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="colorLogCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getColorLog()" type="code"/>
@@ -325,7 +325,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Show color coded text in color?"/>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="linkLogCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="linkLogCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getLinkLog()" type="code"/>
@@ -336,7 +336,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="gameSettingsPanel">
+        <Container class="com.gawdscape.launcher.ui.components.TransparentPanel" name="gameSettingsPanel">
           <Properties>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -445,7 +445,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gameDirLabel">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="gameDirLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Game Directory:"/>
               </Properties>
@@ -454,7 +454,7 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentButton" name="browseButton">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="browseButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Browse"/>
                 <Property name="toolTipText" type="java.lang.String" value="Select a new Game Directory"/>
@@ -475,7 +475,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="The directory where your game data will be stored."/>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="memoryLabel">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="memoryLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Memory to Allocate:"/>
               </Properties>
@@ -484,14 +484,14 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="allocatedMemoryLabel">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="allocatedMemoryLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getMemory() + &quot; MB&quot;" type="code"/>
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentSlider" name="memorySlider">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentSlider" name="memorySlider">
               <Properties>
                 <Property name="majorTickSpacing" type="int" value="1024"/>
                 <Property name="maximum" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -510,7 +510,7 @@
                 <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="memorySliderStateChanged"/>
               </Events>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="minMemoryLabel">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="minMemoryLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="512 MB"/>
               </Properties>
@@ -519,7 +519,7 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="maxMemoryLabel">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="maxMemoryLabel">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="11"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -531,7 +531,7 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="joinServerCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="joinServerCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getJoinServer()" type="code"/>
@@ -554,7 +554,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="windowSizeCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="windowSizeCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getWindowSize()" type="code"/>
@@ -577,7 +577,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="x">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="x">
               <Properties>
                 <Property name="text" type="java.lang.String" value="x"/>
               </Properties>
@@ -597,7 +597,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="fullscreenCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="fullscreenCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getFullscreen()" type="code"/>
@@ -606,7 +606,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Start Minecraft in Fullscreen mode?"/>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentCheckBox" name="resourcePackCheckBox">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentCheckBox" name="resourcePackCheckBox">
               <Properties>
                 <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="GawdScapeLauncher.config.getGlobalResourcePacks()" type="code"/>
@@ -617,7 +617,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="javaButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="javaButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Java Settings"/>
           </Properties>
@@ -629,7 +629,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="addPackButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="addPackButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Add Mod Pack"/>
           </Properties>
@@ -641,7 +641,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="removePackButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="removePackButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Remove Mod Pack"/>
           </Properties>
@@ -653,7 +653,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="gameDirButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="gameDirButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Open Game Dir"/>
             <Property name="toolTipText" type="java.lang.String" value="Open your current Game Directory"/>

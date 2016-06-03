@@ -11,7 +11,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -73,7 +73,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="com.gawdscape.launcher.ui.CobblestonePanel" name="bottomPanel">
+    <Container class="com.gawdscape.launcher.ui.components.CobblestonePanel" name="bottomPanel">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -106,7 +106,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="com.gawdscape.launcher.ui.TransparentPanel" name="profilePanel">
+        <Container class="com.gawdscape.launcher.ui.components.TransparentPanel" name="profilePanel">
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -169,7 +169,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="com.gawdscape.launcher.ui.TransparentButton" name="playButton">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="playButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Play"/>
               </Properties>
@@ -180,7 +180,7 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
               </AuxValues>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentButton" name="optionsButton">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="optionsButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Options"/>
               </Properties>
@@ -192,7 +192,7 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="greetingLabel">
+            <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="greetingLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Welcome back"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
@@ -202,7 +202,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="usernameLabel">
+            <Component class="com.gawdscape.launcher.ui.components.WhiteLinkLabel" name="usernameLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Guest"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
@@ -215,7 +215,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="usernameLabelMouseClicked"/>
               </Events>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="switchUsersLabel">
+            <Component class="com.gawdscape.launcher.ui.components.WhiteLinkLabel" name="switchUsersLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Switch Users"/>
               </Properties>
@@ -227,7 +227,7 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="logoutLabel">
+            <Component class="com.gawdscape.launcher.ui.components.WhiteLinkLabel" name="logoutLabel">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Logout"/>
               </Properties>
@@ -239,7 +239,7 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
             </Component>
-            <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="aboutLabel">
+            <Component class="com.gawdscape.launcher.ui.components.WhiteLinkLabel" name="aboutLabel">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="About"/>

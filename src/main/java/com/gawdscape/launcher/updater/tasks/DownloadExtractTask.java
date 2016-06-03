@@ -1,10 +1,13 @@
 package com.gawdscape.launcher.updater.tasks;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
-import com.gawdscape.launcher.updater.DownloadManager;
 import com.gawdscape.launcher.util.FileUtils;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import java.io.*;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.zip.ZipEntry;
@@ -21,13 +24,13 @@ public class DownloadExtractTask extends DownloadTask {
     }
 
     private void unZip() throws IOException {
-	GawdScapeLauncher.logger.log(Level.INFO, "Starting to extract {0}", file.getName());
+	GawdScapeLauncher.LOGGER.log(Level.INFO, "Starting to extract {0}", file.getName());
 	ZipFile zip = new ZipFile(file);
 	Enumeration entries = zip.entries();
 	while (entries.hasMoreElements()) {
 	    ZipEntry entry = (ZipEntry) entries.nextElement();
 	    File target = new File(file.getParentFile(), entry.getName());
-	    DownloadManager.downloadDialog.setFile(target.getName(), file.getName(), target.getParent());
+	    GawdScapeLauncher.updater.getDownloadManager().setFile(target.getName(), file.getName(), target.getParent());
 
 	    target.getParentFile().mkdirs();
 
@@ -51,17 +54,17 @@ public class DownloadExtractTask extends DownloadTask {
 
     @Override
     public Object call() throws Exception {
-	GawdScapeLauncher.logger.log(Level.FINE, "Starting download of archive: {0}", file.getName());
-	DownloadManager.thisFile++;
+	GawdScapeLauncher.LOGGER.log(Level.FINE, "Starting download of archive: {0}", file.getName());
+	GawdScapeLauncher.updater.getDownloadManager().incrementFile();
 	if (attemptDownload()) {
 	    try {
 		unZip();
 	    } catch (IOException ex) {
-		GawdScapeLauncher.logger.log(Level.SEVERE, "Error extracting " + file.getName(), ex);
+		GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error extracting " + file.getName(), ex);
 	    }
 	}
         FileUtils.delete(file);
-	DownloadManager.downloadDialog.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);
+	GawdScapeLauncher.updater.getDownloadManager().updateProgress();
 	return true;
     }
 }

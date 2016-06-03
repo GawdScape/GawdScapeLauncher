@@ -4,10 +4,13 @@
 	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>GawdScape Launcher</name>
     <groupId>com.gawdscape</groupId>
     <artifactId>launcher</artifactId>
-    <version>18</version>
+    <version>19</version>
+
+    <name>GawdScape Launcher</name>
+    <description>The better Minecraft launcher.</description>
+    <url>https://launcher.gawdscape.com/</url>
 
     <organization>
 	<name>GawdScape</name>
@@ -25,8 +28,8 @@
     <properties>
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<mainClass>${project.groupId}.${project.artifactId}.GawdScapeLauncher</mainClass>
-	<exeVersion>0.0.1.8</exeVersion>
-	<copyright>(c) 2015 ${project.organization.name}</copyright>
+	<exeVersion>0.0.1.9</exeVersion>
+	<copyright>(c) 2016 ${project.organization.name}</copyright>
     </properties>
 
     <build>
@@ -66,6 +69,7 @@
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
 		<configuration>
 		    <source>1.8</source>
 		    <target>1.8</target>
@@ -74,6 +78,7 @@
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
 		<configuration>
 		    <archive>
 			<addMavenDescriptor>false</addMavenDescriptor>
@@ -90,6 +95,7 @@
 	    <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
 		<executions>
 		    <execution>
 			<phase>package</phase>

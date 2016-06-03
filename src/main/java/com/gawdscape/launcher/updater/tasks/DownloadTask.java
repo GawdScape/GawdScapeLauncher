@@ -1,12 +1,15 @@
 package com.gawdscape.launcher.updater.tasks;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
-import com.gawdscape.launcher.updater.DownloadManager;
 import com.gawdscape.launcher.updater.ProgressDelegate;
 import com.gawdscape.launcher.updater.RBCWrapper;
 import com.gawdscape.launcher.util.FileUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,7 +34,7 @@ public class DownloadTask implements Callable, ProgressDelegate {
 	try {
 	    url = new URL(remoteURL);
 	} catch (MalformedURLException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Bad download URL for file: " + file.getName(), ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Bad download URL for file: " + file.getName(), ex);
 	}
     }
 
@@ -57,7 +60,7 @@ public class DownloadTask implements Callable, ProgressDelegate {
 	    rbc.close();
 	    connection.disconnect();
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "[" + (tries + 1) + "/3] Error downloading file: " + file.getName(), ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "[" + (tries + 1) + "/3] Error downloading file: " + file.getName(), ex);
 	}
     }
 
@@ -65,15 +68,19 @@ public class DownloadTask implements Callable, ProgressDelegate {
 	HttpURLConnection connection = createConnection(url);
 
 	String expectedMD5 = connection.getHeaderField("ETag");
-	if (expectedMD5.length() == 34) {
-	    expectedMD5 = expectedMD5.substring(1, 33);
-	} else if (expectedMD5.length() == 32) {
-	} else {
-	    expectedMD5 = "0";
-	}
+        switch (expectedMD5.length()) {
+            case 34:
+                expectedMD5 = expectedMD5.substring(1, 33);
+                break;
+            case 32:
+                break;
+            default:
+                expectedMD5 = "0";
+                break;
+        }
 
 	if (expectedMD5.equals(getCurrentMD5())) {
-	    GawdScapeLauncher.logger.log(Level.FINE, "[{0}/3] Skipping: {1}", new Object[]{tries + 1, file.getName()});
+	    GawdScapeLauncher.LOGGER.log(Level.FINE, "[{0}/3] Skipping: {1}", new Object[]{tries + 1, file.getName()});
 	    return true;
 	}
 
@@ -88,7 +95,7 @@ public class DownloadTask implements Callable, ProgressDelegate {
 	    if (expectedMD5.equals(getCurrentMD5())) {
 		return true;
 	    }
-	    GawdScapeLauncher.logger.log(Level.WARNING, "[{0}/3] {1} File hash did not match.", new Object[]{tries + 1, file.getName()});
+	    GawdScapeLauncher.LOGGER.log(Level.WARNING, "[{0}/3] {1} File hash did not match.", new Object[]{tries + 1, file.getName()});
 	    tries++;
 	    if (attemptDownload()) {
 		return true;
@@ -99,8 +106,8 @@ public class DownloadTask implements Callable, ProgressDelegate {
 
     @Override
     public void progressCallback(RBCWrapper rbc, double progress) {
-	DownloadManager.downloadDialog.setFile(file.getName(), url.getHost(), file.getParentFile().getPath());
-	DownloadManager.downloadDialog.setProgress((int) progress, (int) rbc.getReadSoFar(), (int) rbc.getExpectedSize());
+	GawdScapeLauncher.updater.getDownloadManager().setFile(file.getName(), url.getHost(), file.getParentFile().getPath());
+	GawdScapeLauncher.updater.getDownloadManager().setProgress((int) progress, (int) rbc.getReadSoFar(), (int) rbc.getExpectedSize());
     }
 
     private HttpURLConnection createConnection(URL url) {
@@ -114,12 +121,12 @@ public class DownloadTask implements Callable, ProgressDelegate {
 	    if (status != HttpURLConnection.HTTP_OK) {
 		if (status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_SEE_OTHER) {
 		    String location = connection.getHeaderField("Location");
-		    GawdScapeLauncher.logger.log(Level.FINE, "URL: {0}\n\t->Redirect: {1}", new Object[]{url.toString(), location});
+		    GawdScapeLauncher.LOGGER.log(Level.FINE, "URL: {0}\n\t->Redirect: {1}", new Object[]{url.toString(), location});
 		    connection = (HttpURLConnection) new URL(location).openConnection();
 		}
 	    }
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "[" + (tries + 1) + "/3] Error connecting to URL " + url.toString(), ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "[" + (tries + 1) + "/3] Error connecting to URL " + url.toString(), ex);
 	}
 
 	return connection;
@@ -127,10 +134,10 @@ public class DownloadTask implements Callable, ProgressDelegate {
 
     @Override
     public Object call() throws Exception {
-	GawdScapeLauncher.logger.log(Level.INFO, "[1/3] Starting download of: {0}", file.getName());
-	DownloadManager.thisFile++;
+	GawdScapeLauncher.LOGGER.log(Level.INFO, "[1/3] Starting download of: {0}", file.getName());
+	GawdScapeLauncher.updater.getDownloadManager().incrementFile();
 	attemptDownload();
-	DownloadManager.downloadDialog.setTotalProgress(DownloadManager.thisFile, DownloadManager.poolSize);
+	GawdScapeLauncher.updater.getDownloadManager().updateProgress();
 	return true;
     }
 }

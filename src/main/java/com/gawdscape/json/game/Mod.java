@@ -1,8 +1,9 @@
 package com.gawdscape.json.game;
 
 import com.gawdscape.json.modpacks.ModType;
-import static com.gawdscape.launcher.updater.DownloadManager.mcVer;
+import com.gawdscape.launcher.GawdScapeLauncher;
 import com.gawdscape.launcher.util.Constants;
+
 import java.io.File;
 
 /**
@@ -104,9 +105,9 @@ public class Mod {
             case COREMOD:
                 return "coremods";
             case VERSIONMOD:
-                return "mods" + File.separator + mcVer;
             case VERSIONLITEMOD:
-                return "mods" + File.separator + mcVer;
+                return "mods" + File.separator +
+                        GawdScapeLauncher.updater.getMinecraftVersion();
             case JARMOD:
                 return "bin";
         }

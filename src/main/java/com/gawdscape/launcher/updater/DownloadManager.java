@@ -7,7 +7,7 @@ import com.gawdscape.json.game.AssetIndex;
 import com.gawdscape.json.game.ZipArchive;
 import com.gawdscape.json.game.Library;
 import com.gawdscape.json.game.Mod;
-import com.gawdscape.launcher.DownloadDialog;
+import com.gawdscape.launcher.ui.DownloadDialog;
 import com.gawdscape.launcher.GawdScapeLauncher;
 import com.gawdscape.launcher.updater.tasks.DownloadExtractTask;
 import com.gawdscape.launcher.util.Constants;
@@ -27,55 +27,98 @@ import java.util.logging.Level;
  */
 public class DownloadManager {
 
-    private static final int processorCores = OperatingSystem.getProcessorCores();
-    public static final ExecutorService pool = Executors.newFixedThreadPool(processorCores * 2);
-    public static int poolSize = 0;
-    public static int thisFile = 0;
-    public static String mcVer;
+    private final ExecutorService pool;
+    private DownloadDialog downloadDialog;
+    private String mcVer;
+    private int poolSize = 0;
+    private int thisFile = 0;
 
-    public static DownloadDialog downloadDialog;
+    public DownloadManager() {
+        int processorCores = OperatingSystem.getProcessorCores();
+        pool = Executors.newFixedThreadPool(processorCores * 2);
+        GawdScapeLauncher.LOGGER.log(Level.INFO, "Downloading with {0} threads...", processorCores * 2);
+    }
 
-    public static void createDialog(final String name) {
-	GawdScapeLauncher.logger.log(Level.INFO, "Downloading with {0} threads...", processorCores * 2);
+    public void createDialog(final String name) {
 	java.awt.EventQueue.invokeLater(() -> {
 	    downloadDialog = new DownloadDialog(GawdScapeLauncher.launcherFrame);
 	    downloadDialog.changeTitle("Downloading " + name + "...");
+            downloadDialog.setLocationRelativeTo(GawdScapeLauncher.launcherFrame);
 	    downloadDialog.setVisible(true);
 	});
     }
 
-    private static void addToQueue(String url, String toPath) {
+    public void closeDialog() {
+	java.awt.EventQueue.invokeLater(() -> {
+	    downloadDialog.dispose();
+	    downloadDialog = null;
+	});
+    }
+
+    public void setDialogLaunching() {
+	java.awt.EventQueue.invokeLater(() -> {
+	    downloadDialog.setLaunching();
+	});
+    }
+
+    public void updateProgress() {
+        java.awt.EventQueue.invokeLater(() -> {
+            downloadDialog.setTotalProgress(thisFile, poolSize);
+        });
+    }
+
+    public void setFile(String fileName, String host, String localPath) {
+        java.awt.EventQueue.invokeLater(() -> {
+            downloadDialog.setFile(fileName, host, localPath);
+        });
+    }
+
+    public void setProgress(int percent, int dlKB, int totalKB) {
+        java.awt.EventQueue.invokeLater(() -> {
+            downloadDialog.setProgress(percent, dlKB, totalKB);
+        });
+    }
+
+    public void incrementFile() {
+        thisFile++;
+    }
+
+    public void setMinecraftVersion(String version) {
+        this.mcVer = version;
+    }
+
+    private void addToQueue(String url, String toPath) {
 	poolSize++;
 	pool.submit(new DownloadTask(url, toPath));
     }
 
-    private static void addMinecraftToQueue(String url, String toPath) {
+    private void addMinecraftToQueue(String url, String toPath) {
 	poolSize++;
 	pool.submit(new DownloadMinecraftTask(url, toPath, mcVer));
     }
 
-    private static void addNativeToQueue(String url, String toPath) {
+    private void addNativeToQueue(String url, String toPath) {
 	poolSize++;
 	pool.submit(new DownloadNativeTask(url, toPath, mcVer));
     }
 
-    private static void addArchiveToQueue(String url, String toPath) {
+    private void addArchiveToQueue(String url, String toPath) {
 	poolSize++;
 	pool.submit(new DownloadExtractTask(url, toPath));
     }
 
-    public static boolean completeQueue() {
+    public boolean completeQueue() {
 	pool.shutdown();
 	try {
 	    pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 	    return true;
 	} catch (InterruptedException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Download queue interrupted", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Download queue interrupted", ex);
 	    return false;
 	}
     }
 
-    public static void queueAssets(AssetIndex index) {
+    public void queueAssets(AssetIndex index) {
 	index.getUniqueObjects().stream().map((object)
 		-> object.getHash().substring(0, 2) + "/" + object.getHash())
 		.forEach((filename) -> addToQueue(
@@ -84,21 +127,21 @@ public class DownloadManager {
 			));
     }
 
-    public static void queueMinecraft() {
+    public void queueMinecraft() {
 	addMinecraftToQueue(
 		Constants.getMcJar(mcVer),
 		Directories.getMcJar(mcVer)
 	);
     }
 
-    public static void queueTexperienceMod(String mcVersion, String version) {
+    public void queueTexperienceMod(String mcVersion, String version) {
 	addToQueue(
 		Constants.getTexperienceJar(version, mcVersion),
 		Directories.getTexperienceJar(version, mcVersion)
 	);
     }
 
-    public static void queueLibraries(Collection<Library> libraries) {
+    public void queueLibraries(Collection<Library> libraries) {
 	if (libraries == null) {
 	    return;
 	}
@@ -124,7 +167,7 @@ public class DownloadManager {
 	});
     }
 
-    public static void queueMods(String packName, Collection<Mod> mods) {
+    public void queueMods(String packName, Collection<Mod> mods) {
 	if (mods == null) {
 	    return;
 	}
@@ -136,7 +179,7 @@ public class DownloadManager {
 	));
     }
 
-    public static void queueArchives(String packName, Collection<ZipArchive> archives) {
+    public void queueArchives(String packName, Collection<ZipArchive> archives) {
 	if (archives == null) {
 	    return;
 	}

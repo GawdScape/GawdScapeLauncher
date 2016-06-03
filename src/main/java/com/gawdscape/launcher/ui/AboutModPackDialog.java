@@ -1,11 +1,13 @@
-package com.gawdscape.launcher;
+package com.gawdscape.launcher.ui;
 
 import com.gawdscape.json.game.Library;
 import com.gawdscape.json.game.Mod;
 import com.gawdscape.json.game.ZipArchive;
 import com.gawdscape.json.modpacks.ModPack;
+import com.gawdscape.launcher.GawdScapeLauncher;
 import com.gawdscape.launcher.util.FileUtils;
 import com.google.gson.JsonSyntaxException;
+
 import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +33,6 @@ public class AboutModPackDialog extends javax.swing.JDialog {
         this.id = modpack.getId();
         this.url = url;
         loadPackData(modpack);
-        setLocationRelativeTo(parent);
-        setVisible(true);
     }
 
     private void loadPackData(ModPack modpack) {
@@ -51,7 +51,7 @@ public class AboutModPackDialog extends javax.swing.JDialog {
             listArchives(modpack.getArchives());
             serverList.setText(String.valueOf(checkServerList()));
         } catch (JsonSyntaxException ex) {
-            GawdScapeLauncher.logger.log(Level.SEVERE, "Error", ex);
+            GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error", ex);
         }
     }
 
@@ -252,9 +252,7 @@ public class AboutModPackDialog extends javax.swing.JDialog {
                                             .addComponent(version)
                                             .addComponent(mcVersion)
                                             .addComponent(txtVersion)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(0, 0, 0)
-                                                .addComponent(serverList))))
+                                            .addComponent(serverList)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(mcArgsLabel)
@@ -269,9 +267,7 @@ public class AboutModPackDialog extends javax.swing.JDialog {
                                             .addComponent(zipsLabel))
                                         .addGap(33, 33, 33)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(0, 0, 0)
-                                                .addComponent(archivesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(archivesScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(modsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
@@ -336,7 +332,7 @@ public class AboutModPackDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Added Mod Pack: " + id);
             GawdScapeLauncher.launcherFrame.loadPacks();
         } catch (IOException ex) {
-            GawdScapeLauncher.logger.log(Level.SEVERE, "Error adding new mod pack.", ex);
+            GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error adding new mod pack.", ex);
         }
         dispose();
     }//GEN-LAST:event_acceptButtonActionPerformed

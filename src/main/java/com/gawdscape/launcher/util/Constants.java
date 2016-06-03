@@ -15,15 +15,15 @@ import java.util.logging.Level;
  */
 public class Constants {
 
-    public static final int VERSION = 18;
+    public static final int VERSION = 19;
 
-    public static final int THIS_YEAR = 2015;
+    public static final int THIS_YEAR = 2016;
 
     public static final Agent MINECRAFT = new Agent("Minecraft", 1);
 
     public static final URL MC_LOGIN = constantURL("https://authserver.mojang.com/authenticate");
     public static final URL MC_REFRESH = constantURL("https://authserver.mojang.com/refresh");
-    public static final URL LAUNCHER_NEWS = constantURL("http://launcher.gawdscape.com/news");
+    public static final URL LAUNCHER_NEWS = constantURL("https://launcher.gawdscape.com/news");
     public static final String MC_DOWNLOAD_URL = "https://s3.amazonaws.com/Minecraft.Download/";
     public static final String MC_LIBRARY_URL = "https://libraries.minecraft.net/";
     public static final String MC_ASSET_URL = "http://resources.download.minecraft.net/";
@@ -32,7 +32,7 @@ public class Constants {
     public static final String TXT_MOD_URL = "https://github.com/GawdScape/TexperienceMod/releases/download/";
     public static final String LAUNCHER_VERSION_URL = "https://raw.githubusercontent.com/GawdScape/GawdScapeLauncher/master/latest.version";
     public static final URI UPDATE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/releases/latest");
-    public static final URI GS_FORUM_LINK = constantURI("http://www.gawdscape.com/");
+    public static final URI GS_FORUM_LINK = constantURI("https://www.gawdscape.com/");
     public static final URI GS_GITHUB_LINK = constantURI("https://github.com/GawdScape");
     public static final URI LAUNCHER_WIKI_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/wiki");
     public static final URI LAUNCHER_ISSUE_LINK = constantURI("https://github.com/GawdScape/GawdScapeLauncher/issues");
@@ -45,7 +45,7 @@ public class Constants {
 	try {
 	    return new URI(input);
 	} catch (URISyntaxException e) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "URI Error", e);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "URI Error", e);
 	    return null;
 	}
     }
@@ -54,7 +54,7 @@ public class Constants {
 	try {
 	    return new URL(input);
 	} catch (MalformedURLException e) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "URL Error", e);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "URL Error", e);
 	    return null;
 	}
     }

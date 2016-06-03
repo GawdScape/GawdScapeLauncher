@@ -37,7 +37,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="com.gawdscape.launcher.ui.DirtPanel" name="downloadPanel">
+    <Container class="com.gawdscape.launcher.ui.components.DirtPanel" name="downloadPanel">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -102,7 +102,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="title">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="title">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" value="Mod Pack Download"/>
@@ -111,12 +111,12 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="source">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="source">
           <Properties>
             <Property name="text" type="java.lang.String" value="Preparing for download..."/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="progressLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="progressLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Progress:"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -126,18 +126,18 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="destinationLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="destinationLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Download to:"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="progress">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="progress">
           <Properties>
             <Property name="text" type="java.lang.String" value="0 KB of 0 KB copied"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="destination">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="destination">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Directories.getWorkingDirectory().toString()" type="code"/>
@@ -160,7 +160,7 @@
             <Property name="stringPainted" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="cancel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="cancel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancel"/>
           </Properties>

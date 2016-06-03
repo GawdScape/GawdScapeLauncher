@@ -12,6 +12,6 @@ public class Utils {
 
     public static void benchmark(String text, long start) {
 	long end = System.currentTimeMillis();
-	GawdScapeLauncher.logger.log(Level.FINE, text, end - start);
+	GawdScapeLauncher.LOGGER.log(Level.FINE, text, end - start);
     }
 }

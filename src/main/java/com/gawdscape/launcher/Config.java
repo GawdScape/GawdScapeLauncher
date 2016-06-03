@@ -16,7 +16,7 @@ import java.util.logging.Level;
  */
 public class Config {
 
-    private static final File configFile = new File(Directories.getWorkingDirectory(), "config.json");
+    private static final File CONFIG_FILE = new File(Directories.getWorkingDirectory(), "config.json");
     public static boolean forceUpdate;
 
     private String gameDir;
@@ -238,11 +238,11 @@ public class Config {
     public static Config loadConfig() {
 	String configJson = "";
 	try {
-	    configJson = JsonUtils.readJsonFromFile(configFile);
+	    configJson = JsonUtils.readJsonFromFile(CONFIG_FILE);
 	} catch (FileNotFoundException ex) {
-	    GawdScapeLauncher.logger.warning("Missing config file.");
+	    GawdScapeLauncher.LOGGER.warning("Missing config file.");
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error loading launcher configuration.", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error loading launcher configuration.", ex);
 	}
 	return JsonUtils.getGson().fromJson(configJson, Config.class);
     }
@@ -250,9 +250,9 @@ public class Config {
     public static void saveConfig(Config config) {
 	String configJson = JsonUtils.getGson().toJson(config);
 	try {
-	    JsonUtils.writeJsonToFile(configJson, configFile);
+	    JsonUtils.writeJsonToFile(configJson, CONFIG_FILE);
 	} catch (IOException ex) {
-	    GawdScapeLauncher.logger.log(Level.SEVERE, "Error saving launcher configuration.", ex);
+	    GawdScapeLauncher.LOGGER.log(Level.SEVERE, "Error saving launcher configuration.", ex);
 	}
     }
 }

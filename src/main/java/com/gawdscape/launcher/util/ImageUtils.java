@@ -2,9 +2,9 @@ package com.gawdscape.launcher.util;
 
 import com.gawdscape.launcher.GawdScapeLauncher;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Image;
 import java.net.URL;
+import javax.swing.ImageIcon;
 
 /**
  *

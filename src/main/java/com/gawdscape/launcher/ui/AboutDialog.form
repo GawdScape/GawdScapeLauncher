@@ -37,7 +37,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="com.gawdscape.launcher.ui.DirtPanel" name="aboutPanel">
+    <Container class="com.gawdscape.launcher.ui.components.DirtPanel" name="aboutPanel">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -49,7 +49,11 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="closeButton" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="packVersionLabel" min="-2" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
@@ -70,11 +74,6 @@
                                   <Component id="directoryLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="packLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="mcVersionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="closeButton" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                               <Component id="userModLabel" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
@@ -100,13 +99,12 @@
                                       <Component id="version" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="gawdscapeImg" min="-2" pref="256" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                  <Component id="launcherImg" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="gawdscapeImg" min="-2" pref="256" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="launcherImg" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -222,7 +220,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="description1">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="description1">
           <Properties>
             <Property name="text" type="java.lang.String" value="The better Minecraft launcher..."/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -234,7 +232,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentButton" name="closeButton">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentButton" name="closeButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Close"/>
           </Properties>
@@ -246,7 +244,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="copyright">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="copyright">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="&quot;GawdScapeLauncher  Copyright (C) &quot;+Constants.THIS_YEAR+&quot;  GawdScape&quot;" type="code"/>
@@ -257,7 +255,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="versionLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="versionLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Launcher Version:"/>
           </Properties>
@@ -266,7 +264,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="version">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="version">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="String.valueOf(Constants.VERSION)" type="code"/>
@@ -277,7 +275,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="directoryLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="directoryLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Launcher Directory:"/>
           </Properties>
@@ -286,7 +284,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="directory">
+        <Component class="com.gawdscape.launcher.ui.components.WhiteLinkLabel" name="directory">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Directories.getWorkingDirectory().toString()" type="code"/>
@@ -300,7 +298,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="packLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Mod Pack:"/>
           </Properties>
@@ -309,12 +307,12 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="pack">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="pack">
           <Properties>
             <Property name="text" type="java.lang.String" value="Not Installed"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="mcVersionLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="mcVersionLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Minecraft Version:"/>
           </Properties>
@@ -323,12 +321,12 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="mcVersion">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="mcVersion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Not Installed"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="gameDirLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="gameDirLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Game Directory:"/>
           </Properties>
@@ -337,7 +335,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.WhiteLinkLabel" name="gameDir">
+        <Component class="com.gawdscape.launcher.ui.components.WhiteLinkLabel" name="gameDir">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="GawdScapeLauncher.config.getGameDir()" type="code"/>
@@ -351,7 +349,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="javaVersionLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="javaVersionLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Java Version:"/>
           </Properties>
@@ -360,7 +358,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="javaVersion">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="javaVersion">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="System.getProperty(&quot;java.version&quot;)" type="code"/>
@@ -371,7 +369,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="forumsLink">
+        <Component class="com.gawdscape.launcher.ui.components.HyperLinkLabel" name="forumsLink">
           <Properties>
             <Property name="text" type="java.lang.String" value="Website"/>
           </Properties>
@@ -383,7 +381,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="githubLink">
+        <Component class="com.gawdscape.launcher.ui.components.HyperLinkLabel" name="githubLink">
           <Properties>
             <Property name="text" type="java.lang.String" value="GitHub"/>
           </Properties>
@@ -395,7 +393,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="wikiLink">
+        <Component class="com.gawdscape.launcher.ui.components.HyperLinkLabel" name="wikiLink">
           <Properties>
             <Property name="text" type="java.lang.String" value="Wiki"/>
           </Properties>
@@ -407,7 +405,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.HyperLinkLabel" name="issuesLink">
+        <Component class="com.gawdscape.launcher.ui.components.HyperLinkLabel" name="issuesLink">
           <Properties>
             <Property name="text" type="java.lang.String" value="Issues"/>
           </Properties>
@@ -419,7 +417,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="architectureLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="architectureLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="System Architecture:"/>
           </Properties>
@@ -428,7 +426,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="architecture">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="architecture">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="System.getProperty(&quot;os.arch&quot;)" type="code"/>
@@ -440,7 +438,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packVersionLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="packVersionLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Mod Pack Version:"/>
           </Properties>
@@ -449,7 +447,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packLibrariesLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="packLibrariesLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Mod Pack Libraries:"/>
           </Properties>
@@ -458,7 +456,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packModsLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="packModsLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Mod Pack Mods:"/>
           </Properties>
@@ -467,7 +465,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="txtModLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="txtModLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Texperience Version:"/>
           </Properties>
@@ -476,7 +474,7 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="userModLabel">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="userModLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="Your Mods:"/>
           </Properties>
@@ -485,12 +483,12 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="packVersion">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="packVersion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Not Installed"/>
           </Properties>
         </Component>
-        <Component class="com.gawdscape.launcher.ui.TransparentLabel" name="txtModVersion">
+        <Component class="com.gawdscape.launcher.ui.components.TransparentLabel" name="txtModVersion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Not Installed"/>
           </Properties>

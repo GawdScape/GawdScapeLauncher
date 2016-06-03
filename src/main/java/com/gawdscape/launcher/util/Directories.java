@@ -9,7 +9,6 @@ import java.io.File;
 public class Directories {
 
     private static File workDir = null;
-    private static final String separator = File.separator;
 
     public static File getWorkingDirectory() {
 	if (workDir == null) {
@@ -22,18 +21,19 @@ public class Directories {
 	String userHome = System.getProperty("user.home", ".");
 	File workingDirectory = new File(userHome, applicationName + '/');
 	OperatingSystem os = OperatingSystem.getCurrentPlatform();
-	if (os.equals(OperatingSystem.LINUX)) {
-	    workingDirectory = new File(userHome, '.' + applicationName + '/');
-	}
-        else if (os.equals(OperatingSystem.WINDOWS)) {
-	    String applicationData = System.getenv("APPDATA");
-	    String folder = applicationData != null ? applicationData : userHome;
-
-	    workingDirectory = new File(folder, '.' + applicationName + '/');
-	}
-        else if (os.equals(OperatingSystem.OSX)) {
-	    workingDirectory = new File(userHome, "Library/Application Support/" + applicationName);
-	}
+        switch (os) {
+            case LINUX:
+                workingDirectory = new File(userHome, '.' + applicationName + '/');
+                break;
+            case WINDOWS:
+                String applicationData = System.getenv("APPDATA");
+                String folder = applicationData != null ? applicationData : userHome;
+                workingDirectory = new File(folder, '.' + applicationName + '/');
+                break;
+            case OSX:
+                workingDirectory = new File(userHome, "Library/Application Support/" + applicationName);
+                break;
+        }
 	if ((!workingDirectory.exists()) && (!workingDirectory.mkdirs())) {
 	    throw new RuntimeException("The working directory could not be created: " + workingDirectory);
 	}
@@ -41,31 +41,31 @@ public class Directories {
     }
 
     public static String getAssetPath() {
-	return getWorkingDirectory() + separator + "assets" + separator;
+	return getWorkingDirectory() + File.separator + "assets" + File.separator;
     }
 
     public static String getAssetIndexPath() {
-	return getAssetPath() + "indexes" + separator;
+	return getAssetPath() + "indexes" + File.separator;
     }
 
     public static String getAssetObjectPath() {
-	return getAssetPath() + "objects" + separator;
+	return getAssetPath() + "objects" + File.separator;
     }
 
     public static String getPackDataPath() {
-	return getWorkingDirectory() + separator + "packdata" + separator;
+	return getWorkingDirectory() + File.separator + "packdata" + File.separator;
     }
 
     public static String getLogoPath(String pack) {
-	return getPackDataPath() + "logos" + separator + pack + ".png";
+	return getPackDataPath() + "logos" + File.separator + pack + ".png";
     }
 
     public static String getBinPath() {
-	return getWorkingDirectory() + separator + "bin" + separator;
+	return getWorkingDirectory() + File.separator + "bin" + File.separator;
     }
 
     public static String getTexperiencePath() {
-	return getBinPath() + "texperience" + separator;
+	return getBinPath() + "texperience" + File.separator;
     }
 
     public static String getTexperienceJar(String version, String mcVersion) {
@@ -73,7 +73,7 @@ public class Directories {
     }
 
     public static String getMcPath(String version) {
-	return getBinPath() + version + separator;
+	return getBinPath() + version + File.separator;
     }
 
     public static String getMcJar(String version) {
@@ -85,11 +85,11 @@ public class Directories {
     }
 
     public static String getNativesPath(String version) {
-	return getMcPath(version) + "natives" + separator;
+	return getMcPath(version) + "natives" + File.separator;
     }
 
     public static String getLibraryPath() {
-	return getWorkingDirectory() + separator + "libraries" + separator;
+	return getWorkingDirectory() + File.separator + "libraries" + File.separator;
     }
 
     public static void createGameDirs(File gameDir) {

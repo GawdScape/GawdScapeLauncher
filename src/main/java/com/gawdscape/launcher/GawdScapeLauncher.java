@@ -1,18 +1,28 @@
 package com.gawdscape.launcher;
 
+import com.gawdscape.launcher.ui.LauncherFrame;
+import com.gawdscape.launcher.ui.LogFrame;
+import com.gawdscape.launcher.ui.LoginDialog;
 import com.gawdscape.json.auth.SessionResponse;
 import com.gawdscape.launcher.auth.AuthManager;
 import com.gawdscape.launcher.auth.SessionManager;
 import com.gawdscape.launcher.launch.MinecraftLauncher;
 import com.gawdscape.launcher.updater.Updater;
-import com.gawdscape.launcher.util.*;
-import java.awt.Font;
+import com.gawdscape.launcher.util.Constants;
+import com.gawdscape.launcher.util.JsonUtils;
+import com.gawdscape.launcher.util.LogFormatter;
+import com.gawdscape.launcher.util.LogHandler;
+import com.gawdscape.launcher.util.OperatingSystem;
+import com.gawdscape.launcher.util.Utils;
 
-import javax.swing.*;
+import java.awt.Font;
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.FontUIResource;
 
 /**
@@ -21,7 +31,7 @@ import javax.swing.plaf.FontUIResource;
  */
 public class GawdScapeLauncher {
 
-    public static final Logger logger = Logger.getLogger("Launcher");
+    public static final Logger LOGGER = Logger.getLogger("Launcher");
     public static Config config;
     public static LogFrame logFrame;
     public static LauncherFrame launcherFrame;
@@ -33,11 +43,11 @@ public class GawdScapeLauncher {
     public static boolean offlineMode;
 
     public static void initLogger() {
-	GawdScapeLauncher.logger.setUseParentHandlers(false);
+	GawdScapeLauncher.LOGGER.setUseParentHandlers(false);
 	ConsoleHandler ch = new ConsoleHandler();
 	ch.setFormatter(new LogFormatter());
-	GawdScapeLauncher.logger.addHandler(ch);
-	GawdScapeLauncher.logger.setLevel(Level.ALL);
+	GawdScapeLauncher.LOGGER.addHandler(ch);
+	GawdScapeLauncher.LOGGER.setLevel(Level.ALL);
     }
 
     public static void setUIFont (FontUIResource font){
@@ -64,7 +74,7 @@ public class GawdScapeLauncher {
 	try {
 	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 	} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-	    logger.log(Level.SEVERE, "Error setting look and feel.", ex);
+	    LOGGER.log(Level.SEVERE, "Error setting look and feel.", ex);
 	}
 
         setUIFont(new FontUIResource("Arial", Font.PLAIN, 12));
@@ -72,7 +82,7 @@ public class GawdScapeLauncher {
 
 	// Load config
 	long startTime2 = System.currentTimeMillis();
-	logger.info("Loading config...");
+	LOGGER.info("Loading config...");
 	config = Config.loadConfig();
 	if (config == null) {
 	    config = new Config();
@@ -82,10 +92,10 @@ public class GawdScapeLauncher {
 	/* Create and display the form */
 	if (config.getShowLog()) {
 	    startTime2 = System.currentTimeMillis();
-	    logger.info("Initializing Log.");
+	    LOGGER.info("Initializing Log.");
 	    logFrame = new LogFrame(config.getColorLog(), config.getLinkLog());
 	    if (config.getShowLog()) {
-		logger.addHandler(new LogHandler());
+		LOGGER.addHandler(new LogHandler());
 	    }
 	    logFrame.setVisible(true);
 	    Utils.benchmark("Log took {0}ms", startTime2);
@@ -125,23 +135,23 @@ public class GawdScapeLauncher {
 	try {
 	    modpacks.downloadPacks();
 	} catch (IOException ex) {
-	    logger.log(Level.SEVERE, "Error downloading mod pack index.", ex);
+	    LOGGER.log(Level.SEVERE, "Error downloading mod pack index.", ex);
 	}
 
 	try {
 	    modpacks.loadCustomPacks();
 	} catch (IOException ex) {
-	    logger.log(Level.SEVERE, "Error loading custom mod pack index.", ex);
+	    LOGGER.log(Level.SEVERE, "Error loading custom mod pack index.", ex);
 	}
 	Utils.benchmark("Loaded mod packs in {0}ms", startTime2);
 
 	SessionManager sessionManager = SessionManager.loadSessions();
 
 	// Load and refresh last saved session
-	logger.info("Checking for saved session...");
+	LOGGER.info("Checking for saved session...");
 	if (sessionManager.shouldAutoLogin()) {
 	    startTime2 = System.currentTimeMillis();
-	    logger.log(Level.INFO, "Session found. Refreshing session for {0}", sessionManager.getAutoLoginUser());
+	    LOGGER.log(Level.INFO, "Session found. Refreshing session for {0}", sessionManager.getAutoLoginUser());
 	    session = AuthManager.refresh(sessionManager.getAutoLoginToken());
 	    Utils.benchmark("Auto Login took {0}ms", startTime2);
 	}
@@ -151,7 +161,7 @@ public class GawdScapeLauncher {
 	    sessionManager.addSession(session);
 	    SessionManager.saveSessions(sessionManager);
 	    // Valid session, continue
-	    logger.log(Level.INFO, "Refreshed session for {0}", session.getSelectedProfile().getName());
+	    LOGGER.log(Level.INFO, "Refreshed session for {0}", session.getSelectedProfile().getName());
 	    // Should we skip the launcher and just launch Minecraft?
 	    if (config.getSkipLauncher()) {
 		updater = new Updater(
@@ -172,8 +182,8 @@ public class GawdScapeLauncher {
 	    loginDialog = new LoginDialog(launcherFrame, sessionManager);
 	    if (session != null && session.getError() != null) {
 		loginDialog.setError(session.getErrorMessage());
-		logger.severe("Error refreshing session:");
-		logger.severe(session.getErrorMessage());
+		LOGGER.severe("Error refreshing session:");
+		LOGGER.severe(session.getErrorMessage());
 	    }
 	    loginDialog.setVisible(true);
 	    Utils.benchmark("Loaded Login Dialog in {0}ms", startTime2);
@@ -187,18 +197,18 @@ public class GawdScapeLauncher {
     }
 
     private static void checkLauncherUpdate() {
-	logger.info("Checking for launcher update...");
+	LOGGER.info("Checking for launcher update...");
 	try {
-	    int version = new Integer(
+	    int version = Integer.parseInt(
 		    JsonUtils.readJsonFromUrl(Constants.LAUNCHER_VERSION_URL));
 	    if (version > Constants.VERSION) {
-		logger.log(Level.WARNING, "Launcher version {0} has been released.", version);
+		LOGGER.log(Level.WARNING, "Launcher version {0} has been released.", version);
 		promptUpdate(version);
 	    } else {
-		logger.info("No launcher update found.");
+		LOGGER.info("No launcher update found.");
 	    }
 	} catch (IOException ex) {
-	    logger.log(Level.SEVERE, "Error checking for launcher update.", ex);
+	    LOGGER.log(Level.SEVERE, "Error checking for launcher update.", ex);
 	}
     }
 
