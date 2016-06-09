@@ -6,7 +6,7 @@ GawdScapeLauncher
 
 Custom launcher for launching GawdScape (Minecraft)
 
-The GawdScape Launcher will download the [GawdMod](https://github.com/GawdScape/GawdMod), your choice of [Mod Pack](https://github.com/GawdScape/GawdPack), and Minecraft.
+The GawdScape Launcher will download the [TexperienceMod](https://github.com/GawdScape/TexperienceMod), your choice of [Mod Pack](https://github.com/GawdScape/GawdPack), and Minecraft.
 
 This launcher was created to make launching the game faster while providing additional modding features and customizations.
 
