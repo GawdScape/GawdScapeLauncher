@@ -1,7 +1,6 @@
 ---
 layout: page-sidebar
 title: GawdScape Launcher
-navbar: Home
 ---
 
 #### GawdScape Launcher and Log

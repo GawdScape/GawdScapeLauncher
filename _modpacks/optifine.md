@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: page-modpack
 title: OptiFine - Mod Packs
 excerpt: Graphics & Performance Mod
 author: GawdScape

@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: page-modpack
 title: Forge - Mod Packs
 excerpt: Minecraft Mod Loader
 author: GawdScape
