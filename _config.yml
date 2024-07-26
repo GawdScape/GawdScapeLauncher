@@ -1,0 +1,20 @@
+# Site settings
+title: GawdScape Launcher
+description: >
+  The better Minecraft Launcher.
+baseurl: "GawdScapeLauncher/"
+url: "https://gawdscape.github.io/"
+
+# Build settings
+markdown: kramdown
+
+# Collections
+collections:
+  modpacks:
+    output: true
+    navbar: Mod Packs
+    url: /modpacks/
+
+# Google Analytics
+google_analytics:
+

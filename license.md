@@ -1,0 +1,20 @@
+---
+layout: page
+title: Forge - Mod Packs
+---
+
+The GawdScape Launcher is Copyright © GawdScape.
+
+You are not permitted to redistribute or publish any modified or unmodified versions of the GawdScape launcher.
+
+You are permitted to modify the launcher for your own personal, private, recreational use.
+
+You are also permitted to Fork this repository to your GitHub account under certain circumstances.
+
+- You must submit your final modifications in the form of a Pull Request.
+- You must retain this license and prior copyrights to GawdScape.
+- You may not publish your modifications to any other website other than the GawdScape Forums or GitHub.
+
+Failure to comply with this license is strictly prohibited and a violation of copyright.
+
+If you have any questions or concerns, please contact Vinnie at <Mc.GawdScape@gmail.com>.

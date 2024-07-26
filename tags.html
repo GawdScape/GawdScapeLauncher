@@ -1,0 +1,23 @@
+---
+layout: page
+title: Tags
+---
+
+{% for tag in site.tags %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ tag | first }}</h3>
+    </div>
+    <div class="panel-body">
+      <ul>
+        {% for posts in tag %}
+          {% for post in posts %}
+            {% if post.url %}
+              <li><a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endfor %}

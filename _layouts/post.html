@@ -1,0 +1,32 @@
+---
+layout: default
+---
+
+<div class="page-header">
+  <h1 class="blog-post-title">{{ page.title }}</h1>
+</div>
+
+<div class="row">
+  <div class="col-sm-8 blog-main">
+    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+      <p class="blog-post-meta">
+        <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>
+        {% if page.author %}
+          &bull; 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span itemprop="name">{{ page.author }}</span>
+          </span>
+        {% endif %}
+      </p>
+      <div class="blog-post" itemprop="articleBody">
+        {{ content }}
+      </div><!-- /.blog-post -->
+    </article>
+  </div><!-- /.blog-main -->
+
+  <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+{% include sidebar-post.html %}
+{% include sidebar-categories.html %}
+{% include sidebar-tags.html %}
+  </div><!-- /.post-sidebar -->
+</div>

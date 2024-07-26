@@ -1,0 +1,8 @@
+<div class="sidebar-module sidebar-module-inset">
+  <h4>Tags</h4>
+  {% for tag in site.tags %}
+  <ul>
+    <li><a href="{{ tag.url | prepend: site.baseurl }}">{{ tag | first }}</a></li>
+  </ul>
+  {% endfor %}
+</div><!-- /.sidebar-tags -->

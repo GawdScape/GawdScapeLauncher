@@ -1,0 +1,29 @@
+---
+layout: default
+index: true
+---
+
+<div class="blog-header">
+  <h1 class="blog-title">Posts</h1>
+  <p class="lead blog-description">Recent news & events</p>
+</div>
+
+<div class="row">
+  <div class="col-sm-8 blog-main">
+    {% for post in site.posts %}
+      <div class="blog-post">
+        <h2 class="blog-post-title">{{ post.title }}</h2>
+        <p class="blog-post-meta">{{ post.date | date: "%b %-d, %Y" }}</p>
+        {{ post.excerpt }}
+        <p class="blog-post-link"><a href="{{ post.url | prepend: site.baseurl }}">Read more...</a></p>
+      </div><!-- /.blog-post -->
+    {% endfor %}
+    <br />
+    <p class="rss-subscribe">Subscribe <a href="{{ '/feed.xml' | prepend: site.baseurl }}">via RSS</a></p>
+  </div><!-- /.blog-main -->
+
+  <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+{% include sidebar-categories.html %}
+{% include sidebar-tags.html %}
+  </div><!-- /.blog-sidebar -->
+</div>

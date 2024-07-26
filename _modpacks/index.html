@@ -1,0 +1,19 @@
+---
+layout: page
+title: Mod Packs
+index: true
+---
+
+{% for modpack in site.modpacks %}
+  {% if modpack.index %}
+  {% else %}
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><a class="post-link" href="{{ modpack.url | prepend: site.baseurl }}">{{ modpack.title }}</a></h3>
+      </div>
+      <div class="panel-body">
+        {{ modpack.excerpt }}
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

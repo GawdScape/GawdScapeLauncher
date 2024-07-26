@@ -1,0 +1,8 @@
+<div class="sidebar-module sidebar-module-inset">
+  <h4>Categories</h4>
+  {% for category in site.categories %}
+  <ul>
+    <li><a href="{{ category.url | prepend: site.baseurl }}">{{ category | first }}</a></li>
+  </ul>
+  {% endfor %}
+</div><!-- /.sidebar-categories -->

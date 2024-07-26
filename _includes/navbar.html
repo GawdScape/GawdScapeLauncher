@@ -1,0 +1,14 @@
+<div id="navbar" class="navbar-collapse collapse">
+  <ul class="nav navbar-nav">
+  {% for collection in site.collections %}
+    {% if collection.navbar %}
+    <li><a class="page-link" href="{{ collection.url | prepend: site.baseurl }}">{{ collection.navbar }}</a></li>
+    {% endif %}
+  {% endfor %}
+  {% for page in site.pages %}
+    {% if page.navbar %}
+    <li><a class="page-link" href="{{ page.url | prepend: site.baseurl }}">{{ page.navbar }}</a></li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+</div><!--/.nav-collapse -->
