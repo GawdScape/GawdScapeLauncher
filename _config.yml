@@ -2,8 +2,8 @@
 title: GawdScape Launcher
 description: >
   The better Minecraft Launcher.
-baseurl: "GawdScapeLauncher/"
-url: "https://gawdscape.github.io/"
+baseurl: "/GawdScapeLauncher"
+url: "https://gawdscape.github.io"
 
 # Build settings
 markdown: kramdown
