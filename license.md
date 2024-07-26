@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Forge - Mod Packs
+title: License
 ---
 
 The GawdScape Launcher is Copyright © GawdScape.
