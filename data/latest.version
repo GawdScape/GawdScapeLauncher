@@ -1,0 +1,5 @@
+# GawdScape Launcher
+#
+VERSION = ${{ launcher_version }}
+BUILD_ID = ${{ launcher_build_id }}
+BUILD_DATE = ${{ launcher_build_date }}
